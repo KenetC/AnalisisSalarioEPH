@@ -1,0 +1,243 @@
+---
+title: "TP 2da Pregunta"
+output: html_notebook
+---
+Primero cargamos las librerias necesarias:
+
+```{r}
+library(quantreg);
+#library(readxl); # para leer archivos xml, pero vamos a usar el paquete eph
+library(eph);
+library(dplyr);
+library(tidyr)
+library(ggplot2)
+source("funciones.R") # funciones auxiliares para no ocupar tanto espacio
+library(ineq)
+library(dineq)
+```
+
+Mismas especificaciones de la pregunta 1: 
+
+```{r}
+variables = c("P21","AGLOMERADO","CH07","CH06","CH03","CH04","CH13","CH12","CH14")
+
+base24   <- get_microdata(year = 2024, period = 1, type = "individual",destfile="EPH_2024_1_individual.zip",vars = variables) # para leer usando el paquete eph 
+base23_1 <- get_microdata(year = 2023,period=1,type="individual",destfile="EPH_2023_1_individual.zip",vars = variables) 
+base23_2 <- get_microdata(year = 2023,period=2,type="individual",destfile="EPH_2023_2_individual.zip",vars = variables) 
+base23_3 <- get_microdata(year = 2023,period=3,type="individual",destfile="EPH_2023_3_individual.zip",vars = variables) 
+base23_4 <- get_microdata(year = 2023,period=4,type="individual",destfile="EPH_2023_4_individual.zip",vars = variables) 
+
+#base2024 <- read_excel('EPH_usu_1er_Trim_2024_xlsx/usu_individual_T124.xlsx')
+
+base24 <- f_restricciones(base24$microdata[[1]])
+base23_1 <- f_restricciones(base23_1$microdata[[1]])
+base23_2 <- f_restricciones(base23_2$microdata[[1]])
+base23_3 <- f_restricciones(base23_3$microdata[[1]])
+base23_4 <- f_restricciones(base23_4$microdata[[1]])
+```
+
+2.a 
+
+### Indice Gini 
+
+```{R}
+# Primero definimos la lista donde iteraremos cada data.frame
+d <- list(base23_1,base23_2,base23_3,base23_4,base24)
+
+# anios y periodos de cada data.frame 
+anios <- c("2023-1 per","2023-2 per","2023-3 per","2023-4 per","2024-1 per")
+
+g <- c()
+for(i in 1:5){
+  g <- c(g,Gini(d[i][[1]]$wage))
+}
+
+plot(g, type = "o", col = "black", pch = 16, ylab = "", xlab = "",
+     main = "indice Gini", xaxt= "n", ylim = c(0.33,0.38))
+
+axis(1,at=1:5,labels = anios)
+```
+
+La comparación de los valores del índice de Gini entre 2023 y 2024 muestra un aumento de 0.352 a 0.380, del 3er periodo del 2023 al 4to periodo, se observa un mayor incremento, implica un cambio negativo en términos de equidad, ya que un índice de Gini mayor indica una mayor desigualdad en la distribución de los ingresos en la población.
+
+### Ratios $\frac{Q90}{Q10}$
+
+```{r}
+q <- c()
+ 
+for(i in 1:5){
+  valor <- quantile(d[i][[1]]$wage,0.9) / quantile(d[i][[1]]$wage,0.1)
+  q <- c(q,valor)
+}
+plot(q, type = "o", col = "black", pch = 16, ylab = "", xlab = "",
+     main = 'Ratios Q90/Q10', xaxt= "n")
+
+axis(1,at=1:5,labels = anios)
+```
+Si los ratios son mayores a 1, esto es;
+$$ \frac{Q90}{Q10} > 1 \rightarrow Q90 > Q10 $$
+es decir los ingresos del decil superior son mucho (si ratio >> 1) mayores al decil inferior. 
+
+Observamos que en el primer trimestre del 2023 el ratio crece, para luego descender, y por ultimo crece nuevamente solo que esta vez con un mayor incremento entre el 4to periodo del 2023 y 1er del 2024. 
+Con Gini, nunca hubo un descenso, esto se debe a que calculamos el area encerrada entre la equidad ideal y la curva de lorenz, en cambio con este enfoque solo estamos midiendo la relacion entre el noveno decil con el primero, obviando al resto de la distribucion. 
+
+### Indice Theil
+
+Una propiedad del índice Theil es que se puede establecer una descomposición aditiva en dos componentes. Para conjuntos de subgrupos mutuamente excluyentes, {1,2,…,$G$}, el índice de Theil puede re-expresarse como:
+
+$$ T = \sum_{g=1}^{G} \frac{n_g \mu_g}{n\mu} T_g  + \sum_{g=1}^{G}\frac{n_g \mu_g}{n\mu} ln(\frac{\mu_g}{\mu}) $$
+de acuerdo a Bourguignon (1979), Cowell (1980) y Shorrocks (1980). [1]
+
+donde: 
+
+* $n_g$, es el número de observaciones en el subgrupo $g$. 
+
+* $\mu_g$, es el ingreso medio del subgrupo $g$.
+
+* $T_g$, es el índice Theil calculado para el subgrupo $g$.
+
+El primer sumando representa el componente de la desigualdad atribuido a las diferencias de ingresos **dentro** de un mismo grupo.
+
+El segundo sumando representa la desigualdad en los ingresos **entre** los subgrupos de la población.
+
+
+
+```{r}
+x <- c()
+w <- c()
+b <- c() 
+
+for (i in 1:5){
+  wage <- d[i][[1]]$wage
+  ubicacion <- d[i][[1]]$ubicacion
+    
+  Ts <- tapply(wage, ubicacion, Theil)
+  
+  # Calcular sum(wage) por ubicacion 
+  sums <- tapply(wage,ubicacion, function(w) faux(w,TRUE))
+  
+  # Calcular len(wage) por ubicacion 
+  ns <- tapply(wage,ubicacion, function(w) faux(w,FALSE))
+  
+  mu_n <- sum(sums)     
+  n <- sum(ns)
+  mu <- mu_n / sum(ns)
+  
+  within_ineq <- sum(sums*Ts / mu_n) 
+  between_ineq <- sum(sums*log((sums/ns) / mu) / mu_n)
+  Te <- within_ineq + between_ineq
+  x <- c(x,Te)
+  w <- c(w,within_ineq)
+  b <- c(b,between_ineq)
+}
+```
+
+Hacemos la división por **AGLOMERADO**, que en nuestro caso es **ubicacion**, luego hacemos el cálculo de la descomposición.
+
+```{r}
+plot(x, type = "o", col = "blue", pch = 16, ylab = "", xlab = "",
+     main = "Theil y su descomposicion",ylim = c(0,0.35), xaxt= "n")
+
+axis(1,at=1:5,labels = anios)
+# Añadir el segundo conjunto de datos con líneas
+lines(w, type = "o", col = "orange", pch = 16)
+
+# Añadir el tercer conjunto de datos con líneas
+lines(b, type = "o", col = "darkgray", pch = 16)
+
+# Añadir leyenda
+legend("topleft", legend = c("Theil", "within", "between"), col = c("blue", "orange", "darkgray"), 
+       pch = 16, lty = 1)
+```
+
+Observando el comportamiento de la componente **between**, podemos afirmar que la desigualdad entre las distintas ubicaciones se mantuvo constante durante este periodo. Atribuimos, entonces, la mayor parte del comportamiento del índice de Theil a la componente **within**.
+
+En particular, al notar que el índice de Theil aumenta en el cuarto trimestre de 2023, inferimos que hubo un incremento en la desigualdad salarial, el cual se debe principalmente a la desigualdad **dentro** de los subgrupos, que en nuestro análisis corresponden a las ubicaciones.
+
+
+2.b
+
+Comenzamos con la regresión RIF:
+
+Vamos a tomar cada periodo de tiempo y hacer el cálculo de RIF de lwage, usando como estadístico el índice de Gini, para luego calcular las estimaciones de los coeficientes resultantes de la regresión, tomamos **anios_edu** y **exp_pot** para luego graficarlos.
+
+```{r}
+
+coefs_rif_edu <- c()
+coefs_rif_exp <- c()
+ 
+for(i in 1:5){
+  # calculamos RIF en funcion de lwage.
+  rif_gini <- rif(log(d[i][[1]]$wage), method = "gini")
+  
+  RIFreg_gini <- lm(rif_gini ~ anios_edu + exp_pot + exp_pot_2 + edad + as.factor(est_civil), data = d[i][[1]])
+  
+  edu <- RIFreg_gini$coefficients[2]
+  exp <- RIFreg_gini$coefficients[3]
+  
+  coefs_rif_edu <- c(coefs_rif_edu, edu)
+  coefs_rif_exp <- c(coefs_rif_exp, exp)
+}
+```
+
+
+### Gráfico de las estimaciones de años de educación 
+
+```{r}
+plot(coefs_rif_edu, type = "o", col = "black", pch = 16, ylab = "", xlab = "", main = 'Años de educación', xaxt= "n", xlim = c(1, 5.3))
+
+axis(1,at=1:5,labels = anios)
+valid_indices <- which(!is.na(coefs_rif_edu))
+text(valid_indices, coefs_rif_edu, labels = paste( format(coefs_rif_edu[valid_indices], digits = 2)), pos = 4, cex = 0.8, col = "blue")
+```
+
+Observando el valor de los coeficientes estimados, vemos que son positivos, esto sugiere que el aumento en la educación incrementa la desigualdad salarial, como son cercanos a 0, no se puede hacer tal afirmación. Uno esperaría que dichas estimaciones fueran negativas. 
+
+
+```{r}
+plot(coefs_rif_exp, type = "o", col = "black", pch = 16, ylab = "", xlab = "", main = 'experiencia potencial', xaxt= "n",xlim = c(1, 5.3))
+
+axis(1,at=1:5,labels = anios)
+
+valid_indices <- which(!is.na(coefs_rif_exp))
+text(valid_indices, coefs_rif_exp, 
+     labels = paste( format(coefs_rif_exp[valid_indices], digits = 2)), 
+     pos = 4, cex = 0.8, col = "blue")
+```
+
+Se observan características similares a las anteriores, en tanto concluimos que ambas variables no afectan determinantemente a cambios en el mercado laboral, en los periodos estudiados. 
+
+### Oaxaca-Blinder 
+
+```{r}
+model_24 <- lm(log(wage) ~ anios_edu + exp_pot + exp_pot_2 + as.factor(est_civil),data = base24)
+model_23 <- lm(log(wage) ~ anios_edu + exp_pot + exp_pot_2 + as.factor(est_civil),data = base23)
+
+coef_24 <- coef(model_24)
+coef_23 <- coef(model_23)
+
+media_vars_24 <- colMeans(model.matrix(model_24))
+media_vars_23 <- colMeans(model.matrix(model_23))
+
+diff_total <- mean(log(base23$wage)) - mean(log(base24$wage))
+
+explained <- sum((media_vars_23 - media_vars_24) * coef_23)
+unexplained <- sum(media_vars_24 * (coef_23 - coef_24))
+
+cat("Diferencia total: ", diff_total, "\n")
+cat("Parte explicada: ", explained,"\n")
+cat("Parte no explicada: ",unexplained,"\n")
+```
+Observamos que el coeficiente correspondiente a la parte no explicada por las características observadas es alto en comparación con su "contraparte", por tanto no podemos afirmar que la brecha salarial del año 2023 al 2024 se deba a las características observada, es decir a los años educativos, experiencia potencial, y estado civil. 
+
+
+
+
+[1]
+Shorrocks A. F., The Class of Additively Decomposable Inequality Measures. Econometrica 48, 613-625. 1980.
+
+Cowell F., On the Structure of Additive Inequality Measures. Review of Economic Studies 47, 521-531. 1980.
+
+Bourguignon F., Decomposable Income Inequality Measures. Econometrica 47, 901-920.
+1979
+
