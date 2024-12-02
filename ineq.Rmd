@@ -1,9 +1,7 @@
 ---
-title: "TP 2da Pregunta"
+title: "Desigualdad"
 output: html_notebook
 ---
-Primero cargamos las librerias necesarias:
-
 ```{r}
 library(quantreg);
 #library(readxl); # para leer archivos xml, pero vamos a usar el paquete eph
@@ -16,7 +14,6 @@ library(ineq)
 library(dineq)
 ```
 
-Mismas especificaciones de la pregunta 1: 
 
 ```{r}
 variables = c("P21","AGLOMERADO","CH07","CH06","CH03","CH04","CH13","CH12","CH14")

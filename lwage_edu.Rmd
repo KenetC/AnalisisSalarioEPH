@@ -1,8 +1,7 @@
 ---
-title: "TP 1era Pregunta"
+title: "Modelo Ec Mincer"
 output: html_notebook
 ---
-Primero cargamos las librerias necesarias: 
 
 ```{r}
 library(quantreg);
@@ -13,8 +12,6 @@ library(tidyr)
 library(ggplot2)
 source("funciones.R")
 ```
-
-### a. 
 
 Realizamos las restricciones, y calculamos la variable anios_educacion en función de CH14 (último año de aprobación), luego lo mismo para experiencia potencial y su cuadrado.
 

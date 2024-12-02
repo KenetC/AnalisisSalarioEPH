@@ -1,0 +1,107 @@
+---
+title: "Analisis EPH"
+output: html_notebook
+---
+
+Librerias necesarias y funciones auxiliares (ver en utils.R)
+
+```{r}
+library(quantreg);
+library(eph);
+library(dplyr);
+library(tidyr)
+library(ggplot2)
+source("utils.R")
+```
+
+* Cargamos los datos.
+* Cambiamos las variables a nombres mas representativos.
+* Removemos las filas con columnas faltantes, pues en este contexto no es buena practica hacer imputaciones.
+* Filtramos filas: 
+- Asalariados    ie wage > 0 
+- Jefes de hogar ie CH03 == 01
+- Varones        ie CH04 == 1 aca quizas este bueno hacer una breve analisis sobre la desiguldad de genero
+- Edad entre 25 y 65.
+* Calculamos anios de educacion en funcion de las demas variables. (ver utis.R linea 14 - 28)
+* Estimamos experiencia potencial, siguiendo 
+
+$$ \text{EXP POTENCIAL} = \text{EDAD} - \text{ANIOS EDUCATIVOS} - 6 $$
+
+```{r}
+variables = c("P21","AGLOMERADO","CH07","CH06","CH03","CH04","CH13","CH12","CH14")
+
+base24   <- get_microdata(year = 2024,period=1,type= "individual",destfile="EPH_2024_1_individual.zip",vars = variables)  
+base23_1 <- get_microdata(year = 2023,period=1,type="individual",destfile="EPH_2023_1_individual.zip",vars = variables) 
+base23_2 <- get_microdata(year = 2023,period=2,type="individual",destfile="EPH_2023_2_individual.zip",vars = variables) 
+base23_3 <- get_microdata(year = 2023,period=3,type="individual",destfile="EPH_2023_3_individual.zip",vars = variables) 
+base23_4 <- get_microdata(year = 2023,period=4,type="individual",destfile="EPH_2023_4_individual.zip",vars = variables) 
+
+#base2024 <- read_excel('EPH_usu_1er_Trim_2024_xlsx/usu_individual_T124.xlsx')
+
+base24   <- f_restricciones(base24$microdata[[1]])
+base23_1 <- f_restricciones(base23_1$microdata[[1]])
+base23_2 <- f_restricciones(base23_2$microdata[[1]])
+base23_3 <- f_restricciones(base23_3$microdata[[1]])
+base23_4 <- f_restricciones(base23_4$microdata[[1]])
+```
+
+Observando los siguientes histogramas vemos que lwage (logaritmo de salario) parece seguir una distribucion normal a diferencia de wage, por ello se considera esta transformacion. 
+
+```{r}
+par(mfrow = c(1, 2))
+
+# Graficar el primer histograma
+hist(log(base24$wage), col = "skyblue", main = "Histograma lwage", xlab = "Valores de lwage", ylab = "Frecuencia")
+
+# Graficar el segundo histograma
+hist(base24$wage, col = "salmon", main = "Histograma wage", xlab = "Valores de wage", ylab = "Frecuencia")
+
+# Resetear la configuración para evitar que afecte otros gráficos
+par(mfrow = c(1, 1))
+```
+
+Usaremos el modelo lineal, para modelar el efecto de la educacion sobre la media del logaritmo de los ingresos de la ocupacion principal, controlando con la ubicacion (variable categoria), edad, estado civil y experiencia potencial.
+
+# Modelo Lineal 
+
+$$ log(wage) = \text{Intercept} + \text{anios_edu} + \text{exp_pot} + \text{exp_pot}^2 + ubicacion (dummie) + \text{estado_civil} + edad  $$
+```{r}
+reg1 <- lm(log(wage)~ anios_edu + exp_pot + exp_pot_2 + edad + as.factor(ubicacion) + as.factor(est_civil), data=base24)
+
+summ_reg1 <- summary(reg1)
+
+coef_reg1 <- coef(summ_reg1)
+
+coef_interes_reg1 <- coef_reg1[c("anios_edu", "exp_pot"), ]
+```
+
+Graficamos el p-valor correspondiente a cada estimacion sobre 
+
+```{r}
+x <- c("Primario completo","Secundario incompleto","Secundario completo",
+       "Universitario incompleto","Universitario completo","Sin instruccion")
+y <- coef_interes_reg2[,1]
+pv <- coef_interes_reg2[,4]
+
+# Crear el gráfico base
+plot(1:length(x), y, type = "b", pch = 19, col = "blue", xaxt = "n", 
+     xlab = "", ylab = "Coeficiente estimado", 
+     xlim = c(0, length(x) + 1),
+     main = "Efecto del Nivel Educativo sobre lwage")
+
+# Añadir una línea horizontal en y = 0 para referencia
+abline(h = 0, col = "red", lty = 2)
+
+# Añadir las etiquetas del eje X inclinadas
+axis(1, at = 1:length(x), labels = FALSE)  # Ocultar etiquetas predeterminadas
+text(1:length(x), par("usr")[3] - 0.05,  # Ajuste para desplazar las etiquetas
+     labels = x, srt = 45, adj = 1, xpd = TRUE, cex = 0.8)
+
+# Filtrar los valores válidos para evitar NA en los p-valores
+valid_indices <- which(!is.na(y))
+
+# Añadir los p-valores junto a sus respectivos puntos en el gráfico
+text(valid_indices, y[valid_indices], 
+     labels = paste("p-valor", format(pv[valid_indices], digits = 2)), 
+     pos = 4, cex = 0.8, col = "darkgreen")
+```
