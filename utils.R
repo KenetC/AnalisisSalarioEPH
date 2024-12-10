@@ -1,18 +1,24 @@
-f_restricciones <- function(df){
+# calculamos anios de educacion (anios_edu), experiencia potencial (exp_pot)
+anios_prev <- c(0, 0, 6, 6, 9, 12, 12, 18)
+anios_post <- c(0, 6, 9, 12, 12, 15, 18, 22)
+
+f_restricciones <- function(df, gender = "mas"){
   # renombramos las variables que usamos, para mas claridad
   df <-df %>% 
     rename(wage = P21,  ubicacion = AGLOMERADO, est_civil = CH07, edad = CH06)
-  
+  valor <- 1
+  if(gender == "mas"){
+  }else if(gender == "fem"){
+    valor <- 2
+  }else{
+    warning("El valor de gender no es valido")
+  }
   df <- df %>%
     filter(wage > 0,        # Asalariados
            CH03 == 01,      # Jefes de hogar
-           CH04 == 1,       # Varones
+           CH04 == valor,   # genero 1-> masculino , 2 -> femenino
            edad >= 25,      # Edad mínima
            edad <= 65)      # Edad maxima 
-  
-  # calculamos anios de educacion (anios_edu), experiencia potencial (exp_pot)
-  anios_prev <- c(0, 0, 6, 6, 9, 12, 12, 18)
-  anios_post <- c(0, 6, 9, 12, 12, 15, 18, 22)
   
   df <- df %>%
     mutate(

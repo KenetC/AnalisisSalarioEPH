@@ -1,0 +1,519 @@
+---
+title: "Trabajo Practico"
+output:
+  html_document: default
+  pdf_document: default
+date: "2024-11-17"
+---
+
+Cargamos las librerías
+
+```{r}
+library(quantreg);
+library(eph);
+library(dplyr);
+library(tidyr)
+library(ggplot2)
+library(dineq)
+library(ineq)
+```
+
+Definimos algunas funciones que vamos a usar
+
+```{r}
+f_restricciones <- function(df){
+  # renombramos las variables que usamos, para mas claridad
+  df <-df %>% 
+        rename(wage = P21,  ubicacion = AGLOMERADO, est_civil = CH07, edad = CH06)
+  
+  df <- df %>%
+  filter(wage > 0,        # Asalariados
+         CH03 == 01,      # Jefes de hogar
+         CH04 == 1,       # Varones
+         edad >= 25,      # Edad mínima
+         edad <= 65)      # Edad maxima 
+  
+  # calculamos anios de educacion (anios_edu), experiencia potencial (exp_pot)
+  anios_prev <- c(0, 0, 6, 6, 9, 12, 12, 18)
+  anios_post <- c(0, 6, 9, 12, 12, 15, 18, 22)
+  
+  df <- df %>%
+  mutate(
+    # Asignar el número de años en base al nivel de educación y condición de finalización
+    anios_edu = ifelse(CH13 == 1, # finalizo ese nivel ? 
+                      anios_post[CH12 + 1],  # +1 para ajustar al índice en R
+                      anios_prev[CH12 + 1] + as.numeric(CH14)),
+    
+    # Calcular la experiencia potencial y su cuadrado
+    exp_pot = edad - anios_edu - 6,
+    exp_pot_2 = exp_pot^2
+  )
+  
+  # Filtrado
+  df <- df[complete.cases(df[, c("exp_pot")]), ] # nos quitamos los na's de la variable "exp_pot"
+  df <- df[! (df$anios_edu > 100),] # [1]
+  return(df)
+}
+
+# funcion auxiliar, devuelve la suma de sarialos, o la cantidad de elementos.
+faux <- function(wage,bool){
+  if(bool){
+    return(sum(wage))
+  }else{
+    return(length(wage))
+  }
+}
+```
+
+
+### 1era Pregunta 
+
+#### a. 
+
+Realizamos las restricciones, y calculamos la variable anios_educacion en función de CH14 (último año de aprobación), luego lo mismo para experiencia potencial y su cuadrado.
+
+[1] Hacemos una limpieza: cómo quitar los valores de anios_educacion por encima de 100, ya que son valores que provienen de educacion especial o Ns/Nr  
+
+```{r}
+variables = c("P21","AGLOMERADO","CH07","CH06","CH03","CH04","CH13","CH12","CH14")
+
+base24   <- get_microdata(year = 2024, period = 1, type = "individual",destfile="EPH_2024_1_individual.zip",vars = variables) # para leer usando el paquete eph 
+base23_1 <- get_microdata(year = 2023,period=1,type="individual",destfile="EPH_2023_1_individual.zip",vars = variables) 
+base23_2 <- get_microdata(year = 2023,period=2,type="individual",destfile="EPH_2023_2_individual.zip",vars = variables) 
+base23_3 <- get_microdata(year = 2023,period=3,type="individual",destfile="EPH_2023_3_individual.zip",vars = variables) 
+base23_4 <- get_microdata(year = 2023,period=4,type="individual",destfile="EPH_2023_4_individual.zip",vars = variables) 
+
+#base2024 <- read_excel('EPH_usu_1er_Trim_2024_xlsx/usu_individual_T124.xlsx')
+
+base24 <- f_restricciones(base24$microdata[[1]])
+base23_1 <- f_restricciones(base23_1$microdata[[1]])
+base23_2 <- f_restricciones(base23_2$microdata[[1]])
+base23_3 <- f_restricciones(base23_3$microdata[[1]])
+base23_4 <- f_restricciones(base23_4$microdata[[1]])
+```
+Realizamos histogramas para 
+
+```{r}
+par(mfrow = c(1, 2))
+
+# Graficar el primer histograma
+hist(log(base24$wage), col = "skyblue", main = "Histograma lwage", xlab = "Valores de lwage", ylab = "Frecuencia")
+
+# Graficar el segundo histograma
+hist(base24$wage, col = "salmon", main = "Histograma wage", xlab = "Valores de wage", ylab = "Frecuencia")
+
+# Resetear la configuración para evitar que afecte otros gráficos
+par(mfrow = c(1, 1))
+```
+
+Visualmente en los valores de lwage (**log(wage)**) se observa cierta normalidad, esto no es así con los valores crudos (**wage**). Más adelante se hace un análisis tomando en cuenta ambos enfoques con 2 modelos donde se encuentran diferencias.
+
+```{r}
+par(mfrow = c(1, 2))
+
+# Graficar el primer histograma
+# plot(base1$anios_edu, log(base1$wage),xlab= "Años de educación",ylab = "lwage")
+ggplot(base24, aes(x = as.factor(anios_edu), y = log(wage))) +
+  geom_violin(fill = "lightblue", color = "black") +
+  labs(x = "Años de Educación", y = "Logaritmo del Salario (lwage)", title = "Distribución de lwage según Años de Educación") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Graficar el segundo histograma
+#plot(base1$anios_edu, base1$wage,xlab= "Años de educación",ylab = "wage")
+ggplot(base24, aes(x = as.factor(anios_edu), y = wage)) +
+  geom_violin(fill = "lightblue", color = "black") +
+  labs(x = "Años de Educación", y = "Salario (wage)", title = "Distribución de wage según Años de Educación") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Resetear la configuración para evitar que afecte otros gráficos
+par(mfrow = c(1, 1))
+```
+
+### Modelo lineal 
+
+##### Modelo 1 
+$$ \text{log(wage)} = \text{anios_ed} + \text{exp_pot} + \text{exp_pot}^2 + \text{ubicacion (dummie)} + \text{estado_civil} + \text{edad} $$
+
+##### Modelo 2
+$$ \text{log(wage)} = \text{educacion (dummie)} + \text{exp_pot} + \text{exp_pot}^2 + \text{ubicacion (dummie)} + \text{estado_civil} + \text{edad} $$
+```{r}
+reg1 <- lm(log(wage)~ anios_edu + exp_pot + exp_pot_2 + edad + as.factor(ubicacion) + as.factor(est_civil), data=base24)
+reg2 <- lm(log(wage)~ as.factor(NIVEL_ED) + exp_pot + exp_pot_2 + edad + as.factor(ubicacion) + as.factor(est_civil), data=base24)
+
+summ_reg1 <- summary(reg1)
+summ_reg2 <- summary(reg2)
+
+# Extraer los coeficientes, errores estándar, valores t y p-valores del resumen del modelo
+coef_reg1 <- coef(summ_reg1)
+coef_reg2 <- coef(summ_reg2)
+
+# Filtrar las filas de los coeficientes que te interesan
+coef_interes_reg1 <- coef_reg1[c("anios_edu", "exp_pot"), ]
+coef_interes_reg2 <- coef_reg2[grep("NIVEL_ED", rownames(coef_reg2)), ] 
+```
+
+
+```{r}
+x <- c("Primario completo","Secundario incompleto","Secundario completo",
+       "Universitario incompleto","Universitario completo","Sin instruccion")
+y <- coef_interes_reg2[,1]
+pv <- coef_interes_reg2[,4]
+
+# Crear el gráfico base
+plot(1:length(x), y, type = "b", pch = 19, col = "blue", xaxt = "n", 
+     xlab = "", ylab = "Coeficiente estimado", 
+     xlim = c(0, length(x) + 1),
+     main = "Efecto del Nivel Educativo sobre lwage")
+
+# Añadir una línea horizontal en y = 0 para referencia
+abline(h = 0, col = "red", lty = 2)
+
+# Añadir las etiquetas del eje X inclinadas
+axis(1, at = 1:length(x), labels = FALSE)  # Ocultar etiquetas predeterminadas
+text(1:length(x), par("usr")[3] - 0.05,  # Ajuste para desplazar las etiquetas
+     labels = x, srt = 45, adj = 1, xpd = TRUE, cex = 0.8)
+
+# Filtrar los valores válidos para evitar NA en los p-valores
+valid_indices <- which(!is.na(y))
+
+# Añadir los p-valores junto a sus respectivos puntos en el gráfico
+text(valid_indices, y[valid_indices], 
+     labels = paste("p-valor", format(pv[valid_indices], digits = 2)), 
+     pos = 4, cex = 0.8, col = "darkgreen")
+```
+
+La variación es considerable en los coeficientes de las variables dummie **NIVEL_ED**, sugiere que el efecto en **log(wage)** de cada nivel educativo no es constante. Es decir, parece haber un efecto no lineal de la educación sobre lwage.
+
+Esto indica que el retorno económico de completar un nivel educativo cambia significativamente dependiendo de qué nivel se está comparando. Por ejemplo, pasar de primario completo a secundario completo parece tener un retorno mayor que otros niveles, sugiriendo que las personas que completan el secundario pueden obtener un salario significativamente más alto que aquellos que sólo completan el primario.
+
+Los coeficientes para secundario incompleto, completo y universitario incompleto y completo, son todos significativos, en especial el 4 (secundario completo), lo que respalda la idea de que esos niveles educativos tienen un impacto positivo y relevante en los salarios.
+Por otro lado, si bien el coeficiente de la categoría **Sin instruccion** es alto en comparación, no es significativo, por tanto no es influyente para estimar lwage.
+
+La variación en los coeficientes y su significancia sugiere que el impacto de la educación sobre los salarios no es lineal. Esto es consistente con la idea de que ciertos niveles de educación (como completar la secundaria o la educación superior) pueden ofrecer ventajas salariales más significativas que simplemente tener un año más de educación.
+
+### ANOVA 
+
+```{r}
+anova(reg1,reg2)
+```
+La prueba *ANOVA* de ambos modelos, dio un p-valor menor a 0.05, suponiendo verdaderas las hipótesis necesaria de *ANOVA*, tenemos que cuando controlamos por las variables control (valga la redundancia) el nivel educativo máximo alcanzado como variable dummie de cada persona resulta significativo, contra la variable continua. Por tanto esto sugiere un efecto no lineal de la educación sobre lwage.
+
+### Intervalo de confianza de $\beta_1$ (anios_ed) 
+
+```{r}
+coef_df <- data.frame(estimate = coef(reg1)["anios_edu"], confint_lower = confint(reg1)["anios_edu", 1], confint_upper = confint(reg1)["anios_edu", 2])
+
+ggplot(coef_df, aes(x = "anios_edu", y = estimate)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = confint_lower, ymax = confint_upper), width = 0.2) +
+  labs(title = "Intervalo de confianza de Años de educación", y = "Coeficiente (Años de educación)")
+print(confint(reg1)[2,] )
+```
+
+#### b.
+
+El primer cambio respecto al modelo previamente evaluado es que al tener la variable **edad** codificada con dummies, hace que la matriz de diseño no pueda invertirse para luego hacer la regresión por cuantiles, por lo tanto opte por quitar esta variable y obtuve estos resultados:
+
+```{r}
+regq1_lwage <- rq(log(wage)~ anios_edu + exp_pot + exp_pot_2 + as.factor(ubicacion) + as.factor(est_civil),data=base24,tau = 1:9/10,ci = FALSE)
+summregq1 <- summary(regq1_lwage,se="ker")
+plot(summregq1,parm=2,main ="Coeficientes: Años de educación",xlab ="tau's",ylab = "coef ") # con param =2 le decimos que queremos el grafico de valores e intervalos de confianza de años de educacion. 
+```
+
+Para cuantiles bajos (τ cercanos a 0.1), el coeficiente de años_ed es más alto, lo que indica que el efecto marginal de la educación es mayor entre las personas con ingresos más bajos. En otras palabras, para este grupo, cada año adicional de educación tiene un impacto más fuerte en el aumento de los ingresos. Esto tiene sentido dado que estos individuos, al tener ingresos relativamente bajos, podrían beneficiarse más de la educación en términos de movilidad económica.
+
+A medida que τ se aproxima a 0.5 (mediana de la distribución), el coeficiente de años_ed disminuye, lo que sugiere que, en la mediana de los ingresos, el impacto de la educación es menos pronunciado. Es decir, el efecto marginal de la educación se atenúa en este grupo, lo cual podría indicar que otros factores además de la educación juegan un rol más importante en la determinación de los ingresos.
+
+Finalmente, para los cuantiles altos (τ cercanos a 0.9), el coeficiente de años_ed vuelve a aumentar, lo que sugiere que, para aquellos con ingresos más altos, la educación sigue siendo un factor determinante. Esto podría reflejar que en los niveles más altos de la distribución de ingresos, los años de educación siguen siendo cruciales para alcanzar los ingresos más elevados, probablemente debido a la acumulación de capital humano especializado o credenciales educativas superiores.
+
+Yendo a la pregunta del 1.b
+Para los individuos en los cuantiles bajos y altos, un año adicional de educación tiene un impacto significativo en el aumento de los ingresos, lo que sugiere que la educación es una vía importante para mejorar su situación económica. Esto puede deberse a que un año más de formación amplía sus oportunidades laborales y su potencial de ingresos de manera considerable.
+
+La comparacion grafica que veo es que al usar el modelo de regresion lineal estamos calculando la media de la log de los ingresos y no estamos puediendo darle demaciada interpretabilidad al coeficiente, y como en este modelo no presenta este problema, podemos dar mas interpretabilidad.
+
+
+```{r}
+regq1 <- rq(wage~ anios_edu + exp_pot + exp_pot_2 + as.factor(ubicacion) + as.factor(est_civil),data=base24,tau = 1:9/10,ci = FALSE)
+summregq1 <- summary(regq1,se="ker")
+plot(summregq1,parm=2,main ="Coeficientes: Años de educación",xlab ="tau's",ylab = "coef ") # con param =2 le decimos que queremos el grafico de valores e intervalos de confianza de años de educacion. 
+```
+
+Para el caso del Modelo 2, se obtuvo que el coeficiente crece en funcion de **$\tau$**, pareciera ser de manera exponencial, concluimos que el efecto marginal de los anios de educacion sobre los ingresos, es creciente.
+
+Este cambio en el analisis, quizas se deba a la variabilidad de la distribucion de **wage** ya que para el otro modelo era homocedastico, sin embargo para este no lo es.
+
+```{r}
+summregq2 <- summary(regq1_lwage,se="boot",R=100)
+plot(summregq2,parm=2,main ="Coeficientes: Años de educación",xlab ="tau's",ylab = "coef ")
+```
+
+```{r}
+summregq3 <- summary(regq1_lwage,se="iid")
+plot(summregq3,parm=2,main ="Coeficientes: Años de educación",xlab ="tau's",ylab = "coef ")
+```
+
+Habia dicidido no mostrar los otros metodos (iid boot), pues no vi cambios significativos.
+
+
+### 2da Pregunta
+
+#### a.
+
+##### Indice Gini 
+
+```{R}
+# Primero definimos la lista donde iteraremos cada data.frame
+d <- list(base23_1,base23_2,base23_3,base23_4,base24)
+
+# anios y periodos de cada data.frame 
+anios <- c("2023-1 per","2023-2 per","2023-3 per","2023-4 per","2024-1 per")
+
+g <- c()
+for(i in 1:5){
+  g <- c(g,Gini(d[i][[1]]$wage))
+}
+
+plot(g, type = "o", col = "black", pch = 16, ylab = "", xlab = "",
+     main = "indice Gini", xaxt= "n", ylim = c(0.33,0.38))
+
+axis(1,at=1:5,labels = anios)
+```
+
+La comparación de los valores del índice de Gini entre 2023 y 2024 muestra un aumento de 0.352 a 0.380, del 3er periodo del 2023 al 4to periodo, se observa un mayor incremento, implica un cambio negativo en términos de equidad, ya que un índice de Gini mayor indica una mayor desigualdad en la distribución de los ingresos en la población.
+
+##### Ratios $\frac{Q90}{Q10}$
+
+```{r}
+q <- c()
+ 
+for(i in 1:5){
+  valor <- quantile(d[i][[1]]$wage,0.9) / quantile(d[i][[1]]$wage,0.1)
+  q <- c(q,valor)
+}
+plot(q, type = "o", col = "black", pch = 16, ylab = "", xlab = "",
+     main = 'Ratios Q90/Q10', xaxt= "n")
+
+axis(1,at=1:5,labels = anios)
+```
+Si los ratios son mayores a 1, esto es;
+$$ \frac{Q90}{Q10} > 1 \rightarrow Q90 > Q10 $$
+es decir los ingresos del decil superior son mucho (si ratio >> 1) mayores al decil inferior. 
+
+Observamos que en el primer trimestre del 2023 el ratio crece, para luego descender, y por ultimo crece nuevamente solo que esta vez con un mayor incremento entre el 4to periodo del 2023 y 1er del 2024. 
+Con Gini, nunca hubo un descenso, esto se debe a que calculamos el area encerrada entre la equidad ideal y la curva de lorenz, en cambio con este enfoque solo estamos midiendo la relacion entre el noveno decil con el primero, obviando al resto de la distribucion. 
+
+##### Indice Theil
+
+Una propiedad del índice Theil es que se puede establecer una descomposición aditiva en dos componentes. Para conjuntos de subgrupos mutuamente excluyentes, {1,2,…,$G$}, el índice de Theil puede re-expresarse como:
+
+$$ T = \sum_{g=1}^{G} \frac{n_g \mu_g}{n\mu} T_g  + \sum_{g=1}^{G}\frac{n_g \mu_g}{n\mu} ln(\frac{\mu_g}{\mu}) $$
+de acuerdo a Bourguignon (1979), Cowell (1980) y Shorrocks (1980). [1]
+
+donde: 
+
+* $n_g$, es el número de observaciones en el subgrupo $g$. 
+
+* $\mu_g$, es el ingreso medio del subgrupo $g$.
+
+* $T_g$, es el índice Theil calculado para el subgrupo $g$.
+
+El primer sumando representa el componente de la desigualdad atribuido a las diferencias de ingresos **dentro** de un mismo grupo.
+
+El segundo sumando representa la desigualdad en los ingresos **entre** los subgrupos de la población.
+
+
+
+```{r}
+x <- c()
+w <- c()
+b <- c() 
+
+for (i in 1:5){
+  wage <- d[i][[1]]$wage
+  ubicacion <- d[i][[1]]$ubicacion
+    
+  Ts <- tapply(wage, ubicacion, Theil)
+  
+  # Calcular sum(wage) por ubicacion 
+  sums <- tapply(wage,ubicacion, function(w) faux(w,TRUE))
+  
+  # Calcular len(wage) por ubicacion 
+  ns <- tapply(wage,ubicacion, function(w) faux(w,FALSE))
+  
+  mu_n <- sum(sums)     
+  n <- sum(ns)
+  mu <- mu_n / sum(ns)
+  
+  within_ineq <- sum(sums*Ts / mu_n) 
+  between_ineq <- sum(sums*log((sums/ns) / mu) / mu_n)
+  Te <- within_ineq + between_ineq
+  x <- c(x,Te)
+  w <- c(w,within_ineq)
+  b <- c(b,between_ineq)
+}
+```
+
+Hacemos la división por **AGLOMERADO**, que en nuestro caso es **ubicacion**, luego hacemos el cálculo de la descomposición.
+
+```{r}
+plot(x, type = "o", col = "blue", pch = 16, ylab = "", xlab = "",
+     main = "Theil y su descomposicion",ylim = c(0,0.35), xaxt= "n")
+
+axis(1,at=1:5,labels = anios)
+# Añadir el segundo conjunto de datos con líneas
+lines(w, type = "o", col = "orange", pch = 16)
+
+# Añadir el tercer conjunto de datos con líneas
+lines(b, type = "o", col = "darkgray", pch = 16)
+
+# Añadir leyenda
+legend("topleft", legend = c("Theil", "within", "between"), col = c("blue", "orange", "darkgray"), 
+       pch = 16, lty = 1)
+```
+
+Observando el comportamiento de la componente **between**, podemos afirmar que la desigualdad entre las distintas ubicaciones se mantuvo constante durante este periodo. Atribuimos, entonces, la mayor parte del comportamiento del índice de Theil a la componente **within**.
+
+En particular, al notar que el índice de Theil aumenta en el cuarto trimestre de 2023, inferimos que hubo un incremento en la desigualdad salarial, el cual se debe principalmente a la desigualdad **dentro** de los subgrupos, que en nuestro análisis corresponden a las ubicaciones.
+
+
+2.b
+
+Comenzamos con la regresión RIF:
+
+Vamos a tomar cada periodo de tiempo y hacer el cálculo de RIF de lwage, usando como estadístico el índice de Gini, para luego calcular las estimaciones de los coeficientes resultantes de la regresión, tomamos **anios_edu** y **exp_pot** para luego graficarlos.
+
+```{r}
+
+coefs_rif_edu <- c()
+coefs_rif_exp <- c()
+ 
+for(i in 1:5){
+  # calculamos RIF en funcion de lwage.
+  rif_gini <- rif(log(d[i][[1]]$wage), method = "gini")
+  
+  RIFreg_gini <- lm(rif_gini ~ anios_edu + exp_pot + exp_pot_2 + edad + as.factor(est_civil), data = d[i][[1]])
+  
+  edu <- RIFreg_gini$coefficients[2]
+  exp <- RIFreg_gini$coefficients[3]
+  
+  coefs_rif_edu <- c(coefs_rif_edu, edu)
+  coefs_rif_exp <- c(coefs_rif_exp, exp)
+}
+```
+
+
+### Gráfico de las estimaciones de años de educación 
+
+```{r}
+plot(coefs_rif_edu, type = "o", col = "black", pch = 16, ylab = "", xlab = "", main = 'Años de educación', xaxt= "n", xlim = c(1, 5.3))
+
+axis(1,at=1:5,labels = anios)
+valid_indices <- which(!is.na(coefs_rif_edu))
+text(valid_indices, coefs_rif_edu, labels = paste( format(coefs_rif_edu[valid_indices], digits = 2)), pos = 4, cex = 0.8, col = "blue")
+```
+
+Observando el valor de los coeficientes estimados, vemos que son positivos, esto sugiere que el aumento en la educación incrementa la desigualdad salarial, como son cercanos a 0, no se puede hacer tal afirmación. Uno esperaría que dichas estimaciones fueran negativas. 
+
+
+```{r}
+plot(coefs_rif_exp, type = "o", col = "black", pch = 16, ylab = "", xlab = "", main = 'experiencia potencial', xaxt= "n",xlim = c(1, 5.3))
+
+axis(1,at=1:5,labels = anios)
+
+valid_indices <- which(!is.na(coefs_rif_exp))
+text(valid_indices, coefs_rif_exp, 
+     labels = paste( format(coefs_rif_exp[valid_indices], digits = 2)), 
+     pos = 4, cex = 0.8, col = "blue")
+```
+
+Se observan características similares a las anteriores, en tanto concluimos que ambas variables no afectan determinantemente a cambios en el mercado laboral, en los periodos estudiados. 
+
+### Oaxaca-Blinder 
+
+```{r}
+model_24 <- lm(log(wage) ~ anios_edu + exp_pot + exp_pot_2 + as.factor(est_civil),data = base24)
+model_23 <- lm(log(wage) ~ anios_edu + exp_pot + exp_pot_2 + as.factor(est_civil),data = base23_1)
+
+coef_24 <- coef(model_24)
+coef_23 <- coef(model_23)
+
+media_vars_24 <- colMeans(model.matrix(model_24))
+media_vars_23 <- colMeans(model.matrix(model_23))
+
+diff_total <- mean(log(base23_1$wage)) - mean(log(base24$wage))
+
+explained <- sum((media_vars_23 - media_vars_24) * coef_23)
+unexplained <- sum(media_vars_24 * (coef_23 - coef_24))
+
+cat("Diferencia total: ", diff_total, "\n")
+cat("Parte explicada: ", explained,"\n")
+cat("Parte no explicada: ",unexplained,"\n")
+```
+Observamos que el coeficiente correspondiente a la parte no explicada por las características observadas es alto en comparación con su "contraparte", por tanto no podemos afirmar que la brecha salarial del año 2023 al 2024 se deba a las características observada, es decir a los años educativos, experiencia potencial, y estado civil. 
+
+
+### Modelo IVQR 
+
+```{r}
+# Simulación de datos  --> vamos a querer estimar el valor de "alpha"
+
+n <- 100
+alpha_true <- 8
+x <- rnorm(n)
+z <- rnorm(n)
+u <- rnorm(n)
+d <- z + u + rnorm(n)
+y <- alpha_true * d + x + u
+```
+
+En algunas pruebas realizadas de la primera versión, estimó de manera muy acertada a cada valor, en cambio el inconveniente es que dependemos de un **hiper-parámetro** que está estrechamente relacionada con el valor a estimar, que para este código es **N**.
+
+Sin embargo utilizando algún método de optimización podemos minimizar la función **ivqr_loss**, también tenemos un hiper-parámetro, pero no cumple el mismo rol que en el método previamente mencionado. 
+
+
+```{r}
+opt_alpha_v1 <- function(y,d,x,z, N = 10){
+  # problema debemos determinar un rango de busqueda para alpha... 
+  # 
+  grilla_alphas <- seq(-N,N,0.01)
+  coef_z <- NA 
+  for(a in grilla_alphas){
+    coef_z <- rbind(coef_z, cbind(a, rq(y-a*d~ x + z)$coef[3]))
+  }
+  return(coef_z[which.min(abs(coef_z[,2])),1])
+}
+
+est_alpha_v2 <- function(y,d,x,z){
+  # funcion de perdida a optimizar 
+  ivqr_loss <- function(alpha, y, d, x, z) {
+    resid <- 
+    rq_model <- rq(y-alpha*d~ x + z)
+    return(sum(abs(rq_model$coef[3])))
+  }
+  
+  # Optimización para encontrar alpha
+  optim_res <- optim(par = 0, 
+                     fn = ivqr_loss, 
+                     y = y, d = d, x = x, z = z, 
+                     method = "BFGS")
+  return(optim_res$par) 
+}
+```
+
+```{r}
+alpha_est_v2 <- est_alpha_v2(y, d, x, z)
+alpha_est_v1 <- opt_alpha_v1(y,d,x,z)
+cat("Coeficiente estimado de alpha (para v1):", alpha_est_v1, "\n")
+cat("Coeficiente estimado de alpha (para v2):", alpha_est_v2, "\n")
+```
+
+
+[1]
+Shorrocks A. F., The Class of Additively Decomposable Inequality Measures. Econometrica 48, 613-625. 1980.
+
+Cowell F., On the Structure of Additive Inequality Measures. Review of Economic Studies 47, 521-531. 1980.
+
+Bourguignon F., Decomposable Income Inequality Measures. Econometrica 47, 901-920.
+1979

@@ -1754,29 +1754,52 @@ display: none;
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShxdWFudHJlZyk7XG4jbGlicmFyeShyZWFkeGwpOyAjIHBhcmEgbGVlciBhcmNoaXZvcyB4bWwsIHBlcm8gdmFtb3MgYSB1c2FyIGVsIHBhcXVldGUgZXBoXG5saWJyYXJ5KGVwaCk7XG5saWJyYXJ5KGRwbHlyKTtcbmxpYnJhcnkodGlkeXIpXG5saWJyYXJ5KGdncGxvdDIpXG5zb3VyY2UoXCJmdW5jaW9uZXMuUlwiKSAjIGZ1bmNpb25lcyBhdXhpbGlhcmVzIHBhcmEgbm8gb2N1cGFyIHRhbnRvIGVzcGFjaW9cbmxpYnJhcnkoaW5lcSlcbmxpYnJhcnkoZGluZXEpXG5gYGAifQ== -->
-<pre class="r"><code>library(quantreg);
+<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVZR0JnY2x4dWJHbGljbUZ5ZVNoeGRXRnVkSEpsWnlrN1hHNGpiR2xpY21GeWVTaHlaV0ZrZUd3cE95QWpJSEJoY21FZ2JHVmxjaUJoY21Ob2FYWnZjeUI0Yld3c0lIQmxjbThnZG1GdGIzTWdZU0IxYzJGeUlHVnNJSEJoY1hWbGRHVWdaWEJvWEc1c2FXSnlZWEo1S0dWd2FDazdYRzVzYVdKeVlYSjVLR1J3YkhseUtUdGNibXhwWW5KaGNua29kR2xrZVhJcFhHNXNhV0p5WVhKNUtHZG5jR3h2ZERJcFhHNXpiM1Z5WTJVb1hGeG1kVzVqYVc5dVpYTXVVbHhjS1NBaklHWjFibU5wYjI1bGN5QmhkWGhwYkdsaGNtVnpJSEJoY21FZ2JtOGdiMk4xY0dGeUlIUmhiblJ2SUdWemNHRmphVzljYm14cFluSmhjbmtvYVc1bGNTbGNibXhwWW5KaGNua29aR2x1WlhFcFhHNWdZR0JjYm1CZ1lDSjkgLS0+XG5cbmBgYHJcbmBgYHJcbmxpYnJhcnkocXVhbnRyZWcpO1xuI2xpYnJhcnkocmVhZHhsKTsgIyBwYXJhIGxlZXIgYXJjaGl2b3MgeG1sLCBwZXJvIHZhbW9zIGEgdXNhciBlbCBwYXF1ZXRlIGVwaFxubGlicmFyeShlcGgpO1xubGlicmFyeShkcGx5cik7XG5saWJyYXJ5KHRpZHlyKVxubGlicmFyeShnZ3Bsb3QyKVxuc291cmNlKFxcZnVuY2lvbmVzLlJcXCkgIyBmdW5jaW9uZXMgYXV4aWxpYXJlcyBwYXJhIG5vIG9jdXBhciB0YW50byBlc3BhY2lvXG5saWJyYXJ5KGluZXEpXG5saWJyYXJ5KGRpbmVxKVxuYGBgXG5gYGBcblxuPCEtLSBybmItc291cmNlLWVuZCAtLT5cbiJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxubGlicmFyeShxdWFudHJlZyk7XG4jbGlicmFyeShyZWFkeGwpOyAjIHBhcmEgbGVlciBhcmNoaXZvcyB4bWwsIHBlcm8gdmFtb3MgYSB1c2FyIGVsIHBhcXVldGUgZXBoXG5saWJyYXJ5KGVwaCk7XG5saWJyYXJ5KGRwbHlyKTtcbmxpYnJhcnkodGlkeXIpXG5saWJyYXJ5KGdncGxvdDIpXG5zb3VyY2UoXFxmdW5jaW9uZXMuUlxcKSAjIGZ1bmNpb25lcyBhdXhpbGlhcmVzIHBhcmEgbm8gb2N1cGFyIHRhbnRvIGVzcGFjaW9cbmxpYnJhcnkoaW5lcSlcbmxpYnJhcnkoZGluZXEpXG5gYGBcbmBgYCJ9 -->
+<pre class="r"><code>```r
+library(quantreg);
 #library(readxl); # para leer archivos xml, pero vamos a usar el paquete eph
 library(eph);
 library(dplyr);
 library(tidyr)
 library(ggplot2)
-source(&quot;funciones.R&quot;) # funciones auxiliares para no ocupar tanto espacio
+source(\funciones.R\) # funciones auxiliares para no ocupar tanto espacio
 library(ineq)
 library(dineq)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudmFyaWFibGVzID0gYyhcIlAyMVwiLFwiQUdMT01FUkFET1wiLFwiQ0gwN1wiLFwiQ0gwNlwiLFwiQ0gwM1wiLFwiQ0gwNFwiLFwiQ0gxM1wiLFwiQ0gxMlwiLFwiQ0gxNFwiKVxuXG5iYXNlMjQgICA8LSBnZXRfbWljcm9kYXRhKHllYXIgPSAyMDI0LCBwZXJpb2QgPSAxLCB0eXBlID0gXCJpbmRpdmlkdWFsXCIsZGVzdGZpbGU9XCJFUEhfMjAyNF8xX2luZGl2aWR1YWwuemlwXCIsdmFycyA9IHZhcmlhYmxlcykgIyBwYXJhIGxlZXIgdXNhbmRvIGVsIHBhcXVldGUgZXBoIFxuYmFzZTIzXzEgPC0gZ2V0X21pY3JvZGF0YSh5ZWFyID0gMjAyMyxwZXJpb2Q9MSx0eXBlPVwiaW5kaXZpZHVhbFwiLGRlc3RmaWxlPVwiRVBIXzIwMjNfMV9pbmRpdmlkdWFsLnppcFwiLHZhcnMgPSB2YXJpYWJsZXMpIFxuYmFzZTIzXzIgPC0gZ2V0X21pY3JvZGF0YSh5ZWFyID0gMjAyMyxwZXJpb2Q9Mix0eXBlPVwiaW5kaXZpZHVhbFwiLGRlc3RmaWxlPVwiRVBIXzIwMjNfMl9pbmRpdmlkdWFsLnppcFwiLHZhcnMgPSB2YXJpYWJsZXMpIFxuYmFzZTIzXzMgPC0gZ2V0X21pY3JvZGF0YSh5ZWFyID0gMjAyMyxwZXJpb2Q9Myx0eXBlPVwiaW5kaXZpZHVhbFwiLGRlc3RmaWxlPVwiRVBIXzIwMjNfM19pbmRpdmlkdWFsLnppcFwiLHZhcnMgPSB2YXJpYWJsZXMpIFxuYmFzZTIzXzQgPC0gZ2V0X21pY3JvZGF0YSh5ZWFyID0gMjAyMyxwZXJpb2Q9NCx0eXBlPVwiaW5kaXZpZHVhbFwiLGRlc3RmaWxlPVwiRVBIXzIwMjNfNF9pbmRpdmlkdWFsLnppcFwiLHZhcnMgPSB2YXJpYWJsZXMpIFxuXG4jYmFzZTIwMjQgPC0gcmVhZF9leGNlbCgnRVBIX3VzdV8xZXJfVHJpbV8yMDI0X3hsc3gvdXN1X2luZGl2aWR1YWxfVDEyNC54bHN4JylcblxuYmFzZTI0IDwtIGZfcmVzdHJpY2Npb25lcyhiYXNlMjQkbWljcm9kYXRhW1sxXV0pXG5iYXNlMjNfMSA8LSBmX3Jlc3RyaWNjaW9uZXMoYmFzZTIzXzEkbWljcm9kYXRhW1sxXV0pXG5iYXNlMjNfMiA8LSBmX3Jlc3RyaWNjaW9uZXMoYmFzZTIzXzIkbWljcm9kYXRhW1sxXV0pXG5iYXNlMjNfMyA8LSBmX3Jlc3RyaWNjaW9uZXMoYmFzZTIzXzMkbWljcm9kYXRhW1sxXV0pXG5iYXNlMjNfNCA8LSBmX3Jlc3RyaWNjaW9uZXMoYmFzZTIzXzQkbWljcm9kYXRhW1sxXV0pXG5gYGAifQ== -->
-<pre class="r"><code>variables = c(&quot;P21&quot;,&quot;AGLOMERADO&quot;,&quot;CH07&quot;,&quot;CH06&quot;,&quot;CH03&quot;,&quot;CH04&quot;,&quot;CH13&quot;,&quot;CH12&quot;,&quot;CH14&quot;)
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
 
-base24   &lt;- get_microdata(year = 2024, period = 1, type = &quot;individual&quot;,destfile=&quot;EPH_2024_1_individual.zip&quot;,vars = variables) # para leer usando el paquete eph 
-base23_1 &lt;- get_microdata(year = 2023,period=1,type=&quot;individual&quot;,destfile=&quot;EPH_2023_1_individual.zip&quot;,vars = variables) 
-base23_2 &lt;- get_microdata(year = 2023,period=2,type=&quot;individual&quot;,destfile=&quot;EPH_2023_2_individual.zip&quot;,vars = variables) 
-base23_3 &lt;- get_microdata(year = 2023,period=3,type=&quot;individual&quot;,destfile=&quot;EPH_2023_3_individual.zip&quot;,vars = variables) 
-base23_4 &lt;- get_microdata(year = 2023,period=4,type=&quot;individual&quot;,destfile=&quot;EPH_2023_4_individual.zip&quot;,vars = variables) 
+
+&lt;!-- rnb-output-end --&gt;
+
+&lt;!-- rnb-chunk-end --&gt;
+
+
+&lt;!-- rnb-text-begin --&gt;
+
+
+
+
+&lt;!-- rnb-text-end --&gt;
+
+
+&lt;!-- rnb-chunk-begin --&gt;
+
+
+&lt;!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVZR0JnY2x4dWRtRnlhV0ZpYkdWeklEMGdZeWhjWEZBeU1WeGNMRnhjUVVkTVQwMUZVa0ZFVDF4Y0xGeGNRMGd3TjF4Y0xGeGNRMGd3Tmx4Y0xGeGNRMGd3TTF4Y0xGeGNRMGd3TkZ4Y0xGeGNRMGd4TTF4Y0xGeGNRMGd4TWx4Y0xGeGNRMGd4TkZ4Y0tWeHVYRzVpWVhObE1qUWdJQ0E4TFNCblpYUmZiV2xqY205a1lYUmhLSGxsWVhJZ1BTQXlNREkwTENCd1pYSnBiMlFnUFNBeExDQjBlWEJsSUQwZ1hGeHBibVJwZG1sa2RXRnNYRndzWkdWemRHWnBiR1U5WEZ4RlVFaGZNakF5TkY4eFgybHVaR2wyYVdSMVlXd3VlbWx3WEZ3c2RtRnljeUE5SUhaaGNtbGhZbXhsY3lrZ0l5QndZWEpoSUd4bFpYSWdkWE5oYm1SdklHVnNJSEJoY1hWbGRHVWdaWEJvSUZ4dVltRnpaVEl6WHpFZ1BDMGdaMlYwWDIxcFkzSnZaR0YwWVNoNVpXRnlJRDBnTWpBeU15eHdaWEpwYjJROU1TeDBlWEJsUFZ4Y2FXNWthWFpwWkhWaGJGeGNMR1JsYzNSbWFXeGxQVnhjUlZCSVh6SXdNak5mTVY5cGJtUnBkbWxrZFdGc0xucHBjRnhjTEhaaGNuTWdQU0IyWVhKcFlXSnNaWE1wSUZ4dVltRnpaVEl6WHpJZ1BDMGdaMlYwWDIxcFkzSnZaR0YwWVNoNVpXRnlJRDBnTWpBeU15eHdaWEpwYjJROU1peDBlWEJsUFZ4Y2FXNWthWFpwWkhWaGJGeGNMR1JsYzNSbWFXeGxQVnhjUlZCSVh6SXdNak5mTWw5cGJtUnBkbWxrZFdGc0xucHBjRnhjTEhaaGNuTWdQU0IyWVhKcFlXSnNaWE1wSUZ4dVltRnpaVEl6WHpNZ1BDMGdaMlYwWDIxcFkzSnZaR0YwWVNoNVpXRnlJRDBnTWpBeU15eHdaWEpwYjJROU15eDBlWEJsUFZ4Y2FXNWthWFpwWkhWaGJGeGNMR1JsYzNSbWFXeGxQVnhjUlZCSVh6SXdNak5mTTE5cGJtUnBkbWxrZFdGc0xucHBjRnhjTEhaaGNuTWdQU0IyWVhKcFlXSnNaWE1wSUZ4dVltRnpaVEl6WHpRZ1BDMGdaMlYwWDIxcFkzSnZaR0YwWVNoNVpXRnlJRDBnTWpBeU15eHdaWEpwYjJROU5DeDBlWEJsUFZ4Y2FXNWthWFpwWkhWaGJGeGNMR1JsYzNSbWFXeGxQVnhjUlZCSVh6SXdNak5mTkY5cGJtUnBkbWxrZFdGc0xucHBjRnhjTEhaaGNuTWdQU0IyWVhKcFlXSnNaWE1wSUZ4dVhHNGpZbUZ6WlRJd01qUWdQQzBnY21WaFpGOWxlR05sYkNnblJWQklYM1Z6ZFY4eFpYSmZWSEpwYlY4eU1ESTBYM2hzYzNndmRYTjFYMmx1WkdsMmFXUjFZV3hmVkRFeU5DNTRiSE40SnlsY2JseHVZbUZ6WlRJMElEd3RJR1pmY21WemRISnBZMk5wYjI1bGN5aGlZWE5sTWpRa2JXbGpjbTlrWVhSaFcxc3hYVjBwWEc1aVlYTmxNak5mTVNBOExTQm1YM0psYzNSeWFXTmphVzl1WlhNb1ltRnpaVEl6WHpFa2JXbGpjbTlrWVhSaFcxc3hYVjBwWEc1aVlYTmxNak5mTWlBOExTQm1YM0psYzNSeWFXTmphVzl1WlhNb1ltRnpaVEl6WHpJa2JXbGpjbTlrWVhSaFcxc3hYVjBwWEc1aVlYTmxNak5mTXlBOExTQm1YM0psYzNSeWFXTmphVzl1WlhNb1ltRnpaVEl6WHpNa2JXbGpjbTlrWVhSaFcxc3hYVjBwWEc1aVlYTmxNak5mTkNBOExTQm1YM0psYzNSeWFXTmphVzl1WlhNb1ltRnpaVEl6WHpRa2JXbGpjbTlrWVhSaFcxc3hYVjBwWEc1Z1lHQmNibUJnWUNKOSAtLT5cblxuYGBgclxuYGBgclxudmFyaWFibGVzID0gYyhcXFAyMVxcLFxcQUdMT01FUkFET1xcLFxcQ0gwN1xcLFxcQ0gwNlxcLFxcQ0gwM1xcLFxcQ0gwNFxcLFxcQ0gxM1xcLFxcQ0gxMlxcLFxcQ0gxNFxcKVxuXG5iYXNlMjQgICA8LSBnZXRfbWljcm9kYXRhKHllYXIgPSAyMDI0LCBwZXJpb2QgPSAxLCB0eXBlID0gXFxpbmRpdmlkdWFsXFwsZGVzdGZpbGU9XFxFUEhfMjAyNF8xX2luZGl2aWR1YWwuemlwXFwsdmFycyA9IHZhcmlhYmxlcykgIyBwYXJhIGxlZXIgdXNhbmRvIGVsIHBhcXVldGUgZXBoIFxuYmFzZTIzXzEgPC0gZ2V0X21pY3JvZGF0YSh5ZWFyID0gMjAyMyxwZXJpb2Q9MSx0eXBlPVxcaW5kaXZpZHVhbFxcLGRlc3RmaWxlPVxcRVBIXzIwMjNfMV9pbmRpdmlkdWFsLnppcFxcLHZhcnMgPSB2YXJpYWJsZXMpIFxuYmFzZTIzXzIgPC0gZ2V0X21pY3JvZGF0YSh5ZWFyID0gMjAyMyxwZXJpb2Q9Mix0eXBlPVxcaW5kaXZpZHVhbFxcLGRlc3RmaWxlPVxcRVBIXzIwMjNfMl9pbmRpdmlkdWFsLnppcFxcLHZhcnMgPSB2YXJpYWJsZXMpIFxuYmFzZTIzXzMgPC0gZ2V0X21pY3JvZGF0YSh5ZWFyID0gMjAyMyxwZXJpb2Q9Myx0eXBlPVxcaW5kaXZpZHVhbFxcLGRlc3RmaWxlPVxcRVBIXzIwMjNfM19pbmRpdmlkdWFsLnppcFxcLHZhcnMgPSB2YXJpYWJsZXMpIFxuYmFzZTIzXzQgPC0gZ2V0X21pY3JvZGF0YSh5ZWFyID0gMjAyMyxwZXJpb2Q9NCx0eXBlPVxcaW5kaXZpZHVhbFxcLGRlc3RmaWxlPVxcRVBIXzIwMjNfNF9pbmRpdmlkdWFsLnppcFxcLHZhcnMgPSB2YXJpYWJsZXMpIFxuXG4jYmFzZTIwMjQgPC0gcmVhZF9leGNlbCgnRVBIX3VzdV8xZXJfVHJpbV8yMDI0X3hsc3gvdXN1X2luZGl2aWR1YWxfVDEyNC54bHN4JylcblxuYmFzZTI0IDwtIGZfcmVzdHJpY2Npb25lcyhiYXNlMjQkbWljcm9kYXRhW1sxXV0pXG5iYXNlMjNfMSA8LSBmX3Jlc3RyaWNjaW9uZXMoYmFzZTIzXzEkbWljcm9kYXRhW1sxXV0pXG5iYXNlMjNfMiA8LSBmX3Jlc3RyaWNjaW9uZXMoYmFzZTIzXzIkbWljcm9kYXRhW1sxXV0pXG5iYXNlMjNfMyA8LSBmX3Jlc3RyaWNjaW9uZXMoYmFzZTIzXzMkbWljcm9kYXRhW1sxXV0pXG5iYXNlMjNfNCA8LSBmX3Jlc3RyaWNjaW9uZXMoYmFzZTIzXzQkbWljcm9kYXRhW1sxXV0pXG5gYGBcbmBgYFxuXG48IS0tIHJuYi1zb3VyY2UtZW5kIC0tPlxuIn0= --&gt;
+
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxudmFyaWFibGVzID0gYyhcXFAyMVxcLFxcQUdMT01FUkFET1xcLFxcQ0gwN1xcLFxcQ0gwNlxcLFxcQ0gwM1xcLFxcQ0gwNFxcLFxcQ0gxM1xcLFxcQ0gxMlxcLFxcQ0gxNFxcKVxuXG5iYXNlMjQgICA8LSBnZXRfbWljcm9kYXRhKHllYXIgPSAyMDI0LCBwZXJpb2QgPSAxLCB0eXBlID0gXFxpbmRpdmlkdWFsXFwsZGVzdGZpbGU9XFxFUEhfMjAyNF8xX2luZGl2aWR1YWwuemlwXFwsdmFycyA9IHZhcmlhYmxlcykgIyBwYXJhIGxlZXIgdXNhbmRvIGVsIHBhcXVldGUgZXBoIFxuYmFzZTIzXzEgPC0gZ2V0X21pY3JvZGF0YSh5ZWFyID0gMjAyMyxwZXJpb2Q9MSx0eXBlPVxcaW5kaXZpZHVhbFxcLGRlc3RmaWxlPVxcRVBIXzIwMjNfMV9pbmRpdmlkdWFsLnppcFxcLHZhcnMgPSB2YXJpYWJsZXMpIFxuYmFzZTIzXzIgPC0gZ2V0X21pY3JvZGF0YSh5ZWFyID0gMjAyMyxwZXJpb2Q9Mix0eXBlPVxcaW5kaXZpZHVhbFxcLGRlc3RmaWxlPVxcRVBIXzIwMjNfMl9pbmRpdmlkdWFsLnppcFxcLHZhcnMgPSB2YXJpYWJsZXMpIFxuYmFzZTIzXzMgPC0gZ2V0X21pY3JvZGF0YSh5ZWFyID0gMjAyMyxwZXJpb2Q9Myx0eXBlPVxcaW5kaXZpZHVhbFxcLGRlc3RmaWxlPVxcRVBIXzIwMjNfM19pbmRpdmlkdWFsLnppcFxcLHZhcnMgPSB2YXJpYWJsZXMpIFxuYmFzZTIzXzQgPC0gZ2V0X21pY3JvZGF0YSh5ZWFyID0gMjAyMyxwZXJpb2Q9NCx0eXBlPVxcaW5kaXZpZHVhbFxcLGRlc3RmaWxlPVxcRVBIXzIwMjNfNF9pbmRpdmlkdWFsLnppcFxcLHZhcnMgPSB2YXJpYWJsZXMpIFxuXG4jYmFzZTIwMjQgPC0gcmVhZF9leGNlbCgnRVBIX3VzdV8xZXJfVHJpbV8yMDI0X3hsc3gvdXN1X2luZGl2aWR1YWxfVDEyNC54bHN4JylcblxuYmFzZTI0IDwtIGZfcmVzdHJpY2Npb25lcyhiYXNlMjQkbWljcm9kYXRhW1sxXV0pXG5iYXNlMjNfMSA8LSBmX3Jlc3RyaWNjaW9uZXMoYmFzZTIzXzEkbWljcm9kYXRhW1sxXV0pXG5iYXNlMjNfMiA8LSBmX3Jlc3RyaWNjaW9uZXMoYmFzZTIzXzIkbWljcm9kYXRhW1sxXV0pXG5iYXNlMjNfMyA8LSBmX3Jlc3RyaWNjaW9uZXMoYmFzZTIzXzMkbWljcm9kYXRhW1sxXV0pXG5iYXNlMjNfNCA8LSBmX3Jlc3RyaWNjaW9uZXMoYmFzZTIzXzQkbWljcm9kYXRhW1sxXV0pXG5gYGBcbmBgYCJ9 --&gt;
+
+```r
+```r
+variables = c(\P21\,\AGLOMERADO\,\CH07\,\CH06\,\CH03\,\CH04\,\CH13\,\CH12\,\CH14\)
+
+base24   &lt;- get_microdata(year = 2024, period = 1, type = \individual\,destfile=\EPH_2024_1_individual.zip\,vars = variables) # para leer usando el paquete eph 
+base23_1 &lt;- get_microdata(year = 2023,period=1,type=\individual\,destfile=\EPH_2023_1_individual.zip\,vars = variables) 
+base23_2 &lt;- get_microdata(year = 2023,period=2,type=\individual\,destfile=\EPH_2023_2_individual.zip\,vars = variables) 
+base23_3 &lt;- get_microdata(year = 2023,period=3,type=\individual\,destfile=\EPH_2023_3_individual.zip\,vars = variables) 
+base23_4 &lt;- get_microdata(year = 2023,period=4,type=\individual\,destfile=\EPH_2023_4_individual.zip\,vars = variables) 
 
 #base2024 &lt;- read_excel(&#39;EPH_usu_1er_Trim_2024_xlsx/usu_individual_T124.xlsx&#39;)
 
@@ -1785,97 +1808,145 @@ base23_1 &lt;- f_restricciones(base23_1$microdata[[1]])
 base23_2 &lt;- f_restricciones(base23_2$microdata[[1]])
 base23_3 &lt;- f_restricciones(base23_3$microdata[[1]])
 base23_4 &lt;- f_restricciones(base23_4$microdata[[1]])</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>2.a</p>
-<div id="indice-gini" class="section level3">
-<h3>Indice Gini</h3>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBQcmltZXJvIGRlZmluaW1vcyBsYSBsaXN0YSBkb25kZSBpdGVyYXJlbW9zIGNhZGEgZGF0YS5mcmFtZVxuZCA8LSBsaXN0KGJhc2UyM18xLGJhc2UyM18yLGJhc2UyM18zLGJhc2UyM180LGJhc2UyNClcblxuIyBhbmlvcyB5IHBlcmlvZG9zIGRlIGNhZGEgZGF0YS5mcmFtZSBcbmFuaW9zIDwtIGMoXCIyMDIzLTEgcGVyXCIsXCIyMDIzLTIgcGVyXCIsXCIyMDIzLTMgcGVyXCIsXCIyMDIzLTQgcGVyXCIsXCIyMDI0LTEgcGVyXCIpXG5cbmcgPC0gYygpXG5mb3IoaSBpbiAxOjUpe1xuICBnIDwtIGMoZyxHaW5pKGRbaV1bWzFdXSR3YWdlKSlcbn1cblxucGxvdChnLCB0eXBlID0gXCJvXCIsIGNvbCA9IFwiYmxhY2tcIiwgcGNoID0gMTYsIHlsYWIgPSBcIlwiLCB4bGFiID0gXCJcIixcbiAgICAgbWFpbiA9IFwiaW5kaWNlIEdpbmlcIiwgeGF4dD0gXCJuXCIsIHlsaW0gPSBjKDAuMzMsMC4zOCkpXG5cbmF4aXMoMSxhdD0xOjUsbGFiZWxzID0gYW5pb3MpXG5gYGAifQ== -->
-<pre class="r"><code># Primero definimos la lista donde iteraremos cada data.frame
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+
+&lt;!-- rnb-output-end --&gt;
+
+&lt;!-- rnb-chunk-end --&gt;
+
+
+&lt;!-- rnb-text-begin --&gt;
+
+
+2.a 
+
+### Indice Gini 
+
+
+&lt;!-- rnb-text-end --&gt;
+
+
+&lt;!-- rnb-chunk-begin --&gt;
+
+
+&lt;!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVZR0JnY2x4dUl5QlFjbWx0WlhKdklHUmxabWx1YVcxdmN5QnNZU0JzYVhOMFlTQmtiMjVrWlNCcGRHVnlZWEpsYlc5eklHTmhaR0VnWkdGMFlTNW1jbUZ0WlZ4dVpDQThMU0JzYVhOMEtHSmhjMlV5TTE4eExHSmhjMlV5TTE4eUxHSmhjMlV5TTE4ekxHSmhjMlV5TTE4MExHSmhjMlV5TkNsY2JseHVJeUJoYm1sdmN5QjVJSEJsY21sdlpHOXpJR1JsSUdOaFpHRWdaR0YwWVM1bWNtRnRaU0JjYm1GdWFXOXpJRHd0SUdNb1hGd3lNREl6TFRFZ2NHVnlYRndzWEZ3eU1ESXpMVElnY0dWeVhGd3NYRnd5TURJekxUTWdjR1Z5WEZ3c1hGd3lNREl6TFRRZ2NHVnlYRndzWEZ3eU1ESTBMVEVnY0dWeVhGd3BYRzVjYm1jZ1BDMGdZeWdwWEc1bWIzSW9hU0JwYmlBeE9qVXBlMXh1SUNCbklEd3RJR01vWnl4SGFXNXBLR1JiYVYxYld6RmRYU1IzWVdkbEtTbGNibjFjYmx4dWNHeHZkQ2huTENCMGVYQmxJRDBnWEZ4dlhGd3NJR052YkNBOUlGeGNZbXhoWTJ0Y1hDd2djR05vSUQwZ01UWXNJSGxzWVdJZ1BTQmNYRnhjTENCNGJHRmlJRDBnWEZ4Y1hDeGNiaUFnSUNBZ2JXRnBiaUE5SUZ4Y2FXNWthV05sSUVkcGJtbGNYQ3dnZUdGNGREMGdYRnh1WEZ3c0lIbHNhVzBnUFNCaktEQXVNek1zTUM0ek9Da3BYRzVjYm1GNGFYTW9NU3hoZEQweE9qVXNiR0ZpWld4eklEMGdZVzVwYjNNcFhHNWdZR0JjYm1CZ1lDSjkgLS0+XG5cbmBgYHJcbmBgYHJcbiMgUHJpbWVybyBkZWZpbmltb3MgbGEgbGlzdGEgZG9uZGUgaXRlcmFyZW1vcyBjYWRhIGRhdGEuZnJhbWVcbmQgPC0gbGlzdChiYXNlMjNfMSxiYXNlMjNfMixiYXNlMjNfMyxiYXNlMjNfNCxiYXNlMjQpXG5cbiMgYW5pb3MgeSBwZXJpb2RvcyBkZSBjYWRhIGRhdGEuZnJhbWUgXG5hbmlvcyA8LSBjKFxcMjAyMy0xIHBlclxcLFxcMjAyMy0yIHBlclxcLFxcMjAyMy0zIHBlclxcLFxcMjAyMy00IHBlclxcLFxcMjAyNC0xIHBlclxcKVxuXG5nIDwtIGMoKVxuZm9yKGkgaW4gMTo1KXtcbiAgZyA8LSBjKGcsR2luaShkW2ldW1sxXV0kd2FnZSkpXG59XG5cbnBsb3QoZywgdHlwZSA9IFxcb1xcLCBjb2wgPSBcXGJsYWNrXFwsIHBjaCA9IDE2LCB5bGFiID0gXFxcXCwgeGxhYiA9IFxcXFwsXG4gICAgIG1haW4gPSBcXGluZGljZSBHaW5pXFwsIHhheHQ9IFxcblxcLCB5bGltID0gYygwLjMzLDAuMzgpKVxuXG5heGlzKDEsYXQ9MTo1LGxhYmVscyA9IGFuaW9zKVxuYGBgXG5gYGBcblxuPCEtLSBybmItc291cmNlLWVuZCAtLT5cbiJ9 --&gt;
+
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuIyBQcmltZXJvIGRlZmluaW1vcyBsYSBsaXN0YSBkb25kZSBpdGVyYXJlbW9zIGNhZGEgZGF0YS5mcmFtZVxuZCA8LSBsaXN0KGJhc2UyM18xLGJhc2UyM18yLGJhc2UyM18zLGJhc2UyM180LGJhc2UyNClcblxuIyBhbmlvcyB5IHBlcmlvZG9zIGRlIGNhZGEgZGF0YS5mcmFtZSBcbmFuaW9zIDwtIGMoXFwyMDIzLTEgcGVyXFwsXFwyMDIzLTIgcGVyXFwsXFwyMDIzLTMgcGVyXFwsXFwyMDIzLTQgcGVyXFwsXFwyMDI0LTEgcGVyXFwpXG5cbmcgPC0gYygpXG5mb3IoaSBpbiAxOjUpe1xuICBnIDwtIGMoZyxHaW5pKGRbaV1bWzFdXSR3YWdlKSlcbn1cblxucGxvdChnLCB0eXBlID0gXFxvXFwsIGNvbCA9IFxcYmxhY2tcXCwgcGNoID0gMTYsIHlsYWIgPSBcXFxcLCB4bGFiID0gXFxcXCxcbiAgICAgbWFpbiA9IFxcaW5kaWNlIEdpbmlcXCwgeGF4dD0gXFxuXFwsIHlsaW0gPSBjKDAuMzMsMC4zOCkpXG5cbmF4aXMoMSxhdD0xOjUsbGFiZWxzID0gYW5pb3MpXG5gYGBcbmBgYCJ9 --&gt;
+
+```r
+```r
+# Primero definimos la lista donde iteraremos cada data.frame
 d &lt;- list(base23_1,base23_2,base23_3,base23_4,base24)
 
 # anios y periodos de cada data.frame 
-anios &lt;- c(&quot;2023-1 per&quot;,&quot;2023-2 per&quot;,&quot;2023-3 per&quot;,&quot;2023-4 per&quot;,&quot;2024-1 per&quot;)
+anios &lt;- c(\2023-1 per\,\2023-2 per\,\2023-3 per\,\2023-4 per\,\2024-1 per\)
 
 g &lt;- c()
 for(i in 1:5){
   g &lt;- c(g,Gini(d[i][[1]]$wage))
 }
 
-plot(g, type = &quot;o&quot;, col = &quot;black&quot;, pch = 16, ylab = &quot;&quot;, xlab = &quot;&quot;,
-     main = &quot;indice Gini&quot;, xaxt= &quot;n&quot;, ylim = c(0.33,0.38))
+plot(g, type = \o\, col = \black\, pch = 16, ylab = \\, xlab = \\,
+     main = \indice Gini\, xaxt= \n\, ylim = c(0.33,0.38))
 
 axis(1,at=1:5,labels = anios)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>La comparación de los valores del índice de Gini entre 2023 y 2024
-muestra un aumento de 0.352 a 0.380, del 3er periodo del 2023 al 4to
-periodo, se observa un mayor incremento, implica un cambio negativo en
-términos de equidad, ya que un índice de Gini mayor indica una mayor
-desigualdad en la distribución de los ingresos en la población.</p>
-</div>
-<div id="ratios-fracq90q10" class="section level3">
-<h3>Ratios <span class="math inline">\(\frac{Q90}{Q10}\)</span></h3>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucSA8LSBjKClcbiBcbmZvcihpIGluIDE6NSl7XG4gIHZhbG9yIDwtIHF1YW50aWxlKGRbaV1bWzFdXSR3YWdlLDAuOSkgLyBxdWFudGlsZShkW2ldW1sxXV0kd2FnZSwwLjEpXG4gIHEgPC0gYyhxLHZhbG9yKVxufVxucGxvdChxLCB0eXBlID0gXCJvXCIsIGNvbCA9IFwiYmxhY2tcIiwgcGNoID0gMTYsIHlsYWIgPSBcIlwiLCB4bGFiID0gXCJcIixcbiAgICAgbWFpbiA9ICdSYXRpb3MgUTkwL1ExMCcsIHhheHQ9IFwiblwiKVxuXG5heGlzKDEsYXQ9MTo1LGxhYmVscyA9IGFuaW9zKVxuYGBgIn0= -->
-<pre class="r"><code>q &lt;- c()
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+
+&lt;!-- rnb-output-end --&gt;
+
+&lt;!-- rnb-chunk-end --&gt;
+
+
+&lt;!-- rnb-text-begin --&gt;
+
+
+La comparación de los valores del índice de Gini entre 2023 y 2024 muestra un aumento de 0.352 a 0.380, del 3er periodo del 2023 al 4to periodo, se observa un mayor incremento, implica un cambio negativo en términos de equidad, ya que un índice de Gini mayor indica una mayor desigualdad en la distribución de los ingresos en la población.
+
+### Ratios $\frac{Q90}{Q10}$
+
+
+&lt;!-- rnb-text-end --&gt;
+
+
+&lt;!-- rnb-chunk-begin --&gt;
+
+
+&lt;!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVZR0JnY2x4dWNTQThMU0JqS0NsY2JpQmNibVp2Y2locElHbHVJREU2TlNsN1hHNGdJSFpoYkc5eUlEd3RJSEYxWVc1MGFXeGxLR1JiYVYxYld6RmRYU1IzWVdkbExEQXVPU2tnTHlCeGRXRnVkR2xzWlNoa1cybGRXMXN4WFYwa2QyRm5aU3d3TGpFcFhHNGdJSEVnUEMwZ1l5aHhMSFpoYkc5eUtWeHVmVnh1Y0d4dmRDaHhMQ0IwZVhCbElEMGdYRnh2WEZ3c0lHTnZiQ0E5SUZ4Y1lteGhZMnRjWEN3Z2NHTm9JRDBnTVRZc0lIbHNZV0lnUFNCY1hGeGNMQ0I0YkdGaUlEMGdYRnhjWEN4Y2JpQWdJQ0FnYldGcGJpQTlJQ2RTWVhScGIzTWdVVGt3TDFFeE1DY3NJSGhoZUhROUlGeGNibHhjS1Z4dVhHNWhlR2x6S0RFc1lYUTlNVG8xTEd4aFltVnNjeUE5SUdGdWFXOXpLVnh1WUdCZ1hHNWdZR0FpZlE9PSAtLT5cblxuYGBgclxuYGBgclxucSA8LSBjKClcbiBcbmZvcihpIGluIDE6NSl7XG4gIHZhbG9yIDwtIHF1YW50aWxlKGRbaV1bWzFdXSR3YWdlLDAuOSkgLyBxdWFudGlsZShkW2ldW1sxXV0kd2FnZSwwLjEpXG4gIHEgPC0gYyhxLHZhbG9yKVxufVxucGxvdChxLCB0eXBlID0gXFxvXFwsIGNvbCA9IFxcYmxhY2tcXCwgcGNoID0gMTYsIHlsYWIgPSBcXFxcLCB4bGFiID0gXFxcXCxcbiAgICAgbWFpbiA9ICdSYXRpb3MgUTkwL1ExMCcsIHhheHQ9IFxcblxcKVxuXG5heGlzKDEsYXQ9MTo1LGxhYmVscyA9IGFuaW9zKVxuYGBgXG5gYGBcblxuPCEtLSBybmItc291cmNlLWVuZCAtLT5cbiJ9 --&gt;
+
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxucSA8LSBjKClcbiBcbmZvcihpIGluIDE6NSl7XG4gIHZhbG9yIDwtIHF1YW50aWxlKGRbaV1bWzFdXSR3YWdlLDAuOSkgLyBxdWFudGlsZShkW2ldW1sxXV0kd2FnZSwwLjEpXG4gIHEgPC0gYyhxLHZhbG9yKVxufVxucGxvdChxLCB0eXBlID0gXFxvXFwsIGNvbCA9IFxcYmxhY2tcXCwgcGNoID0gMTYsIHlsYWIgPSBcXFxcLCB4bGFiID0gXFxcXCxcbiAgICAgbWFpbiA9ICdSYXRpb3MgUTkwL1ExMCcsIHhheHQ9IFxcblxcKVxuXG5heGlzKDEsYXQ9MTo1LGxhYmVscyA9IGFuaW9zKVxuYGBgXG5gYGAifQ== --&gt;
+
+```r
+```r
+q &lt;- c()
  
 for(i in 1:5){
   valor &lt;- quantile(d[i][[1]]$wage,0.9) / quantile(d[i][[1]]$wage,0.1)
   q &lt;- c(q,valor)
 }
-plot(q, type = &quot;o&quot;, col = &quot;black&quot;, pch = 16, ylab = &quot;&quot;, xlab = &quot;&quot;,
-     main = &#39;Ratios Q90/Q10&#39;, xaxt= &quot;n&quot;)
+plot(q, type = \o\, col = \black\, pch = 16, ylab = \\, xlab = \\,
+     main = &#39;Ratios Q90/Q10&#39;, xaxt= \n\)
 
 axis(1,at=1:5,labels = anios)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Si los ratios son mayores a 1, esto es; <span class="math display">\[
-\frac{Q90}{Q10} &gt; 1 \rightarrow Q90 &gt; Q10 \]</span> es decir los
-ingresos del decil superior son mucho (si ratio &gt;&gt; 1) mayores al
-decil inferior.</p>
-<p>Observamos que en el primer trimestre del 2023 el ratio crece, para
-luego descender, y por ultimo crece nuevamente solo que esta vez con un
-mayor incremento entre el 4to periodo del 2023 y 1er del 2024. Con Gini,
-nunca hubo un descenso, esto se debe a que calculamos el area encerrada
-entre la equidad ideal y la curva de lorenz, en cambio con este enfoque
-solo estamos midiendo la relacion entre el noveno decil con el primero,
-obviando al resto de la distribucion.</p>
-</div>
-<div id="indice-theil" class="section level3">
-<h3>Indice Theil</h3>
-<p>Una propiedad del índice Theil es que se puede establecer una
-descomposición aditiva en dos componentes. Para conjuntos de subgrupos
-mutuamente excluyentes, {1,2,…,<span class="math inline">\(G\)</span>},
-el índice de Theil puede re-expresarse como:</p>
-<p><span class="math display">\[ T = \sum_{g=1}^{G} \frac{n_g
-\mu_g}{n\mu} T_g  + \sum_{g=1}^{G}\frac{n_g \mu_g}{n\mu}
-ln(\frac{\mu_g}{\mu}) \]</span> de acuerdo a Bourguignon (1979), Cowell
-(1980) y Shorrocks (1980). [1]</p>
-<p>donde:</p>
-<ul>
-<li><p><span class="math inline">\(n_g\)</span>, es el número de
-observaciones en el subgrupo <span class="math inline">\(g\)</span>.</p></li>
-<li><p><span class="math inline">\(\mu_g\)</span>, es el ingreso medio
-del subgrupo <span class="math inline">\(g\)</span>.</p></li>
-<li><p><span class="math inline">\(T_g\)</span>, es el índice Theil
-calculado para el subgrupo <span class="math inline">\(g\)</span>.</p></li>
-</ul>
-<p>El primer sumando representa el componente de la desigualdad
-atribuido a las diferencias de ingresos <strong>dentro</strong> de un
-mismo grupo.</p>
-<p>El segundo sumando representa la desigualdad en los ingresos
-<strong>entre</strong> los subgrupos de la población.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxueCA8LSBjKClcbncgPC0gYygpXG5iIDwtIGMoKSBcblxuZm9yIChpIGluIDE6NSl7XG4gIHdhZ2UgPC0gZFtpXVtbMV1dJHdhZ2VcbiAgdWJpY2FjaW9uIDwtIGRbaV1bWzFdXSR1YmljYWNpb25cbiAgICBcbiAgVHMgPC0gdGFwcGx5KHdhZ2UsIHViaWNhY2lvbiwgVGhlaWwpXG4gIFxuICAjIENhbGN1bGFyIHN1bSh3YWdlKSBwb3IgdWJpY2FjaW9uIFxuICBzdW1zIDwtIHRhcHBseSh3YWdlLHViaWNhY2lvbiwgZnVuY3Rpb24odykgZmF1eCh3LFRSVUUpKVxuICBcbiAgIyBDYWxjdWxhciBsZW4od2FnZSkgcG9yIHViaWNhY2lvbiBcbiAgbnMgPC0gdGFwcGx5KHdhZ2UsdWJpY2FjaW9uLCBmdW5jdGlvbih3KSBmYXV4KHcsRkFMU0UpKVxuICBcbiAgbXVfbiA8LSBzdW0oc3VtcykgICAgIFxuICBuIDwtIHN1bShucylcbiAgbXUgPC0gbXVfbiAvIHN1bShucylcbiAgXG4gIHdpdGhpbl9pbmVxIDwtIHN1bShzdW1zKlRzIC8gbXVfbikgXG4gIGJldHdlZW5faW5lcSA8LSBzdW0oc3Vtcypsb2coKHN1bXMvbnMpIC8gbXUpIC8gbXVfbilcbiAgVGUgPC0gd2l0aGluX2luZXEgKyBiZXR3ZWVuX2luZXFcbiAgeCA8LSBjKHgsVGUpXG4gIHcgPC0gYyh3LHdpdGhpbl9pbmVxKVxuICBiIDwtIGMoYixiZXR3ZWVuX2luZXEpXG59XG5gYGAifQ== -->
-<pre class="r"><code>x &lt;- c()
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+
+&lt;!-- rnb-output-end --&gt;
+
+&lt;!-- rnb-chunk-end --&gt;
+
+
+&lt;!-- rnb-text-begin --&gt;
+
+Si los ratios son mayores a 1, esto es;
+$$ \frac{Q90}{Q10} &gt; 1 \rightarrow Q90 &gt; Q10 $$
+es decir los ingresos del decil superior son mucho (si ratio &gt;&gt; 1) mayores al decil inferior. 
+
+Observamos que en el primer trimestre del 2023 el ratio crece, para luego descender, y por ultimo crece nuevamente solo que esta vez con un mayor incremento entre el 4to periodo del 2023 y 1er del 2024. 
+Con Gini, nunca hubo un descenso, esto se debe a que calculamos el area encerrada entre la equidad ideal y la curva de lorenz, en cambio con este enfoque solo estamos midiendo la relacion entre el noveno decil con el primero, obviando al resto de la distribucion. 
+
+### Indice Theil
+
+Una propiedad del índice Theil es que se puede establecer una descomposición aditiva en dos componentes. Para conjuntos de subgrupos mutuamente excluyentes, {1,2,…,$G$}, el índice de Theil puede re-expresarse como:
+
+$$ T = \sum_{g=1}^{G} \frac{n_g \mu_g}{n\mu} T_g  + \sum_{g=1}^{G}\frac{n_g \mu_g}{n\mu} ln(\frac{\mu_g}{\mu}) $$
+de acuerdo a Bourguignon (1979), Cowell (1980) y Shorrocks (1980). [1]
+
+donde: 
+
+* $n_g$, es el número de observaciones en el subgrupo $g$. 
+
+* $\mu_g$, es el ingreso medio del subgrupo $g$.
+
+* $T_g$, es el índice Theil calculado para el subgrupo $g$.
+
+El primer sumando representa el componente de la desigualdad atribuido a las diferencias de ingresos **dentro** de un mismo grupo.
+
+El segundo sumando representa la desigualdad en los ingresos **entre** los subgrupos de la población.
+
+
+
+
+&lt;!-- rnb-text-end --&gt;
+
+
+&lt;!-- rnb-chunk-begin --&gt;
+
+
+&lt;!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVZR0JnY2x4dWVDQThMU0JqS0NsY2JuY2dQQzBnWXlncFhHNWlJRHd0SUdNb0tTQmNibHh1Wm05eUlDaHBJR2x1SURFNk5TbDdYRzRnSUhkaFoyVWdQQzBnWkZ0cFhWdGJNVjFkSkhkaFoyVmNiaUFnZFdKcFkyRmphVzl1SUR3dElHUmJhVjFiV3pGZFhTUjFZbWxqWVdOcGIyNWNiaUFnSUNCY2JpQWdWSE1nUEMwZ2RHRndjR3g1S0hkaFoyVXNJSFZpYVdOaFkybHZiaXdnVkdobGFXd3BYRzRnSUZ4dUlDQWpJRU5oYkdOMWJHRnlJSE4xYlNoM1lXZGxLU0J3YjNJZ2RXSnBZMkZqYVc5dUlGeHVJQ0J6ZFcxeklEd3RJSFJoY0hCc2VTaDNZV2RsTEhWaWFXTmhZMmx2Yml3Z1puVnVZM1JwYjI0b2R5a2dabUYxZUNoM0xGUlNWVVVwS1Z4dUlDQmNiaUFnSXlCRFlXeGpkV3hoY2lCc1pXNG9kMkZuWlNrZ2NHOXlJSFZpYVdOaFkybHZiaUJjYmlBZ2JuTWdQQzBnZEdGd2NHeDVLSGRoWjJVc2RXSnBZMkZqYVc5dUxDQm1kVzVqZEdsdmJpaDNLU0JtWVhWNEtIY3NSa0ZNVTBVcEtWeHVJQ0JjYmlBZ2JYVmZiaUE4TFNCemRXMG9jM1Z0Y3lrZ0lDQWdJRnh1SUNCdUlEd3RJSE4xYlNodWN5bGNiaUFnYlhVZ1BDMGdiWFZmYmlBdklITjFiU2h1Y3lsY2JpQWdYRzRnSUhkcGRHaHBibDlwYm1WeElEd3RJSE4xYlNoemRXMXpLbFJ6SUM4Z2JYVmZiaWtnWEc0Z0lHSmxkSGRsWlc1ZmFXNWxjU0E4TFNCemRXMG9jM1Z0Y3lwc2IyY29LSE4xYlhNdmJuTXBJQzhnYlhVcElDOGdiWFZmYmlsY2JpQWdWR1VnUEMwZ2QybDBhR2x1WDJsdVpYRWdLeUJpWlhSM1pXVnVYMmx1WlhGY2JpQWdlQ0E4TFNCaktIZ3NWR1VwWEc0Z0lIY2dQQzBnWXloM0xIZHBkR2hwYmw5cGJtVnhLVnh1SUNCaUlEd3RJR01vWWl4aVpYUjNaV1Z1WDJsdVpYRXBYRzU5WEc1Z1lHQmNibUJnWUNKOSAtLT5cblxuYGBgclxuYGBgclxueCA8LSBjKClcbncgPC0gYygpXG5iIDwtIGMoKSBcblxuZm9yIChpIGluIDE6NSl7XG4gIHdhZ2UgPC0gZFtpXVtbMV1dJHdhZ2VcbiAgdWJpY2FjaW9uIDwtIGRbaV1bWzFdXSR1YmljYWNpb25cbiAgICBcbiAgVHMgPC0gdGFwcGx5KHdhZ2UsIHViaWNhY2lvbiwgVGhlaWwpXG4gIFxuICAjIENhbGN1bGFyIHN1bSh3YWdlKSBwb3IgdWJpY2FjaW9uIFxuICBzdW1zIDwtIHRhcHBseSh3YWdlLHViaWNhY2lvbiwgZnVuY3Rpb24odykgZmF1eCh3LFRSVUUpKVxuICBcbiAgIyBDYWxjdWxhciBsZW4od2FnZSkgcG9yIHViaWNhY2lvbiBcbiAgbnMgPC0gdGFwcGx5KHdhZ2UsdWJpY2FjaW9uLCBmdW5jdGlvbih3KSBmYXV4KHcsRkFMU0UpKVxuICBcbiAgbXVfbiA8LSBzdW0oc3VtcykgICAgIFxuICBuIDwtIHN1bShucylcbiAgbXUgPC0gbXVfbiAvIHN1bShucylcbiAgXG4gIHdpdGhpbl9pbmVxIDwtIHN1bShzdW1zKlRzIC8gbXVfbikgXG4gIGJldHdlZW5faW5lcSA8LSBzdW0oc3Vtcypsb2coKHN1bXMvbnMpIC8gbXUpIC8gbXVfbilcbiAgVGUgPC0gd2l0aGluX2luZXEgKyBiZXR3ZWVuX2luZXFcbiAgeCA8LSBjKHgsVGUpXG4gIHcgPC0gYyh3LHdpdGhpbl9pbmVxKVxuICBiIDwtIGMoYixiZXR3ZWVuX2luZXEpXG59XG5gYGBcbmBgYFxuXG48IS0tIHJuYi1zb3VyY2UtZW5kIC0tPlxuIn0= --&gt;
+
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxueCA8LSBjKClcbncgPC0gYygpXG5iIDwtIGMoKSBcblxuZm9yIChpIGluIDE6NSl7XG4gIHdhZ2UgPC0gZFtpXVtbMV1dJHdhZ2VcbiAgdWJpY2FjaW9uIDwtIGRbaV1bWzFdXSR1YmljYWNpb25cbiAgICBcbiAgVHMgPC0gdGFwcGx5KHdhZ2UsIHViaWNhY2lvbiwgVGhlaWwpXG4gIFxuICAjIENhbGN1bGFyIHN1bSh3YWdlKSBwb3IgdWJpY2FjaW9uIFxuICBzdW1zIDwtIHRhcHBseSh3YWdlLHViaWNhY2lvbiwgZnVuY3Rpb24odykgZmF1eCh3LFRSVUUpKVxuICBcbiAgIyBDYWxjdWxhciBsZW4od2FnZSkgcG9yIHViaWNhY2lvbiBcbiAgbnMgPC0gdGFwcGx5KHdhZ2UsdWJpY2FjaW9uLCBmdW5jdGlvbih3KSBmYXV4KHcsRkFMU0UpKVxuICBcbiAgbXVfbiA8LSBzdW0oc3VtcykgICAgIFxuICBuIDwtIHN1bShucylcbiAgbXUgPC0gbXVfbiAvIHN1bShucylcbiAgXG4gIHdpdGhpbl9pbmVxIDwtIHN1bShzdW1zKlRzIC8gbXVfbikgXG4gIGJldHdlZW5faW5lcSA8LSBzdW0oc3Vtcypsb2coKHN1bXMvbnMpIC8gbXUpIC8gbXVfbilcbiAgVGUgPC0gd2l0aGluX2luZXEgKyBiZXR3ZWVuX2luZXFcbiAgeCA8LSBjKHgsVGUpXG4gIHcgPC0gYyh3LHdpdGhpbl9pbmVxKVxuICBiIDwtIGMoYixiZXR3ZWVuX2luZXEpXG59XG5gYGBcbmBgYCJ9 --&gt;
+
+```r
+```r
+x &lt;- c()
 w &lt;- c()
 b &lt;- c() 
 
@@ -1902,58 +1973,91 @@ for (i in 1:5){
   w &lt;- c(w,within_ineq)
   b &lt;- c(b,between_ineq)
 }</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Hacemos la división por <strong>AGLOMERADO</strong>, que en nuestro
-caso es <strong>ubicacion</strong>, luego hacemos el cálculo de la
-descomposición.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGxvdCh4LCB0eXBlID0gXCJvXCIsIGNvbCA9IFwiYmx1ZVwiLCBwY2ggPSAxNiwgeWxhYiA9IFwiXCIsIHhsYWIgPSBcIlwiLFxuICAgICBtYWluID0gXCJUaGVpbCB5IHN1IGRlc2NvbXBvc2ljaW9uXCIseWxpbSA9IGMoMCwwLjM1KSwgeGF4dD0gXCJuXCIpXG5cbmF4aXMoMSxhdD0xOjUsbGFiZWxzID0gYW5pb3MpXG4jIEHDsWFkaXIgZWwgc2VndW5kbyBjb25qdW50byBkZSBkYXRvcyBjb24gbMOtbmVhc1xubGluZXModywgdHlwZSA9IFwib1wiLCBjb2wgPSBcIm9yYW5nZVwiLCBwY2ggPSAxNilcblxuIyBBw7FhZGlyIGVsIHRlcmNlciBjb25qdW50byBkZSBkYXRvcyBjb24gbMOtbmVhc1xubGluZXMoYiwgdHlwZSA9IFwib1wiLCBjb2wgPSBcImRhcmtncmF5XCIsIHBjaCA9IDE2KVxuXG4jIEHDsWFkaXIgbGV5ZW5kYVxubGVnZW5kKFwidG9wbGVmdFwiLCBsZWdlbmQgPSBjKFwiVGhlaWxcIiwgXCJ3aXRoaW5cIiwgXCJiZXR3ZWVuXCIpLCBjb2wgPSBjKFwiYmx1ZVwiLCBcIm9yYW5nZVwiLCBcImRhcmtncmF5XCIpLCBcbiAgICAgICBwY2ggPSAxNiwgbHR5ID0gMSlcbmBgYCJ9 -->
-<pre class="r"><code>plot(x, type = &quot;o&quot;, col = &quot;blue&quot;, pch = 16, ylab = &quot;&quot;, xlab = &quot;&quot;,
-     main = &quot;Theil y su descomposicion&quot;,ylim = c(0,0.35), xaxt= &quot;n&quot;)
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+
+&lt;!-- rnb-output-end --&gt;
+
+&lt;!-- rnb-chunk-end --&gt;
+
+
+&lt;!-- rnb-text-begin --&gt;
+
+
+Hacemos la división por **AGLOMERADO**, que en nuestro caso es **ubicacion**, luego hacemos el cálculo de la descomposición.
+
+
+&lt;!-- rnb-text-end --&gt;
+
+
+&lt;!-- rnb-chunk-begin --&gt;
+
+
+&lt;!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVZR0JnY2x4dWNHeHZkQ2g0TENCMGVYQmxJRDBnWEZ4dlhGd3NJR052YkNBOUlGeGNZbXgxWlZ4Y0xDQndZMmdnUFNBeE5pd2dlV3hoWWlBOUlGeGNYRndzSUhoc1lXSWdQU0JjWEZ4Y0xGeHVJQ0FnSUNCdFlXbHVJRDBnWEZ4VWFHVnBiQ0I1SUhOMUlHUmxjMk52YlhCdmMybGphVzl1WEZ3c2VXeHBiU0E5SUdNb01Dd3dMak0xS1N3Z2VHRjRkRDBnWEZ4dVhGd3BYRzVjYm1GNGFYTW9NU3hoZEQweE9qVXNiR0ZpWld4eklEMGdZVzVwYjNNcFhHNGpJRUhEc1dGa2FYSWdaV3dnYzJWbmRXNWtieUJqYjI1cWRXNTBieUJrWlNCa1lYUnZjeUJqYjI0Z2JNT3RibVZoYzF4dWJHbHVaWE1vZHl3Z2RIbHdaU0E5SUZ4Y2IxeGNMQ0JqYjJ3Z1BTQmNYRzl5WVc1blpWeGNMQ0J3WTJnZ1BTQXhOaWxjYmx4dUl5QkJ3N0ZoWkdseUlHVnNJSFJsY21ObGNpQmpiMjVxZFc1MGJ5QmtaU0JrWVhSdmN5QmpiMjRnYk1PdGJtVmhjMXh1YkdsdVpYTW9ZaXdnZEhsd1pTQTlJRnhjYjF4Y0xDQmpiMndnUFNCY1hHUmhjbXRuY21GNVhGd3NJSEJqYUNBOUlERTJLVnh1WEc0aklFSERzV0ZrYVhJZ2JHVjVaVzVrWVZ4dWJHVm5aVzVrS0Z4Y2RHOXdiR1ZtZEZ4Y0xDQnNaV2RsYm1RZ1BTQmpLRnhjVkdobGFXeGNYQ3dnWEZ4M2FYUm9hVzVjWEN3Z1hGeGlaWFIzWldWdVhGd3BMQ0JqYjJ3Z1BTQmpLRnhjWW14MVpWeGNMQ0JjWEc5eVlXNW5aVnhjTENCY1hHUmhjbXRuY21GNVhGd3BMQ0JjYmlBZ0lDQWdJQ0J3WTJnZ1BTQXhOaXdnYkhSNUlEMGdNU2xjYm1CZ1lGeHVZR0JnSW4wPSAtLT5cblxuYGBgclxuYGBgclxucGxvdCh4LCB0eXBlID0gXFxvXFwsIGNvbCA9IFxcYmx1ZVxcLCBwY2ggPSAxNiwgeWxhYiA9IFxcXFwsIHhsYWIgPSBcXFxcLFxuICAgICBtYWluID0gXFxUaGVpbCB5IHN1IGRlc2NvbXBvc2ljaW9uXFwseWxpbSA9IGMoMCwwLjM1KSwgeGF4dD0gXFxuXFwpXG5cbmF4aXMoMSxhdD0xOjUsbGFiZWxzID0gYW5pb3MpXG4jIEHDsWFkaXIgZWwgc2VndW5kbyBjb25qdW50byBkZSBkYXRvcyBjb24gbMOtbmVhc1xubGluZXModywgdHlwZSA9IFxcb1xcLCBjb2wgPSBcXG9yYW5nZVxcLCBwY2ggPSAxNilcblxuIyBBw7FhZGlyIGVsIHRlcmNlciBjb25qdW50byBkZSBkYXRvcyBjb24gbMOtbmVhc1xubGluZXMoYiwgdHlwZSA9IFxcb1xcLCBjb2wgPSBcXGRhcmtncmF5XFwsIHBjaCA9IDE2KVxuXG4jIEHDsWFkaXIgbGV5ZW5kYVxubGVnZW5kKFxcdG9wbGVmdFxcLCBsZWdlbmQgPSBjKFxcVGhlaWxcXCwgXFx3aXRoaW5cXCwgXFxiZXR3ZWVuXFwpLCBjb2wgPSBjKFxcYmx1ZVxcLCBcXG9yYW5nZVxcLCBcXGRhcmtncmF5XFwpLCBcbiAgICAgICBwY2ggPSAxNiwgbHR5ID0gMSlcbmBgYFxuYGBgXG5cbjwhLS0gcm5iLXNvdXJjZS1lbmQgLS0+XG4ifQ== --&gt;
+
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxucGxvdCh4LCB0eXBlID0gXFxvXFwsIGNvbCA9IFxcYmx1ZVxcLCBwY2ggPSAxNiwgeWxhYiA9IFxcXFwsIHhsYWIgPSBcXFxcLFxuICAgICBtYWluID0gXFxUaGVpbCB5IHN1IGRlc2NvbXBvc2ljaW9uXFwseWxpbSA9IGMoMCwwLjM1KSwgeGF4dD0gXFxuXFwpXG5cbmF4aXMoMSxhdD0xOjUsbGFiZWxzID0gYW5pb3MpXG4jIEHDsWFkaXIgZWwgc2VndW5kbyBjb25qdW50byBkZSBkYXRvcyBjb24gbMOtbmVhc1xubGluZXModywgdHlwZSA9IFxcb1xcLCBjb2wgPSBcXG9yYW5nZVxcLCBwY2ggPSAxNilcblxuIyBBw7FhZGlyIGVsIHRlcmNlciBjb25qdW50byBkZSBkYXRvcyBjb24gbMOtbmVhc1xubGluZXMoYiwgdHlwZSA9IFxcb1xcLCBjb2wgPSBcXGRhcmtncmF5XFwsIHBjaCA9IDE2KVxuXG4jIEHDsWFkaXIgbGV5ZW5kYVxubGVnZW5kKFxcdG9wbGVmdFxcLCBsZWdlbmQgPSBjKFxcVGhlaWxcXCwgXFx3aXRoaW5cXCwgXFxiZXR3ZWVuXFwpLCBjb2wgPSBjKFxcYmx1ZVxcLCBcXG9yYW5nZVxcLCBcXGRhcmtncmF5XFwpLCBcbiAgICAgICBwY2ggPSAxNiwgbHR5ID0gMSlcbmBgYFxuYGBgIn0= --&gt;
+
+```r
+```r
+plot(x, type = \o\, col = \blue\, pch = 16, ylab = \\, xlab = \\,
+     main = \Theil y su descomposicion\,ylim = c(0,0.35), xaxt= \n\)
 
 axis(1,at=1:5,labels = anios)
 # Añadir el segundo conjunto de datos con líneas
-lines(w, type = &quot;o&quot;, col = &quot;orange&quot;, pch = 16)
+lines(w, type = \o\, col = \orange\, pch = 16)
 
 # Añadir el tercer conjunto de datos con líneas
-lines(b, type = &quot;o&quot;, col = &quot;darkgray&quot;, pch = 16)
+lines(b, type = \o\, col = \darkgray\, pch = 16)
 
 # Añadir leyenda
-legend(&quot;topleft&quot;, legend = c(&quot;Theil&quot;, &quot;within&quot;, &quot;between&quot;), col = c(&quot;blue&quot;, &quot;orange&quot;, &quot;darkgray&quot;), 
+legend(\topleft\, legend = c(\Theil\, \within\, \between\), col = c(\blue\, \orange\, \darkgray\), 
        pch = 16, lty = 1)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Observando el comportamiento de la componente
-<strong>between</strong>, podemos afirmar que la desigualdad entre las
-distintas ubicaciones se mantuvo constante durante este periodo.
-Atribuimos, entonces, la mayor parte del comportamiento del índice de
-Theil a la componente <strong>within</strong>.</p>
-<p>En particular, al notar que el índice de Theil aumenta en el cuarto
-trimestre de 2023, inferimos que hubo un incremento en la desigualdad
-salarial, el cual se debe principalmente a la desigualdad
-<strong>dentro</strong> de los subgrupos, que en nuestro análisis
-corresponden a las ubicaciones.</p>
-<p>2.b</p>
-<p>Comenzamos con la regresión RIF:</p>
-<p>Vamos a tomar cada periodo de tiempo y hacer el cálculo de RIF de
-lwage, usando como estadístico el índice de Gini, para luego calcular
-las estimaciones de los coeficientes resultantes de la regresión,
-tomamos <strong>anios_edu</strong> y <strong>exp_pot</strong> para luego
-graficarlos.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5jb2Vmc19yaWZfZWR1IDwtIGMoKVxuY29lZnNfcmlmX2V4cCA8LSBjKClcbiBcbmZvcihpIGluIDE6NSl7XG4gICMgY2FsY3VsYW1vcyBSSUYgZW4gZnVuY2lvbiBkZSBsd2FnZS5cbiAgcmlmX2dpbmkgPC0gcmlmKGxvZyhkW2ldW1sxXV0kd2FnZSksIG1ldGhvZCA9IFwiZ2luaVwiKVxuICBcbiAgUklGcmVnX2dpbmkgPC0gbG0ocmlmX2dpbmkgfiBhbmlvc19lZHUgKyBleHBfcG90ICsgZXhwX3BvdF8yICsgZWRhZCArIGFzLmZhY3Rvcihlc3RfY2l2aWwpLCBkYXRhID0gZFtpXVtbMV1dKVxuICBcbiAgZWR1IDwtIFJJRnJlZ19naW5pJGNvZWZmaWNpZW50c1syXVxuICBleHAgPC0gUklGcmVnX2dpbmkkY29lZmZpY2llbnRzWzNdXG4gIFxuICBjb2Vmc19yaWZfZWR1IDwtIGMoY29lZnNfcmlmX2VkdSwgZWR1KVxuICBjb2Vmc19yaWZfZXhwIDwtIGMoY29lZnNfcmlmX2V4cCwgZXhwKVxufVxuYGBgIn0= -->
-<pre class="r"><code>
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+
+&lt;!-- rnb-output-end --&gt;
+
+&lt;!-- rnb-chunk-end --&gt;
+
+
+&lt;!-- rnb-text-begin --&gt;
+
+
+Observando el comportamiento de la componente **between**, podemos afirmar que la desigualdad entre las distintas ubicaciones se mantuvo constante durante este periodo. Atribuimos, entonces, la mayor parte del comportamiento del índice de Theil a la componente **within**.
+
+En particular, al notar que el índice de Theil aumenta en el cuarto trimestre de 2023, inferimos que hubo un incremento en la desigualdad salarial, el cual se debe principalmente a la desigualdad **dentro** de los subgrupos, que en nuestro análisis corresponden a las ubicaciones.
+
+
+2.b
+
+Comenzamos con la regresión RIF:
+
+Vamos a tomar cada periodo de tiempo y hacer el cálculo de RIF de lwage, usando como estadístico el índice de Gini, para luego calcular las estimaciones de los coeficientes resultantes de la regresión, tomamos **anios_edu** y **exp_pot** para luego graficarlos.
+
+
+&lt;!-- rnb-text-end --&gt;
+
+
+&lt;!-- rnb-chunk-begin --&gt;
+
+
+&lt;!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVZR0JnY2x4dVhHNWpiMlZtYzE5eWFXWmZaV1IxSUR3dElHTW9LVnh1WTI5bFpuTmZjbWxtWDJWNGNDQThMU0JqS0NsY2JpQmNibVp2Y2locElHbHVJREU2TlNsN1hHNGdJQ01nWTJGc1kzVnNZVzF2Y3lCU1NVWWdaVzRnWm5WdVkybHZiaUJrWlNCc2QyRm5aUzVjYmlBZ2NtbG1YMmRwYm1rZ1BDMGdjbWxtS0d4dlp5aGtXMmxkVzFzeFhWMGtkMkZuWlNrc0lHMWxkR2h2WkNBOUlGeGNaMmx1YVZ4Y0tWeHVJQ0JjYmlBZ1VrbEdjbVZuWDJkcGJta2dQQzBnYkcwb2NtbG1YMmRwYm1rZ2ZpQmhibWx2YzE5bFpIVWdLeUJsZUhCZmNHOTBJQ3NnWlhod1gzQnZkRjh5SUNzZ1pXUmhaQ0FySUdGekxtWmhZM1J2Y2lobGMzUmZZMmwyYVd3cExDQmtZWFJoSUQwZ1pGdHBYVnRiTVYxZEtWeHVJQ0JjYmlBZ1pXUjFJRHd0SUZKSlJuSmxaMTluYVc1cEpHTnZaV1ptYVdOcFpXNTBjMXN5WFZ4dUlDQmxlSEFnUEMwZ1VrbEdjbVZuWDJkcGJta2tZMjlsWm1acFkybGxiblJ6V3pOZFhHNGdJRnh1SUNCamIyVm1jMTl5YVdaZlpXUjFJRHd0SUdNb1kyOWxabk5mY21sbVgyVmtkU3dnWldSMUtWeHVJQ0JqYjJWbWMxOXlhV1pmWlhod0lEd3RJR01vWTI5bFpuTmZjbWxtWDJWNGNDd2daWGh3S1Z4dWZWeHVZR0JnWEc1Z1lHQWlmUT09IC0tPlxuXG5gYGByXG5gYGByXG5cbmNvZWZzX3JpZl9lZHUgPC0gYygpXG5jb2Vmc19yaWZfZXhwIDwtIGMoKVxuIFxuZm9yKGkgaW4gMTo1KXtcbiAgIyBjYWxjdWxhbW9zIFJJRiBlbiBmdW5jaW9uIGRlIGx3YWdlLlxuICByaWZfZ2luaSA8LSByaWYobG9nKGRbaV1bWzFdXSR3YWdlKSwgbWV0aG9kID0gXFxnaW5pXFwpXG4gIFxuICBSSUZyZWdfZ2luaSA8LSBsbShyaWZfZ2luaSB+IGFuaW9zX2VkdSArIGV4cF9wb3QgKyBleHBfcG90XzIgKyBlZGFkICsgYXMuZmFjdG9yKGVzdF9jaXZpbCksIGRhdGEgPSBkW2ldW1sxXV0pXG4gIFxuICBlZHUgPC0gUklGcmVnX2dpbmkkY29lZmZpY2llbnRzWzJdXG4gIGV4cCA8LSBSSUZyZWdfZ2luaSRjb2VmZmljaWVudHNbM11cbiAgXG4gIGNvZWZzX3JpZl9lZHUgPC0gYyhjb2Vmc19yaWZfZWR1LCBlZHUpXG4gIGNvZWZzX3JpZl9leHAgPC0gYyhjb2Vmc19yaWZfZXhwLCBleHApXG59XG5gYGBcbmBgYFxuXG48IS0tIHJuYi1zb3VyY2UtZW5kIC0tPlxuIn0= --&gt;
+
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuXG5jb2Vmc19yaWZfZWR1IDwtIGMoKVxuY29lZnNfcmlmX2V4cCA8LSBjKClcbiBcbmZvcihpIGluIDE6NSl7XG4gICMgY2FsY3VsYW1vcyBSSUYgZW4gZnVuY2lvbiBkZSBsd2FnZS5cbiAgcmlmX2dpbmkgPC0gcmlmKGxvZyhkW2ldW1sxXV0kd2FnZSksIG1ldGhvZCA9IFxcZ2luaVxcKVxuICBcbiAgUklGcmVnX2dpbmkgPC0gbG0ocmlmX2dpbmkgfiBhbmlvc19lZHUgKyBleHBfcG90ICsgZXhwX3BvdF8yICsgZWRhZCArIGFzLmZhY3Rvcihlc3RfY2l2aWwpLCBkYXRhID0gZFtpXVtbMV1dKVxuICBcbiAgZWR1IDwtIFJJRnJlZ19naW5pJGNvZWZmaWNpZW50c1syXVxuICBleHAgPC0gUklGcmVnX2dpbmkkY29lZmZpY2llbnRzWzNdXG4gIFxuICBjb2Vmc19yaWZfZWR1IDwtIGMoY29lZnNfcmlmX2VkdSwgZWR1KVxuICBjb2Vmc19yaWZfZXhwIDwtIGMoY29lZnNfcmlmX2V4cCwgZXhwKVxufVxuYGBgXG5gYGAifQ== --&gt;
+
+```r
+```r
+
 coefs_rif_edu &lt;- c()
 coefs_rif_exp &lt;- c()
  
 for(i in 1:5){
   # calculamos RIF en funcion de lwage.
-  rif_gini &lt;- rif(log(d[i][[1]]$wage), method = &quot;gini&quot;)
+  rif_gini &lt;- rif(log(d[i][[1]]$wage), method = \gini\)
   
   RIFreg_gini &lt;- lm(rif_gini ~ anios_edu + exp_pot + exp_pot_2 + edad + as.factor(est_civil), data = d[i][[1]])
   
@@ -1963,51 +2067,108 @@ for(i in 1:5){
   coefs_rif_edu &lt;- c(coefs_rif_edu, edu)
   coefs_rif_exp &lt;- c(coefs_rif_exp, exp)
 }</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-</div>
-<div id="gráfico-de-las-estimaciones-de-años-de-educación" class="section level3">
-<h3>Gráfico de las estimaciones de años de educación</h3>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGxvdChjb2Vmc19yaWZfZWR1LCB0eXBlID0gXCJvXCIsIGNvbCA9IFwiYmxhY2tcIiwgcGNoID0gMTYsIHlsYWIgPSBcIlwiLCB4bGFiID0gXCJcIiwgbWFpbiA9ICdBw7FvcyBkZSBlZHVjYWNpw7NuJywgeGF4dD0gXCJuXCIsIHhsaW0gPSBjKDEsIDUuMykpXG5cbmF4aXMoMSxhdD0xOjUsbGFiZWxzID0gYW5pb3MpXG52YWxpZF9pbmRpY2VzIDwtIHdoaWNoKCFpcy5uYShjb2Vmc19yaWZfZWR1KSlcbnRleHQodmFsaWRfaW5kaWNlcywgY29lZnNfcmlmX2VkdSwgbGFiZWxzID0gcGFzdGUoIGZvcm1hdChjb2Vmc19yaWZfZWR1W3ZhbGlkX2luZGljZXNdLCBkaWdpdHMgPSAyKSksIHBvcyA9IDQsIGNleCA9IDAuOCwgY29sID0gXCJibHVlXCIpXG5gYGAifQ== -->
-<pre class="r"><code>plot(coefs_rif_edu, type = &quot;o&quot;, col = &quot;black&quot;, pch = 16, ylab = &quot;&quot;, xlab = &quot;&quot;, main = &#39;Años de educación&#39;, xaxt= &quot;n&quot;, xlim = c(1, 5.3))
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+
+&lt;!-- rnb-output-end --&gt;
+
+&lt;!-- rnb-chunk-end --&gt;
+
+
+&lt;!-- rnb-text-begin --&gt;
+
+
+
+### Gráfico de las estimaciones de años de educación 
+
+
+&lt;!-- rnb-text-end --&gt;
+
+
+&lt;!-- rnb-chunk-begin --&gt;
+
+
+&lt;!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVZR0JnY2x4dWNHeHZkQ2hqYjJWbWMxOXlhV1pmWldSMUxDQjBlWEJsSUQwZ1hGeHZYRndzSUdOdmJDQTlJRnhjWW14aFkydGNYQ3dnY0dOb0lEMGdNVFlzSUhsc1lXSWdQU0JjWEZ4Y0xDQjRiR0ZpSUQwZ1hGeGNYQ3dnYldGcGJpQTlJQ2RCdzdGdmN5QmtaU0JsWkhWallXTnB3N051Snl3Z2VHRjRkRDBnWEZ4dVhGd3NJSGhzYVcwZ1BTQmpLREVzSURVdU15a3BYRzVjYm1GNGFYTW9NU3hoZEQweE9qVXNiR0ZpWld4eklEMGdZVzVwYjNNcFhHNTJZV3hwWkY5cGJtUnBZMlZ6SUR3dElIZG9hV05vS0NGcGN5NXVZU2hqYjJWbWMxOXlhV1pmWldSMUtTbGNiblJsZUhRb2RtRnNhV1JmYVc1a2FXTmxjeXdnWTI5bFpuTmZjbWxtWDJWa2RTd2diR0ZpWld4eklEMGdjR0Z6ZEdVb0lHWnZjbTFoZENoamIyVm1jMTl5YVdaZlpXUjFXM1poYkdsa1gybHVaR2xqWlhOZExDQmthV2RwZEhNZ1BTQXlLU2tzSUhCdmN5QTlJRFFzSUdObGVDQTlJREF1T0N3Z1kyOXNJRDBnWEZ4aWJIVmxYRndwWEc1Z1lHQmNibUJnWUNKOSAtLT5cblxuYGBgclxuYGBgclxucGxvdChjb2Vmc19yaWZfZWR1LCB0eXBlID0gXFxvXFwsIGNvbCA9IFxcYmxhY2tcXCwgcGNoID0gMTYsIHlsYWIgPSBcXFxcLCB4bGFiID0gXFxcXCwgbWFpbiA9ICdBw7FvcyBkZSBlZHVjYWNpw7NuJywgeGF4dD0gXFxuXFwsIHhsaW0gPSBjKDEsIDUuMykpXG5cbmF4aXMoMSxhdD0xOjUsbGFiZWxzID0gYW5pb3MpXG52YWxpZF9pbmRpY2VzIDwtIHdoaWNoKCFpcy5uYShjb2Vmc19yaWZfZWR1KSlcbnRleHQodmFsaWRfaW5kaWNlcywgY29lZnNfcmlmX2VkdSwgbGFiZWxzID0gcGFzdGUoIGZvcm1hdChjb2Vmc19yaWZfZWR1W3ZhbGlkX2luZGljZXNdLCBkaWdpdHMgPSAyKSksIHBvcyA9IDQsIGNleCA9IDAuOCwgY29sID0gXFxibHVlXFwpXG5gYGBcbmBgYFxuXG48IS0tIHJuYi1zb3VyY2UtZW5kIC0tPlxuIn0= --&gt;
+
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxucGxvdChjb2Vmc19yaWZfZWR1LCB0eXBlID0gXFxvXFwsIGNvbCA9IFxcYmxhY2tcXCwgcGNoID0gMTYsIHlsYWIgPSBcXFxcLCB4bGFiID0gXFxcXCwgbWFpbiA9ICdBw7FvcyBkZSBlZHVjYWNpw7NuJywgeGF4dD0gXFxuXFwsIHhsaW0gPSBjKDEsIDUuMykpXG5cbmF4aXMoMSxhdD0xOjUsbGFiZWxzID0gYW5pb3MpXG52YWxpZF9pbmRpY2VzIDwtIHdoaWNoKCFpcy5uYShjb2Vmc19yaWZfZWR1KSlcbnRleHQodmFsaWRfaW5kaWNlcywgY29lZnNfcmlmX2VkdSwgbGFiZWxzID0gcGFzdGUoIGZvcm1hdChjb2Vmc19yaWZfZWR1W3ZhbGlkX2luZGljZXNdLCBkaWdpdHMgPSAyKSksIHBvcyA9IDQsIGNleCA9IDAuOCwgY29sID0gXFxibHVlXFwpXG5gYGBcbmBgYCJ9 --&gt;
+
+```r
+```r
+plot(coefs_rif_edu, type = \o\, col = \black\, pch = 16, ylab = \\, xlab = \\, main = &#39;Años de educación&#39;, xaxt= \n\, xlim = c(1, 5.3))
 
 axis(1,at=1:5,labels = anios)
 valid_indices &lt;- which(!is.na(coefs_rif_edu))
-text(valid_indices, coefs_rif_edu, labels = paste( format(coefs_rif_edu[valid_indices], digits = 2)), pos = 4, cex = 0.8, col = &quot;blue&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Observando el valor de los coeficientes estimados, vemos que son
-positivos, esto sugiere que el aumento en la educación incrementa la
-desigualdad salarial, como son cercanos a 0, no se puede hacer tal
-afirmación. Uno esperaría que dichas estimaciones fueran negativas.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGxvdChjb2Vmc19yaWZfZXhwLCB0eXBlID0gXCJvXCIsIGNvbCA9IFwiYmxhY2tcIiwgcGNoID0gMTYsIHlsYWIgPSBcIlwiLCB4bGFiID0gXCJcIiwgbWFpbiA9ICdleHBlcmllbmNpYSBwb3RlbmNpYWwnLCB4YXh0PSBcIm5cIix4bGltID0gYygxLCA1LjMpKVxuXG5heGlzKDEsYXQ9MTo1LGxhYmVscyA9IGFuaW9zKVxuXG52YWxpZF9pbmRpY2VzIDwtIHdoaWNoKCFpcy5uYShjb2Vmc19yaWZfZXhwKSlcbnRleHQodmFsaWRfaW5kaWNlcywgY29lZnNfcmlmX2V4cCwgXG4gICAgIGxhYmVscyA9IHBhc3RlKCBmb3JtYXQoY29lZnNfcmlmX2V4cFt2YWxpZF9pbmRpY2VzXSwgZGlnaXRzID0gMikpLCBcbiAgICAgcG9zID0gNCwgY2V4ID0gMC44LCBjb2wgPSBcImJsdWVcIilcbmBgYCJ9 -->
-<pre class="r"><code>plot(coefs_rif_exp, type = &quot;o&quot;, col = &quot;black&quot;, pch = 16, ylab = &quot;&quot;, xlab = &quot;&quot;, main = &#39;experiencia potencial&#39;, xaxt= &quot;n&quot;,xlim = c(1, 5.3))
+text(valid_indices, coefs_rif_edu, labels = paste( format(coefs_rif_edu[valid_indices], digits = 2)), pos = 4, cex = 0.8, col = \blue\)</code></pre>
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+
+&lt;!-- rnb-output-end --&gt;
+
+&lt;!-- rnb-chunk-end --&gt;
+
+
+&lt;!-- rnb-text-begin --&gt;
+
+
+Observando el valor de los coeficientes estimados, vemos que son positivos, esto sugiere que el aumento en la educación incrementa la desigualdad salarial, como son cercanos a 0, no se puede hacer tal afirmación. Uno esperaría que dichas estimaciones fueran negativas. 
+
+
+
+&lt;!-- rnb-text-end --&gt;
+
+
+&lt;!-- rnb-chunk-begin --&gt;
+
+
+&lt;!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVZR0JnY2x4dWNHeHZkQ2hqYjJWbWMxOXlhV1pmWlhod0xDQjBlWEJsSUQwZ1hGeHZYRndzSUdOdmJDQTlJRnhjWW14aFkydGNYQ3dnY0dOb0lEMGdNVFlzSUhsc1lXSWdQU0JjWEZ4Y0xDQjRiR0ZpSUQwZ1hGeGNYQ3dnYldGcGJpQTlJQ2RsZUhCbGNtbGxibU5wWVNCd2IzUmxibU5wWVd3bkxDQjRZWGgwUFNCY1hHNWNYQ3g0YkdsdElEMGdZeWd4TENBMUxqTXBLVnh1WEc1aGVHbHpLREVzWVhROU1UbzFMR3hoWW1Wc2N5QTlJR0Z1YVc5ektWeHVYRzUyWVd4cFpGOXBibVJwWTJWeklEd3RJSGRvYVdOb0tDRnBjeTV1WVNoamIyVm1jMTl5YVdaZlpYaHdLU2xjYm5SbGVIUW9kbUZzYVdSZmFXNWthV05sY3l3Z1kyOWxabk5mY21sbVgyVjRjQ3dnWEc0Z0lDQWdJR3hoWW1Wc2N5QTlJSEJoYzNSbEtDQm1iM0p0WVhRb1kyOWxabk5mY21sbVgyVjRjRnQyWVd4cFpGOXBibVJwWTJWelhTd2daR2xuYVhSeklEMGdNaWtwTENCY2JpQWdJQ0FnY0c5eklEMGdOQ3dnWTJWNElEMGdNQzQ0TENCamIyd2dQU0JjWEdKc2RXVmNYQ2xjYm1CZ1lGeHVZR0JnSW4wPSAtLT5cblxuYGBgclxuYGBgclxucGxvdChjb2Vmc19yaWZfZXhwLCB0eXBlID0gXFxvXFwsIGNvbCA9IFxcYmxhY2tcXCwgcGNoID0gMTYsIHlsYWIgPSBcXFxcLCB4bGFiID0gXFxcXCwgbWFpbiA9ICdleHBlcmllbmNpYSBwb3RlbmNpYWwnLCB4YXh0PSBcXG5cXCx4bGltID0gYygxLCA1LjMpKVxuXG5heGlzKDEsYXQ9MTo1LGxhYmVscyA9IGFuaW9zKVxuXG52YWxpZF9pbmRpY2VzIDwtIHdoaWNoKCFpcy5uYShjb2Vmc19yaWZfZXhwKSlcbnRleHQodmFsaWRfaW5kaWNlcywgY29lZnNfcmlmX2V4cCwgXG4gICAgIGxhYmVscyA9IHBhc3RlKCBmb3JtYXQoY29lZnNfcmlmX2V4cFt2YWxpZF9pbmRpY2VzXSwgZGlnaXRzID0gMikpLCBcbiAgICAgcG9zID0gNCwgY2V4ID0gMC44LCBjb2wgPSBcXGJsdWVcXClcbmBgYFxuYGBgXG5cbjwhLS0gcm5iLXNvdXJjZS1lbmQgLS0+XG4ifQ== --&gt;
+
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxucGxvdChjb2Vmc19yaWZfZXhwLCB0eXBlID0gXFxvXFwsIGNvbCA9IFxcYmxhY2tcXCwgcGNoID0gMTYsIHlsYWIgPSBcXFxcLCB4bGFiID0gXFxcXCwgbWFpbiA9ICdleHBlcmllbmNpYSBwb3RlbmNpYWwnLCB4YXh0PSBcXG5cXCx4bGltID0gYygxLCA1LjMpKVxuXG5heGlzKDEsYXQ9MTo1LGxhYmVscyA9IGFuaW9zKVxuXG52YWxpZF9pbmRpY2VzIDwtIHdoaWNoKCFpcy5uYShjb2Vmc19yaWZfZXhwKSlcbnRleHQodmFsaWRfaW5kaWNlcywgY29lZnNfcmlmX2V4cCwgXG4gICAgIGxhYmVscyA9IHBhc3RlKCBmb3JtYXQoY29lZnNfcmlmX2V4cFt2YWxpZF9pbmRpY2VzXSwgZGlnaXRzID0gMikpLCBcbiAgICAgcG9zID0gNCwgY2V4ID0gMC44LCBjb2wgPSBcXGJsdWVcXClcbmBgYFxuYGBgIn0= --&gt;
+
+```r
+```r
+plot(coefs_rif_exp, type = \o\, col = \black\, pch = 16, ylab = \\, xlab = \\, main = &#39;experiencia potencial&#39;, xaxt= \n\,xlim = c(1, 5.3))
 
 axis(1,at=1:5,labels = anios)
 
 valid_indices &lt;- which(!is.na(coefs_rif_exp))
 text(valid_indices, coefs_rif_exp, 
      labels = paste( format(coefs_rif_exp[valid_indices], digits = 2)), 
-     pos = 4, cex = 0.8, col = &quot;blue&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Se observan características similares a las anteriores, en tanto
-concluimos que ambas variables no afectan determinantemente a cambios en
-el mercado laboral, en los periodos estudiados.</p>
-</div>
-<div id="oaxaca-blinder" class="section level3">
-<h3>Oaxaca-Blinder</h3>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubW9kZWxfMjQgPC0gbG0obG9nKHdhZ2UpIH4gYW5pb3NfZWR1ICsgZXhwX3BvdCArIGV4cF9wb3RfMiArIGFzLmZhY3Rvcihlc3RfY2l2aWwpLGRhdGEgPSBiYXNlMjQpXG5tb2RlbF8yMyA8LSBsbShsb2cod2FnZSkgfiBhbmlvc19lZHUgKyBleHBfcG90ICsgZXhwX3BvdF8yICsgYXMuZmFjdG9yKGVzdF9jaXZpbCksZGF0YSA9IGJhc2UyMylcblxuY29lZl8yNCA8LSBjb2VmKG1vZGVsXzI0KVxuY29lZl8yMyA8LSBjb2VmKG1vZGVsXzIzKVxuXG5tZWRpYV92YXJzXzI0IDwtIGNvbE1lYW5zKG1vZGVsLm1hdHJpeChtb2RlbF8yNCkpXG5tZWRpYV92YXJzXzIzIDwtIGNvbE1lYW5zKG1vZGVsLm1hdHJpeChtb2RlbF8yMykpXG5cbmRpZmZfdG90YWwgPC0gbWVhbihsb2coYmFzZTIzJHdhZ2UpKSAtIG1lYW4obG9nKGJhc2UyNCR3YWdlKSlcblxuZXhwbGFpbmVkIDwtIHN1bSgobWVkaWFfdmFyc18yMyAtIG1lZGlhX3ZhcnNfMjQpICogY29lZl8yMylcbnVuZXhwbGFpbmVkIDwtIHN1bShtZWRpYV92YXJzXzI0ICogKGNvZWZfMjMgLSBjb2VmXzI0KSlcblxuY2F0KFwiRGlmZXJlbmNpYSB0b3RhbDogXCIsIGRpZmZfdG90YWwsIFwiXFxuXCIpXG5jYXQoXCJQYXJ0ZSBleHBsaWNhZGE6IFwiLCBleHBsYWluZWQsXCJcXG5cIilcbmNhdChcIlBhcnRlIG5vIGV4cGxpY2FkYTogXCIsdW5leHBsYWluZWQsXCJcXG5cIilcbmBgYCJ9 -->
-<pre class="r"><code>model_24 &lt;- lm(log(wage) ~ anios_edu + exp_pot + exp_pot_2 + as.factor(est_civil),data = base24)
+     pos = 4, cex = 0.8, col = \blue\)</code></pre>
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+
+&lt;!-- rnb-output-end --&gt;
+
+&lt;!-- rnb-chunk-end --&gt;
+
+
+&lt;!-- rnb-text-begin --&gt;
+
+
+Se observan características similares a las anteriores, en tanto concluimos que ambas variables no afectan determinantemente a cambios en el mercado laboral, en los periodos estudiados. 
+
+### Oaxaca-Blinder 
+
+
+&lt;!-- rnb-text-end --&gt;
+
+
+&lt;!-- rnb-chunk-begin --&gt;
+
+
+&lt;!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVZR0JnY2x4dWJXOWtaV3hmTWpRZ1BDMGdiRzBvYkc5bktIZGhaMlVwSUg0Z1lXNXBiM05mWldSMUlDc2daWGh3WDNCdmRDQXJJR1Y0Y0Y5d2IzUmZNaUFySUdGekxtWmhZM1J2Y2lobGMzUmZZMmwyYVd3cExHUmhkR0VnUFNCaVlYTmxNalFwWEc1dGIyUmxiRjh5TXlBOExTQnNiU2hzYjJjb2QyRm5aU2tnZmlCaGJtbHZjMTlsWkhVZ0t5QmxlSEJmY0c5MElDc2daWGh3WDNCdmRGOHlJQ3NnWVhNdVptRmpkRzl5S0dWemRGOWphWFpwYkNrc1pHRjBZU0E5SUdKaGMyVXlNeWxjYmx4dVkyOWxabDh5TkNBOExTQmpiMlZtS0cxdlpHVnNYekkwS1Z4dVkyOWxabDh5TXlBOExTQmpiMlZtS0cxdlpHVnNYekl6S1Z4dVhHNXRaV1JwWVY5MllYSnpYekkwSUR3dElHTnZiRTFsWVc1ektHMXZaR1ZzTG0xaGRISnBlQ2h0YjJSbGJGOHlOQ2twWEc1dFpXUnBZVjkyWVhKelh6SXpJRHd0SUdOdmJFMWxZVzV6S0cxdlpHVnNMbTFoZEhKcGVDaHRiMlJsYkY4eU15a3BYRzVjYm1ScFptWmZkRzkwWVd3Z1BDMGdiV1ZoYmloc2IyY29ZbUZ6WlRJekpIZGhaMlVwS1NBdElHMWxZVzRvYkc5bktHSmhjMlV5TkNSM1lXZGxLU2xjYmx4dVpYaHdiR0ZwYm1Wa0lEd3RJSE4xYlNnb2JXVmthV0ZmZG1GeWMxOHlNeUF0SUcxbFpHbGhYM1poY25OZk1qUXBJQ29nWTI5bFpsOHlNeWxjYm5WdVpYaHdiR0ZwYm1Wa0lEd3RJSE4xYlNodFpXUnBZVjkyWVhKelh6STBJQ29nS0dOdlpXWmZNak1nTFNCamIyVm1YekkwS1NsY2JseHVZMkYwS0Z4Y1JHbG1aWEpsYm1OcFlTQjBiM1JoYkRvZ1hGd3NJR1JwWm1aZmRHOTBZV3dzSUZ4Y1hGeHVYRndwWEc1allYUW9YRnhRWVhKMFpTQmxlSEJzYVdOaFpHRTZJRnhjTENCbGVIQnNZV2x1WldRc1hGeGNYRzVjWENsY2JtTmhkQ2hjWEZCaGNuUmxJRzV2SUdWNGNHeHBZMkZrWVRvZ1hGd3NkVzVsZUhCc1lXbHVaV1FzWEZ4Y1hHNWNYQ2xjYm1CZ1lGeHVZR0JnSW4wPSAtLT5cblxuYGBgclxuYGBgclxubW9kZWxfMjQgPC0gbG0obG9nKHdhZ2UpIH4gYW5pb3NfZWR1ICsgZXhwX3BvdCArIGV4cF9wb3RfMiArIGFzLmZhY3Rvcihlc3RfY2l2aWwpLGRhdGEgPSBiYXNlMjQpXG5tb2RlbF8yMyA8LSBsbShsb2cod2FnZSkgfiBhbmlvc19lZHUgKyBleHBfcG90ICsgZXhwX3BvdF8yICsgYXMuZmFjdG9yKGVzdF9jaXZpbCksZGF0YSA9IGJhc2UyMylcblxuY29lZl8yNCA8LSBjb2VmKG1vZGVsXzI0KVxuY29lZl8yMyA8LSBjb2VmKG1vZGVsXzIzKVxuXG5tZWRpYV92YXJzXzI0IDwtIGNvbE1lYW5zKG1vZGVsLm1hdHJpeChtb2RlbF8yNCkpXG5tZWRpYV92YXJzXzIzIDwtIGNvbE1lYW5zKG1vZGVsLm1hdHJpeChtb2RlbF8yMykpXG5cbmRpZmZfdG90YWwgPC0gbWVhbihsb2coYmFzZTIzJHdhZ2UpKSAtIG1lYW4obG9nKGJhc2UyNCR3YWdlKSlcblxuZXhwbGFpbmVkIDwtIHN1bSgobWVkaWFfdmFyc18yMyAtIG1lZGlhX3ZhcnNfMjQpICogY29lZl8yMylcbnVuZXhwbGFpbmVkIDwtIHN1bShtZWRpYV92YXJzXzI0ICogKGNvZWZfMjMgLSBjb2VmXzI0KSlcblxuY2F0KFxcRGlmZXJlbmNpYSB0b3RhbDogXFwsIGRpZmZfdG90YWwsIFxcXFxuXFwpXG5jYXQoXFxQYXJ0ZSBleHBsaWNhZGE6IFxcLCBleHBsYWluZWQsXFxcXG5cXClcbmNhdChcXFBhcnRlIG5vIGV4cGxpY2FkYTogXFwsdW5leHBsYWluZWQsXFxcXG5cXClcbmBgYFxuYGBgXG5cbjwhLS0gcm5iLXNvdXJjZS1lbmQgLS0+XG4ifQ== --&gt;
+
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxubW9kZWxfMjQgPC0gbG0obG9nKHdhZ2UpIH4gYW5pb3NfZWR1ICsgZXhwX3BvdCArIGV4cF9wb3RfMiArIGFzLmZhY3Rvcihlc3RfY2l2aWwpLGRhdGEgPSBiYXNlMjQpXG5tb2RlbF8yMyA8LSBsbShsb2cod2FnZSkgfiBhbmlvc19lZHUgKyBleHBfcG90ICsgZXhwX3BvdF8yICsgYXMuZmFjdG9yKGVzdF9jaXZpbCksZGF0YSA9IGJhc2UyMylcblxuY29lZl8yNCA8LSBjb2VmKG1vZGVsXzI0KVxuY29lZl8yMyA8LSBjb2VmKG1vZGVsXzIzKVxuXG5tZWRpYV92YXJzXzI0IDwtIGNvbE1lYW5zKG1vZGVsLm1hdHJpeChtb2RlbF8yNCkpXG5tZWRpYV92YXJzXzIzIDwtIGNvbE1lYW5zKG1vZGVsLm1hdHJpeChtb2RlbF8yMykpXG5cbmRpZmZfdG90YWwgPC0gbWVhbihsb2coYmFzZTIzJHdhZ2UpKSAtIG1lYW4obG9nKGJhc2UyNCR3YWdlKSlcblxuZXhwbGFpbmVkIDwtIHN1bSgobWVkaWFfdmFyc18yMyAtIG1lZGlhX3ZhcnNfMjQpICogY29lZl8yMylcbnVuZXhwbGFpbmVkIDwtIHN1bShtZWRpYV92YXJzXzI0ICogKGNvZWZfMjMgLSBjb2VmXzI0KSlcblxuY2F0KFxcRGlmZXJlbmNpYSB0b3RhbDogXFwsIGRpZmZfdG90YWwsIFxcXFxuXFwpXG5jYXQoXFxQYXJ0ZSBleHBsaWNhZGE6IFxcLCBleHBsYWluZWQsXFxcXG5cXClcbmNhdChcXFBhcnRlIG5vIGV4cGxpY2FkYTogXFwsdW5leHBsYWluZWQsXFxcXG5cXClcbmBgYFxuYGBgIn0= --&gt;
+
+```r
+```r
+model_24 &lt;- lm(log(wage) ~ anios_edu + exp_pot + exp_pot_2 + as.factor(est_civil),data = base24)
 model_23 &lt;- lm(log(wage) ~ anios_edu + exp_pot + exp_pot_2 + as.factor(est_civil),data = base23)
 
 coef_24 &lt;- coef(model_24)
@@ -2021,10 +2182,12 @@ diff_total &lt;- mean(log(base23$wage)) - mean(log(base24$wage))
 explained &lt;- sum((media_vars_23 - media_vars_24) * coef_23)
 unexplained &lt;- sum(media_vars_24 * (coef_23 - coef_24))
 
-cat(&quot;Diferencia total: &quot;, diff_total, &quot;\n&quot;)
-cat(&quot;Parte explicada: &quot;, explained,&quot;\n&quot;)
-cat(&quot;Parte no explicada: &quot;,unexplained,&quot;\n&quot;)</code></pre>
+cat(\Diferencia total: \, diff_total, \\n\)
+cat(\Parte explicada: \, explained,\\n\)
+cat(\Parte no explicada: \,unexplained,\\n\)</code></pre>
+<p>```</p>
 <!-- rnb-source-end -->
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>Observamos que el coeficiente correspondiente a la parte no explicada
@@ -2039,9 +2202,8 @@ of Economic Studies 47, 521-531. 1980.</p>
 <p>Bourguignon F., Decomposable Income Inequality Measures. Econometrica
 47, 901-920. 1979</p>
 <!-- rnb-text-end -->
-</div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIkRlc2lndWFsZGFkIg0Kb3V0cHV0OiBodG1sX25vdGVib29rDQotLS0NCmBgYHtyfQ0KbGlicmFyeShxdWFudHJlZyk7DQojbGlicmFyeShyZWFkeGwpOyAjIHBhcmEgbGVlciBhcmNoaXZvcyB4bWwsIHBlcm8gdmFtb3MgYSB1c2FyIGVsIHBhcXVldGUgZXBoDQpsaWJyYXJ5KGVwaCk7DQpsaWJyYXJ5KGRwbHlyKTsNCmxpYnJhcnkodGlkeXIpDQpsaWJyYXJ5KGdncGxvdDIpDQpzb3VyY2UoImZ1bmNpb25lcy5SIikgIyBmdW5jaW9uZXMgYXV4aWxpYXJlcyBwYXJhIG5vIG9jdXBhciB0YW50byBlc3BhY2lvDQpsaWJyYXJ5KGluZXEpDQpsaWJyYXJ5KGRpbmVxKQ0KYGBgDQoNCg0KYGBge3J9DQp2YXJpYWJsZXMgPSBjKCJQMjEiLCJBR0xPTUVSQURPIiwiQ0gwNyIsIkNIMDYiLCJDSDAzIiwiQ0gwNCIsIkNIMTMiLCJDSDEyIiwiQ0gxNCIpDQoNCmJhc2UyNCAgIDwtIGdldF9taWNyb2RhdGEoeWVhciA9IDIwMjQsIHBlcmlvZCA9IDEsIHR5cGUgPSAiaW5kaXZpZHVhbCIsZGVzdGZpbGU9IkVQSF8yMDI0XzFfaW5kaXZpZHVhbC56aXAiLHZhcnMgPSB2YXJpYWJsZXMpICMgcGFyYSBsZWVyIHVzYW5kbyBlbCBwYXF1ZXRlIGVwaCANCmJhc2UyM18xIDwtIGdldF9taWNyb2RhdGEoeWVhciA9IDIwMjMscGVyaW9kPTEsdHlwZT0iaW5kaXZpZHVhbCIsZGVzdGZpbGU9IkVQSF8yMDIzXzFfaW5kaXZpZHVhbC56aXAiLHZhcnMgPSB2YXJpYWJsZXMpIA0KYmFzZTIzXzIgPC0gZ2V0X21pY3JvZGF0YSh5ZWFyID0gMjAyMyxwZXJpb2Q9Mix0eXBlPSJpbmRpdmlkdWFsIixkZXN0ZmlsZT0iRVBIXzIwMjNfMl9pbmRpdmlkdWFsLnppcCIsdmFycyA9IHZhcmlhYmxlcykgDQpiYXNlMjNfMyA8LSBnZXRfbWljcm9kYXRhKHllYXIgPSAyMDIzLHBlcmlvZD0zLHR5cGU9ImluZGl2aWR1YWwiLGRlc3RmaWxlPSJFUEhfMjAyM18zX2luZGl2aWR1YWwuemlwIix2YXJzID0gdmFyaWFibGVzKSANCmJhc2UyM180IDwtIGdldF9taWNyb2RhdGEoeWVhciA9IDIwMjMscGVyaW9kPTQsdHlwZT0iaW5kaXZpZHVhbCIsZGVzdGZpbGU9IkVQSF8yMDIzXzRfaW5kaXZpZHVhbC56aXAiLHZhcnMgPSB2YXJpYWJsZXMpIA0KDQojYmFzZTIwMjQgPC0gcmVhZF9leGNlbCgnRVBIX3VzdV8xZXJfVHJpbV8yMDI0X3hsc3gvdXN1X2luZGl2aWR1YWxfVDEyNC54bHN4JykNCg0KYmFzZTI0IDwtIGZfcmVzdHJpY2Npb25lcyhiYXNlMjQkbWljcm9kYXRhW1sxXV0pDQpiYXNlMjNfMSA8LSBmX3Jlc3RyaWNjaW9uZXMoYmFzZTIzXzEkbWljcm9kYXRhW1sxXV0pDQpiYXNlMjNfMiA8LSBmX3Jlc3RyaWNjaW9uZXMoYmFzZTIzXzIkbWljcm9kYXRhW1sxXV0pDQpiYXNlMjNfMyA8LSBmX3Jlc3RyaWNjaW9uZXMoYmFzZTIzXzMkbWljcm9kYXRhW1sxXV0pDQpiYXNlMjNfNCA8LSBmX3Jlc3RyaWNjaW9uZXMoYmFzZTIzXzQkbWljcm9kYXRhW1sxXV0pDQpgYGANCg0KMi5hIA0KDQojIyMgSW5kaWNlIEdpbmkgDQoNCmBgYHtSfQ0KIyBQcmltZXJvIGRlZmluaW1vcyBsYSBsaXN0YSBkb25kZSBpdGVyYXJlbW9zIGNhZGEgZGF0YS5mcmFtZQ0KZCA8LSBsaXN0KGJhc2UyM18xLGJhc2UyM18yLGJhc2UyM18zLGJhc2UyM180LGJhc2UyNCkNCg0KIyBhbmlvcyB5IHBlcmlvZG9zIGRlIGNhZGEgZGF0YS5mcmFtZSANCmFuaW9zIDwtIGMoIjIwMjMtMSBwZXIiLCIyMDIzLTIgcGVyIiwiMjAyMy0zIHBlciIsIjIwMjMtNCBwZXIiLCIyMDI0LTEgcGVyIikNCg0KZyA8LSBjKCkNCmZvcihpIGluIDE6NSl7DQogIGcgPC0gYyhnLEdpbmkoZFtpXVtbMV1dJHdhZ2UpKQ0KfQ0KDQpwbG90KGcsIHR5cGUgPSAibyIsIGNvbCA9ICJibGFjayIsIHBjaCA9IDE2LCB5bGFiID0gIiIsIHhsYWIgPSAiIiwNCiAgICAgbWFpbiA9ICJpbmRpY2UgR2luaSIsIHhheHQ9ICJuIiwgeWxpbSA9IGMoMC4zMywwLjM4KSkNCg0KYXhpcygxLGF0PTE6NSxsYWJlbHMgPSBhbmlvcykNCmBgYA0KDQpMYSBjb21wYXJhY2nDs24gZGUgbG9zIHZhbG9yZXMgZGVsIMOtbmRpY2UgZGUgR2luaSBlbnRyZSAyMDIzIHkgMjAyNCBtdWVzdHJhIHVuIGF1bWVudG8gZGUgMC4zNTIgYSAwLjM4MCwgZGVsIDNlciBwZXJpb2RvIGRlbCAyMDIzIGFsIDR0byBwZXJpb2RvLCBzZSBvYnNlcnZhIHVuIG1heW9yIGluY3JlbWVudG8sIGltcGxpY2EgdW4gY2FtYmlvIG5lZ2F0aXZvIGVuIHTDqXJtaW5vcyBkZSBlcXVpZGFkLCB5YSBxdWUgdW4gw61uZGljZSBkZSBHaW5pIG1heW9yIGluZGljYSB1bmEgbWF5b3IgZGVzaWd1YWxkYWQgZW4gbGEgZGlzdHJpYnVjacOzbiBkZSBsb3MgaW5ncmVzb3MgZW4gbGEgcG9ibGFjacOzbi4NCg0KIyMjIFJhdGlvcyAkXGZyYWN7UTkwfXtRMTB9JA0KDQpgYGB7cn0NCnEgPC0gYygpDQogDQpmb3IoaSBpbiAxOjUpew0KICB2YWxvciA8LSBxdWFudGlsZShkW2ldW1sxXV0kd2FnZSwwLjkpIC8gcXVhbnRpbGUoZFtpXVtbMV1dJHdhZ2UsMC4xKQ0KICBxIDwtIGMocSx2YWxvcikNCn0NCnBsb3QocSwgdHlwZSA9ICJvIiwgY29sID0gImJsYWNrIiwgcGNoID0gMTYsIHlsYWIgPSAiIiwgeGxhYiA9ICIiLA0KICAgICBtYWluID0gJ1JhdGlvcyBROTAvUTEwJywgeGF4dD0gIm4iKQ0KDQpheGlzKDEsYXQ9MTo1LGxhYmVscyA9IGFuaW9zKQ0KYGBgDQpTaSBsb3MgcmF0aW9zIHNvbiBtYXlvcmVzIGEgMSwgZXN0byBlczsNCiQkIFxmcmFje1E5MH17UTEwfSA+IDEgXHJpZ2h0YXJyb3cgUTkwID4gUTEwICQkDQplcyBkZWNpciBsb3MgaW5ncmVzb3MgZGVsIGRlY2lsIHN1cGVyaW9yIHNvbiBtdWNobyAoc2kgcmF0aW8gPj4gMSkgbWF5b3JlcyBhbCBkZWNpbCBpbmZlcmlvci4gDQoNCk9ic2VydmFtb3MgcXVlIGVuIGVsIHByaW1lciB0cmltZXN0cmUgZGVsIDIwMjMgZWwgcmF0aW8gY3JlY2UsIHBhcmEgbHVlZ28gZGVzY2VuZGVyLCB5IHBvciB1bHRpbW8gY3JlY2UgbnVldmFtZW50ZSBzb2xvIHF1ZSBlc3RhIHZleiBjb24gdW4gbWF5b3IgaW5jcmVtZW50byBlbnRyZSBlbCA0dG8gcGVyaW9kbyBkZWwgMjAyMyB5IDFlciBkZWwgMjAyNC4gDQpDb24gR2luaSwgbnVuY2EgaHVibyB1biBkZXNjZW5zbywgZXN0byBzZSBkZWJlIGEgcXVlIGNhbGN1bGFtb3MgZWwgYXJlYSBlbmNlcnJhZGEgZW50cmUgbGEgZXF1aWRhZCBpZGVhbCB5IGxhIGN1cnZhIGRlIGxvcmVueiwgZW4gY2FtYmlvIGNvbiBlc3RlIGVuZm9xdWUgc29sbyBlc3RhbW9zIG1pZGllbmRvIGxhIHJlbGFjaW9uIGVudHJlIGVsIG5vdmVubyBkZWNpbCBjb24gZWwgcHJpbWVybywgb2J2aWFuZG8gYWwgcmVzdG8gZGUgbGEgZGlzdHJpYnVjaW9uLiANCg0KIyMjIEluZGljZSBUaGVpbA0KDQpVbmEgcHJvcGllZGFkIGRlbCDDrW5kaWNlIFRoZWlsIGVzIHF1ZSBzZSBwdWVkZSBlc3RhYmxlY2VyIHVuYSBkZXNjb21wb3NpY2nDs24gYWRpdGl2YSBlbiBkb3MgY29tcG9uZW50ZXMuIFBhcmEgY29uanVudG9zIGRlIHN1YmdydXBvcyBtdXR1YW1lbnRlIGV4Y2x1eWVudGVzLCB7MSwyLOKApiwkRyR9LCBlbCDDrW5kaWNlIGRlIFRoZWlsIHB1ZWRlIHJlLWV4cHJlc2Fyc2UgY29tbzoNCg0KJCQgVCA9IFxzdW1fe2c9MX1ee0d9IFxmcmFje25fZyBcbXVfZ317blxtdX0gVF9nICArIFxzdW1fe2c9MX1ee0d9XGZyYWN7bl9nIFxtdV9nfXtuXG11fSBsbihcZnJhY3tcbXVfZ317XG11fSkgJCQNCmRlIGFjdWVyZG8gYSBCb3VyZ3VpZ25vbiAoMTk3OSksIENvd2VsbCAoMTk4MCkgeSBTaG9ycm9ja3MgKDE5ODApLiBbMV0NCg0KZG9uZGU6IA0KDQoqICRuX2ckLCBlcyBlbCBuw7ptZXJvIGRlIG9ic2VydmFjaW9uZXMgZW4gZWwgc3ViZ3J1cG8gJGckLiANCg0KKiAkXG11X2ckLCBlcyBlbCBpbmdyZXNvIG1lZGlvIGRlbCBzdWJncnVwbyAkZyQuDQoNCiogJFRfZyQsIGVzIGVsIMOtbmRpY2UgVGhlaWwgY2FsY3VsYWRvIHBhcmEgZWwgc3ViZ3J1cG8gJGckLg0KDQpFbCBwcmltZXIgc3VtYW5kbyByZXByZXNlbnRhIGVsIGNvbXBvbmVudGUgZGUgbGEgZGVzaWd1YWxkYWQgYXRyaWJ1aWRvIGEgbGFzIGRpZmVyZW5jaWFzIGRlIGluZ3Jlc29zICoqZGVudHJvKiogZGUgdW4gbWlzbW8gZ3J1cG8uDQoNCkVsIHNlZ3VuZG8gc3VtYW5kbyByZXByZXNlbnRhIGxhIGRlc2lndWFsZGFkIGVuIGxvcyBpbmdyZXNvcyAqKmVudHJlKiogbG9zIHN1YmdydXBvcyBkZSBsYSBwb2JsYWNpw7NuLg0KDQoNCg0KYGBge3J9DQp4IDwtIGMoKQ0KdyA8LSBjKCkNCmIgPC0gYygpIA0KDQpmb3IgKGkgaW4gMTo1KXsNCiAgd2FnZSA8LSBkW2ldW1sxXV0kd2FnZQ0KICB1YmljYWNpb24gPC0gZFtpXVtbMV1dJHViaWNhY2lvbg0KICAgIA0KICBUcyA8LSB0YXBwbHkod2FnZSwgdWJpY2FjaW9uLCBUaGVpbCkNCiAgDQogICMgQ2FsY3VsYXIgc3VtKHdhZ2UpIHBvciB1YmljYWNpb24gDQogIHN1bXMgPC0gdGFwcGx5KHdhZ2UsdWJpY2FjaW9uLCBmdW5jdGlvbih3KSBmYXV4KHcsVFJVRSkpDQogIA0KICAjIENhbGN1bGFyIGxlbih3YWdlKSBwb3IgdWJpY2FjaW9uIA0KICBucyA8LSB0YXBwbHkod2FnZSx1YmljYWNpb24sIGZ1bmN0aW9uKHcpIGZhdXgodyxGQUxTRSkpDQogIA0KICBtdV9uIDwtIHN1bShzdW1zKSAgICAgDQogIG4gPC0gc3VtKG5zKQ0KICBtdSA8LSBtdV9uIC8gc3VtKG5zKQ0KICANCiAgd2l0aGluX2luZXEgPC0gc3VtKHN1bXMqVHMgLyBtdV9uKSANCiAgYmV0d2Vlbl9pbmVxIDwtIHN1bShzdW1zKmxvZygoc3Vtcy9ucykgLyBtdSkgLyBtdV9uKQ0KICBUZSA8LSB3aXRoaW5faW5lcSArIGJldHdlZW5faW5lcQ0KICB4IDwtIGMoeCxUZSkNCiAgdyA8LSBjKHcsd2l0aGluX2luZXEpDQogIGIgPC0gYyhiLGJldHdlZW5faW5lcSkNCn0NCmBgYA0KDQpIYWNlbW9zIGxhIGRpdmlzacOzbiBwb3IgKipBR0xPTUVSQURPKiosIHF1ZSBlbiBudWVzdHJvIGNhc28gZXMgKip1YmljYWNpb24qKiwgbHVlZ28gaGFjZW1vcyBlbCBjw6FsY3VsbyBkZSBsYSBkZXNjb21wb3NpY2nDs24uDQoNCmBgYHtyfQ0KcGxvdCh4LCB0eXBlID0gIm8iLCBjb2wgPSAiYmx1ZSIsIHBjaCA9IDE2LCB5bGFiID0gIiIsIHhsYWIgPSAiIiwNCiAgICAgbWFpbiA9ICJUaGVpbCB5IHN1IGRlc2NvbXBvc2ljaW9uIix5bGltID0gYygwLDAuMzUpLCB4YXh0PSAibiIpDQoNCmF4aXMoMSxhdD0xOjUsbGFiZWxzID0gYW5pb3MpDQojIEHDsWFkaXIgZWwgc2VndW5kbyBjb25qdW50byBkZSBkYXRvcyBjb24gbMOtbmVhcw0KbGluZXModywgdHlwZSA9ICJvIiwgY29sID0gIm9yYW5nZSIsIHBjaCA9IDE2KQ0KDQojIEHDsWFkaXIgZWwgdGVyY2VyIGNvbmp1bnRvIGRlIGRhdG9zIGNvbiBsw61uZWFzDQpsaW5lcyhiLCB0eXBlID0gIm8iLCBjb2wgPSAiZGFya2dyYXkiLCBwY2ggPSAxNikNCg0KIyBBw7FhZGlyIGxleWVuZGENCmxlZ2VuZCgidG9wbGVmdCIsIGxlZ2VuZCA9IGMoIlRoZWlsIiwgIndpdGhpbiIsICJiZXR3ZWVuIiksIGNvbCA9IGMoImJsdWUiLCAib3JhbmdlIiwgImRhcmtncmF5IiksIA0KICAgICAgIHBjaCA9IDE2LCBsdHkgPSAxKQ0KYGBgDQoNCk9ic2VydmFuZG8gZWwgY29tcG9ydGFtaWVudG8gZGUgbGEgY29tcG9uZW50ZSAqKmJldHdlZW4qKiwgcG9kZW1vcyBhZmlybWFyIHF1ZSBsYSBkZXNpZ3VhbGRhZCBlbnRyZSBsYXMgZGlzdGludGFzIHViaWNhY2lvbmVzIHNlIG1hbnR1dm8gY29uc3RhbnRlIGR1cmFudGUgZXN0ZSBwZXJpb2RvLiBBdHJpYnVpbW9zLCBlbnRvbmNlcywgbGEgbWF5b3IgcGFydGUgZGVsIGNvbXBvcnRhbWllbnRvIGRlbCDDrW5kaWNlIGRlIFRoZWlsIGEgbGEgY29tcG9uZW50ZSAqKndpdGhpbioqLg0KDQpFbiBwYXJ0aWN1bGFyLCBhbCBub3RhciBxdWUgZWwgw61uZGljZSBkZSBUaGVpbCBhdW1lbnRhIGVuIGVsIGN1YXJ0byB0cmltZXN0cmUgZGUgMjAyMywgaW5mZXJpbW9zIHF1ZSBodWJvIHVuIGluY3JlbWVudG8gZW4gbGEgZGVzaWd1YWxkYWQgc2FsYXJpYWwsIGVsIGN1YWwgc2UgZGViZSBwcmluY2lwYWxtZW50ZSBhIGxhIGRlc2lndWFsZGFkICoqZGVudHJvKiogZGUgbG9zIHN1YmdydXBvcywgcXVlIGVuIG51ZXN0cm8gYW7DoWxpc2lzIGNvcnJlc3BvbmRlbiBhIGxhcyB1YmljYWNpb25lcy4NCg0KDQoyLmINCg0KQ29tZW56YW1vcyBjb24gbGEgcmVncmVzacOzbiBSSUY6DQoNClZhbW9zIGEgdG9tYXIgY2FkYSBwZXJpb2RvIGRlIHRpZW1wbyB5IGhhY2VyIGVsIGPDoWxjdWxvIGRlIFJJRiBkZSBsd2FnZSwgdXNhbmRvIGNvbW8gZXN0YWTDrXN0aWNvIGVsIMOtbmRpY2UgZGUgR2luaSwgcGFyYSBsdWVnbyBjYWxjdWxhciBsYXMgZXN0aW1hY2lvbmVzIGRlIGxvcyBjb2VmaWNpZW50ZXMgcmVzdWx0YW50ZXMgZGUgbGEgcmVncmVzacOzbiwgdG9tYW1vcyAqKmFuaW9zX2VkdSoqIHkgKipleHBfcG90KiogcGFyYSBsdWVnbyBncmFmaWNhcmxvcy4NCg0KYGBge3J9DQoNCmNvZWZzX3JpZl9lZHUgPC0gYygpDQpjb2Vmc19yaWZfZXhwIDwtIGMoKQ0KIA0KZm9yKGkgaW4gMTo1KXsNCiAgIyBjYWxjdWxhbW9zIFJJRiBlbiBmdW5jaW9uIGRlIGx3YWdlLg0KICByaWZfZ2luaSA8LSByaWYobG9nKGRbaV1bWzFdXSR3YWdlKSwgbWV0aG9kID0gImdpbmkiKQ0KICANCiAgUklGcmVnX2dpbmkgPC0gbG0ocmlmX2dpbmkgfiBhbmlvc19lZHUgKyBleHBfcG90ICsgZXhwX3BvdF8yICsgZWRhZCArIGFzLmZhY3Rvcihlc3RfY2l2aWwpLCBkYXRhID0gZFtpXVtbMV1dKQ0KICANCiAgZWR1IDwtIFJJRnJlZ19naW5pJGNvZWZmaWNpZW50c1syXQ0KICBleHAgPC0gUklGcmVnX2dpbmkkY29lZmZpY2llbnRzWzNdDQogIA0KICBjb2Vmc19yaWZfZWR1IDwtIGMoY29lZnNfcmlmX2VkdSwgZWR1KQ0KICBjb2Vmc19yaWZfZXhwIDwtIGMoY29lZnNfcmlmX2V4cCwgZXhwKQ0KfQ0KYGBgDQoNCg0KIyMjIEdyw6FmaWNvIGRlIGxhcyBlc3RpbWFjaW9uZXMgZGUgYcOxb3MgZGUgZWR1Y2FjacOzbiANCg0KYGBge3J9DQpwbG90KGNvZWZzX3JpZl9lZHUsIHR5cGUgPSAibyIsIGNvbCA9ICJibGFjayIsIHBjaCA9IDE2LCB5bGFiID0gIiIsIHhsYWIgPSAiIiwgbWFpbiA9ICdBw7FvcyBkZSBlZHVjYWNpw7NuJywgeGF4dD0gIm4iLCB4bGltID0gYygxLCA1LjMpKQ0KDQpheGlzKDEsYXQ9MTo1LGxhYmVscyA9IGFuaW9zKQ0KdmFsaWRfaW5kaWNlcyA8LSB3aGljaCghaXMubmEoY29lZnNfcmlmX2VkdSkpDQp0ZXh0KHZhbGlkX2luZGljZXMsIGNvZWZzX3JpZl9lZHUsIGxhYmVscyA9IHBhc3RlKCBmb3JtYXQoY29lZnNfcmlmX2VkdVt2YWxpZF9pbmRpY2VzXSwgZGlnaXRzID0gMikpLCBwb3MgPSA0LCBjZXggPSAwLjgsIGNvbCA9ICJibHVlIikNCmBgYA0KDQpPYnNlcnZhbmRvIGVsIHZhbG9yIGRlIGxvcyBjb2VmaWNpZW50ZXMgZXN0aW1hZG9zLCB2ZW1vcyBxdWUgc29uIHBvc2l0aXZvcywgZXN0byBzdWdpZXJlIHF1ZSBlbCBhdW1lbnRvIGVuIGxhIGVkdWNhY2nDs24gaW5jcmVtZW50YSBsYSBkZXNpZ3VhbGRhZCBzYWxhcmlhbCwgY29tbyBzb24gY2VyY2Fub3MgYSAwLCBubyBzZSBwdWVkZSBoYWNlciB0YWwgYWZpcm1hY2nDs24uIFVubyBlc3BlcmFyw61hIHF1ZSBkaWNoYXMgZXN0aW1hY2lvbmVzIGZ1ZXJhbiBuZWdhdGl2YXMuIA0KDQoNCmBgYHtyfQ0KcGxvdChjb2Vmc19yaWZfZXhwLCB0eXBlID0gIm8iLCBjb2wgPSAiYmxhY2siLCBwY2ggPSAxNiwgeWxhYiA9ICIiLCB4bGFiID0gIiIsIG1haW4gPSAnZXhwZXJpZW5jaWEgcG90ZW5jaWFsJywgeGF4dD0gIm4iLHhsaW0gPSBjKDEsIDUuMykpDQoNCmF4aXMoMSxhdD0xOjUsbGFiZWxzID0gYW5pb3MpDQoNCnZhbGlkX2luZGljZXMgPC0gd2hpY2goIWlzLm5hKGNvZWZzX3JpZl9leHApKQ0KdGV4dCh2YWxpZF9pbmRpY2VzLCBjb2Vmc19yaWZfZXhwLCANCiAgICAgbGFiZWxzID0gcGFzdGUoIGZvcm1hdChjb2Vmc19yaWZfZXhwW3ZhbGlkX2luZGljZXNdLCBkaWdpdHMgPSAyKSksIA0KICAgICBwb3MgPSA0LCBjZXggPSAwLjgsIGNvbCA9ICJibHVlIikNCmBgYA0KDQpTZSBvYnNlcnZhbiBjYXJhY3RlcsOtc3RpY2FzIHNpbWlsYXJlcyBhIGxhcyBhbnRlcmlvcmVzLCBlbiB0YW50byBjb25jbHVpbW9zIHF1ZSBhbWJhcyB2YXJpYWJsZXMgbm8gYWZlY3RhbiBkZXRlcm1pbmFudGVtZW50ZSBhIGNhbWJpb3MgZW4gZWwgbWVyY2FkbyBsYWJvcmFsLCBlbiBsb3MgcGVyaW9kb3MgZXN0dWRpYWRvcy4gDQoNCiMjIyBPYXhhY2EtQmxpbmRlciANCg0KYGBge3J9DQptb2RlbF8yNCA8LSBsbShsb2cod2FnZSkgfiBhbmlvc19lZHUgKyBleHBfcG90ICsgZXhwX3BvdF8yICsgYXMuZmFjdG9yKGVzdF9jaXZpbCksZGF0YSA9IGJhc2UyNCkNCm1vZGVsXzIzIDwtIGxtKGxvZyh3YWdlKSB+IGFuaW9zX2VkdSArIGV4cF9wb3QgKyBleHBfcG90XzIgKyBhcy5mYWN0b3IoZXN0X2NpdmlsKSxkYXRhID0gYmFzZTIzKQ0KDQpjb2VmXzI0IDwtIGNvZWYobW9kZWxfMjQpDQpjb2VmXzIzIDwtIGNvZWYobW9kZWxfMjMpDQoNCm1lZGlhX3ZhcnNfMjQgPC0gY29sTWVhbnMobW9kZWwubWF0cml4KG1vZGVsXzI0KSkNCm1lZGlhX3ZhcnNfMjMgPC0gY29sTWVhbnMobW9kZWwubWF0cml4KG1vZGVsXzIzKSkNCg0KZGlmZl90b3RhbCA8LSBtZWFuKGxvZyhiYXNlMjMkd2FnZSkpIC0gbWVhbihsb2coYmFzZTI0JHdhZ2UpKQ0KDQpleHBsYWluZWQgPC0gc3VtKChtZWRpYV92YXJzXzIzIC0gbWVkaWFfdmFyc18yNCkgKiBjb2VmXzIzKQ0KdW5leHBsYWluZWQgPC0gc3VtKG1lZGlhX3ZhcnNfMjQgKiAoY29lZl8yMyAtIGNvZWZfMjQpKQ0KDQpjYXQoIkRpZmVyZW5jaWEgdG90YWw6ICIsIGRpZmZfdG90YWwsICJcbiIpDQpjYXQoIlBhcnRlIGV4cGxpY2FkYTogIiwgZXhwbGFpbmVkLCJcbiIpDQpjYXQoIlBhcnRlIG5vIGV4cGxpY2FkYTogIix1bmV4cGxhaW5lZCwiXG4iKQ0KYGBgDQpPYnNlcnZhbW9zIHF1ZSBlbCBjb2VmaWNpZW50ZSBjb3JyZXNwb25kaWVudGUgYSBsYSBwYXJ0ZSBubyBleHBsaWNhZGEgcG9yIGxhcyBjYXJhY3RlcsOtc3RpY2FzIG9ic2VydmFkYXMgZXMgYWx0byBlbiBjb21wYXJhY2nDs24gY29uIHN1ICJjb250cmFwYXJ0ZSIsIHBvciB0YW50byBubyBwb2RlbW9zIGFmaXJtYXIgcXVlIGxhIGJyZWNoYSBzYWxhcmlhbCBkZWwgYcOxbyAyMDIzIGFsIDIwMjQgc2UgZGViYSBhIGxhcyBjYXJhY3RlcsOtc3RpY2FzIG9ic2VydmFkYSwgZXMgZGVjaXIgYSBsb3MgYcOxb3MgZWR1Y2F0aXZvcywgZXhwZXJpZW5jaWEgcG90ZW5jaWFsLCB5IGVzdGFkbyBjaXZpbC4gDQoNCg0KDQoNClsxXQ0KU2hvcnJvY2tzIEEuIEYuLCBUaGUgQ2xhc3Mgb2YgQWRkaXRpdmVseSBEZWNvbXBvc2FibGUgSW5lcXVhbGl0eSBNZWFzdXJlcy4gRWNvbm9tZXRyaWNhIDQ4LCA2MTMtNjI1LiAxOTgwLg0KDQpDb3dlbGwgRi4sIE9uIHRoZSBTdHJ1Y3R1cmUgb2YgQWRkaXRpdmUgSW5lcXVhbGl0eSBNZWFzdXJlcy4gUmV2aWV3IG9mIEVjb25vbWljIFN0dWRpZXMgNDcsIDUyMS01MzEuIDE5ODAuDQoNCkJvdXJndWlnbm9uIEYuLCBEZWNvbXBvc2FibGUgSW5jb21lIEluZXF1YWxpdHkgTWVhc3VyZXMuIEVjb25vbWV0cmljYSA0NywgOTAxLTkyMC4NCjE5NzkNCg0K</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiRGVzaWd1YWxkYWQiCm91dHB1dDogaHRtbF9ub3RlYm9vawotLS0KYGBge3J9CmxpYnJhcnkocXVhbnRyZWcpOwpsaWJyYXJ5KGVwaCk7CmxpYnJhcnkoZHBseXIpOwpsaWJyYXJ5KHRpZHlyKQpsaWJyYXJ5KGdncGxvdDIpCnNvdXJjZSgidXRpbHMuUiIpICMgZnVuY2lvbmVzIGF1eGlsaWFyZXMgcGFyYSBubyBvY3VwYXIgdGFudG8gZXNwYWNpbwpsaWJyYXJ5KGluZXEpCmxpYnJhcnkoZGluZXEpCmBgYAoKCmBgYHtyfQp2YXJpYWJsZXMgPSBjKCJQMjEiLCJBR0xPTUVSQURPIiwiQ0gwNyIsIkNIMDYiLCJDSDAzIiwiQ0gwNCIsIkNIMTMiLCJDSDEyIiwiQ0gxNCIpCgpiYXNlMjQgICA8LSBnZXRfbWljcm9kYXRhKHllYXIgPSAyMDI0LCBwZXJpb2QgPSAxLCB0eXBlID0gImluZGl2aWR1YWwiLGRlc3RmaWxlPSJFUEhfMjAyNF8xX2luZGl2aWR1YWwuemlwIix2YXJzID0gdmFyaWFibGVzKSAjIHBhcmEgbGVlciB1c2FuZG8gZWwgcGFxdWV0ZSBlcGggCmJhc2UyM18xIDwtIGdldF9taWNyb2RhdGEoeWVhciA9IDIwMjMscGVyaW9kPTEsdHlwZT0iaW5kaXZpZHVhbCIsZGVzdGZpbGU9IkVQSF8yMDIzXzFfaW5kaXZpZHVhbC56aXAiLHZhcnMgPSB2YXJpYWJsZXMpIApiYXNlMjNfMiA8LSBnZXRfbWljcm9kYXRhKHllYXIgPSAyMDIzLHBlcmlvZD0yLHR5cGU9ImluZGl2aWR1YWwiLGRlc3RmaWxlPSJFUEhfMjAyM18yX2luZGl2aWR1YWwuemlwIix2YXJzID0gdmFyaWFibGVzKSAKYmFzZTIzXzMgPC0gZ2V0X21pY3JvZGF0YSh5ZWFyID0gMjAyMyxwZXJpb2Q9Myx0eXBlPSJpbmRpdmlkdWFsIixkZXN0ZmlsZT0iRVBIXzIwMjNfM19pbmRpdmlkdWFsLnppcCIsdmFycyA9IHZhcmlhYmxlcykgCmJhc2UyM180IDwtIGdldF9taWNyb2RhdGEoeWVhciA9IDIwMjMscGVyaW9kPTQsdHlwZT0iaW5kaXZpZHVhbCIsZGVzdGZpbGU9IkVQSF8yMDIzXzRfaW5kaXZpZHVhbC56aXAiLHZhcnMgPSB2YXJpYWJsZXMpIAoKI2Jhc2UyMDI0IDwtIHJlYWRfZXhjZWwoJ0VQSF91c3VfMWVyX1RyaW1fMjAyNF94bHN4L3VzdV9pbmRpdmlkdWFsX1QxMjQueGxzeCcpCgpiYXNlMjQgPC0gZl9yZXN0cmljY2lvbmVzKGJhc2UyNCRtaWNyb2RhdGFbWzFdXSkKYmFzZTIzXzEgPC0gZl9yZXN0cmljY2lvbmVzKGJhc2UyM18xJG1pY3JvZGF0YVtbMV1dKQpiYXNlMjNfMiA8LSBmX3Jlc3RyaWNjaW9uZXMoYmFzZTIzXzIkbWljcm9kYXRhW1sxXV0pCmJhc2UyM18zIDwtIGZfcmVzdHJpY2Npb25lcyhiYXNlMjNfMyRtaWNyb2RhdGFbWzFdXSkKYmFzZTIzXzQgPC0gZl9yZXN0cmljY2lvbmVzKGJhc2UyM180JG1pY3JvZGF0YVtbMV1dKQpgYGAKCjIuYSAKCiMjIyBJbmRpY2UgR2luaSAKCmBgYHtSfQojIFByaW1lcm8gZGVmaW5pbW9zIGxhIGxpc3RhIGRvbmRlIGl0ZXJhcmVtb3MgY2FkYSBkYXRhLmZyYW1lCmQgPC0gbGlzdChiYXNlMjNfMSxiYXNlMjNfMixiYXNlMjNfMyxiYXNlMjNfNCxiYXNlMjQpCgojIGFuaW9zIHkgcGVyaW9kb3MgZGUgY2FkYSBkYXRhLmZyYW1lIAphbmlvcyA8LSBjKCIyMDIzLTEgcGVyIiwiMjAyMy0yIHBlciIsIjIwMjMtMyBwZXIiLCIyMDIzLTQgcGVyIiwiMjAyNC0xIHBlciIpCgpnIDwtIGMoKQpmb3IoaSBpbiAxOjUpewogIGcgPC0gYyhnLEdpbmkoZFtpXVtbMV1dJHdhZ2UpKQp9CgpwbG90KGcsIHR5cGUgPSAibyIsIGNvbCA9ICJibGFjayIsIHBjaCA9IDE2LCB5bGFiID0gIiIsIHhsYWIgPSAiIiwKICAgICBtYWluID0gImluZGljZSBHaW5pIiwgeGF4dD0gIm4iLCB5bGltID0gYygwLjMzLDAuMzgpKQoKYXhpcygxLGF0PTE6NSxsYWJlbHMgPSBhbmlvcykKYGBgCgpMYSBjb21wYXJhY2nDs24gZGUgbG9zIHZhbG9yZXMgZGVsIMOtbmRpY2UgZGUgR2luaSBlbnRyZSAyMDIzIHkgMjAyNCBtdWVzdHJhIHVuIGF1bWVudG8gZGUgMC4zNTIgYSAwLjM4MCwgZGVsIDNlciBwZXJpb2RvIGRlbCAyMDIzIGFsIDR0byBwZXJpb2RvLCBzZSBvYnNlcnZhIHVuIG1heW9yIGluY3JlbWVudG8sIGltcGxpY2EgdW4gY2FtYmlvIG5lZ2F0aXZvIGVuIHTDqXJtaW5vcyBkZSBlcXVpZGFkLCB5YSBxdWUgdW4gw61uZGljZSBkZSBHaW5pIG1heW9yIGluZGljYSB1bmEgbWF5b3IgZGVzaWd1YWxkYWQgZW4gbGEgZGlzdHJpYnVjacOzbiBkZSBsb3MgaW5ncmVzb3MgZW4gbGEgcG9ibGFjacOzbi4KCiMjIyBSYXRpb3MgJFxmcmFje1E5MH17UTEwfSQKCmBgYHtyfQpxIDwtIGMoKQogCmZvcihpIGluIDE6NSl7CiAgdmFsb3IgPC0gcXVhbnRpbGUoZFtpXVtbMV1dJHdhZ2UsMC45KSAvIHF1YW50aWxlKGRbaV1bWzFdXSR3YWdlLDAuMSkKICBxIDwtIGMocSx2YWxvcikKfQpwbG90KHEsIHR5cGUgPSAibyIsIGNvbCA9ICJibGFjayIsIHBjaCA9IDE2LCB5bGFiID0gIiIsIHhsYWIgPSAiIiwKICAgICBtYWluID0gJ1JhdGlvcyBROTAvUTEwJywgeGF4dD0gIm4iKQoKYXhpcygxLGF0PTE6NSxsYWJlbHMgPSBhbmlvcykKYGBgClNpIGxvcyByYXRpb3Mgc29uIG1heW9yZXMgYSAxLCBlc3RvIGVzOwokJCBcZnJhY3tROTB9e1ExMH0gPiAxIFxyaWdodGFycm93IFE5MCA+IFExMCAkJAplcyBkZWNpciBsb3MgaW5ncmVzb3MgZGVsIGRlY2lsIHN1cGVyaW9yIHNvbiBtdWNobyAoc2kgcmF0aW8gPj4gMSkgbWF5b3JlcyBhbCBkZWNpbCBpbmZlcmlvci4gCgpPYnNlcnZhbW9zIHF1ZSBlbiBlbCBwcmltZXIgdHJpbWVzdHJlIGRlbCAyMDIzIGVsIHJhdGlvIGNyZWNlLCBwYXJhIGx1ZWdvIGRlc2NlbmRlciwgeSBwb3IgdWx0aW1vIGNyZWNlIG51ZXZhbWVudGUgc29sbyBxdWUgZXN0YSB2ZXogY29uIHVuIG1heW9yIGluY3JlbWVudG8gZW50cmUgZWwgNHRvIHBlcmlvZG8gZGVsIDIwMjMgeSAxZXIgZGVsIDIwMjQuIApDb24gR2luaSwgbnVuY2EgaHVibyB1biBkZXNjZW5zbywgZXN0byBzZSBkZWJlIGEgcXVlIGNhbGN1bGFtb3MgZWwgYXJlYSBlbmNlcnJhZGEgZW50cmUgbGEgZXF1aWRhZCBpZGVhbCB5IGxhIGN1cnZhIGRlIGxvcmVueiwgZW4gY2FtYmlvIGNvbiBlc3RlIGVuZm9xdWUgc29sbyBlc3RhbW9zIG1pZGllbmRvIGxhIHJlbGFjaW9uIGVudHJlIGVsIG5vdmVubyBkZWNpbCBjb24gZWwgcHJpbWVybywgb2J2aWFuZG8gYWwgcmVzdG8gZGUgbGEgZGlzdHJpYnVjaW9uLiAKCiMjIyBJbmRpY2UgVGhlaWwKClVuYSBwcm9waWVkYWQgZGVsIMOtbmRpY2UgVGhlaWwgZXMgcXVlIHNlIHB1ZWRlIGVzdGFibGVjZXIgdW5hIGRlc2NvbXBvc2ljacOzbiBhZGl0aXZhIGVuIGRvcyBjb21wb25lbnRlcy4gUGFyYSBjb25qdW50b3MgZGUgc3ViZ3J1cG9zIG11dHVhbWVudGUgZXhjbHV5ZW50ZXMsIHsxLDIs4oCmLCRHJH0sIGVsIMOtbmRpY2UgZGUgVGhlaWwgcHVlZGUgcmUtZXhwcmVzYXJzZSBjb21vOgoKJCQgVCA9IFxzdW1fe2c9MX1ee0d9IFxmcmFje25fZyBcbXVfZ317blxtdX0gVF9nICArIFxzdW1fe2c9MX1ee0d9XGZyYWN7bl9nIFxtdV9nfXtuXG11fSBsbihcZnJhY3tcbXVfZ317XG11fSkgJCQKZGUgYWN1ZXJkbyBhIEJvdXJndWlnbm9uICgxOTc5KSwgQ293ZWxsICgxOTgwKSB5IFNob3Jyb2NrcyAoMTk4MCkuIFsxXQoKZG9uZGU6IAoKKiAkbl9nJCwgZXMgZWwgbsO6bWVybyBkZSBvYnNlcnZhY2lvbmVzIGVuIGVsIHN1YmdydXBvICRnJC4gCgoqICRcbXVfZyQsIGVzIGVsIGluZ3Jlc28gbWVkaW8gZGVsIHN1YmdydXBvICRnJC4KCiogJFRfZyQsIGVzIGVsIMOtbmRpY2UgVGhlaWwgY2FsY3VsYWRvIHBhcmEgZWwgc3ViZ3J1cG8gJGckLgoKRWwgcHJpbWVyIHN1bWFuZG8gcmVwcmVzZW50YSBlbCBjb21wb25lbnRlIGRlIGxhIGRlc2lndWFsZGFkIGF0cmlidWlkbyBhIGxhcyBkaWZlcmVuY2lhcyBkZSBpbmdyZXNvcyAqKmRlbnRybyoqIGRlIHVuIG1pc21vIGdydXBvLgoKRWwgc2VndW5kbyBzdW1hbmRvIHJlcHJlc2VudGEgbGEgZGVzaWd1YWxkYWQgZW4gbG9zIGluZ3Jlc29zICoqZW50cmUqKiBsb3Mgc3ViZ3J1cG9zIGRlIGxhIHBvYmxhY2nDs24uCgoKCmBgYHtyfQp4IDwtIGMoKQp3IDwtIGMoKQpiIDwtIGMoKSAKCmZvciAoaSBpbiAxOjUpewogIHdhZ2UgPC0gZFtpXVtbMV1dJHdhZ2UKICB1YmljYWNpb24gPC0gZFtpXVtbMV1dJHViaWNhY2lvbgogICAgCiAgVHMgPC0gdGFwcGx5KHdhZ2UsIHViaWNhY2lvbiwgVGhlaWwpCiAgCiAgIyBDYWxjdWxhciBzdW0od2FnZSkgcG9yIHViaWNhY2lvbiAKICBzdW1zIDwtIHRhcHBseSh3YWdlLHViaWNhY2lvbiwgZnVuY3Rpb24odykgZmF1eCh3LFRSVUUpKQogIAogICMgQ2FsY3VsYXIgbGVuKHdhZ2UpIHBvciB1YmljYWNpb24gCiAgbnMgPC0gdGFwcGx5KHdhZ2UsdWJpY2FjaW9uLCBmdW5jdGlvbih3KSBmYXV4KHcsRkFMU0UpKQogIAogIG11X24gPC0gc3VtKHN1bXMpICAgICAKICBuIDwtIHN1bShucykKICBtdSA8LSBtdV9uIC8gc3VtKG5zKQogIAogIHdpdGhpbl9pbmVxIDwtIHN1bShzdW1zKlRzIC8gbXVfbikgCiAgYmV0d2Vlbl9pbmVxIDwtIHN1bShzdW1zKmxvZygoc3Vtcy9ucykgLyBtdSkgLyBtdV9uKQogIFRlIDwtIHdpdGhpbl9pbmVxICsgYmV0d2Vlbl9pbmVxCiAgeCA8LSBjKHgsVGUpCiAgdyA8LSBjKHcsd2l0aGluX2luZXEpCiAgYiA8LSBjKGIsYmV0d2Vlbl9pbmVxKQp9CmBgYAoKSGFjZW1vcyBsYSBkaXZpc2nDs24gcG9yICoqQUdMT01FUkFETyoqLCBxdWUgZW4gbnVlc3RybyBjYXNvIGVzICoqdWJpY2FjaW9uKiosIGx1ZWdvIGhhY2Vtb3MgZWwgY8OhbGN1bG8gZGUgbGEgZGVzY29tcG9zaWNpw7NuLgoKYGBge3J9CnBsb3QoeCwgdHlwZSA9ICJvIiwgY29sID0gImJsdWUiLCBwY2ggPSAxNiwgeWxhYiA9ICIiLCB4bGFiID0gIiIsCiAgICAgbWFpbiA9ICJUaGVpbCB5IHN1IGRlc2NvbXBvc2ljaW9uIix5bGltID0gYygwLDAuMzUpLCB4YXh0PSAibiIpCgpheGlzKDEsYXQ9MTo1LGxhYmVscyA9IGFuaW9zKQojIEHDsWFkaXIgZWwgc2VndW5kbyBjb25qdW50byBkZSBkYXRvcyBjb24gbMOtbmVhcwpsaW5lcyh3LCB0eXBlID0gIm8iLCBjb2wgPSAib3JhbmdlIiwgcGNoID0gMTYpCgojIEHDsWFkaXIgZWwgdGVyY2VyIGNvbmp1bnRvIGRlIGRhdG9zIGNvbiBsw61uZWFzCmxpbmVzKGIsIHR5cGUgPSAibyIsIGNvbCA9ICJkYXJrZ3JheSIsIHBjaCA9IDE2KQoKIyBBw7FhZGlyIGxleWVuZGEKbGVnZW5kKCJ0b3BsZWZ0IiwgbGVnZW5kID0gYygiVGhlaWwiLCAid2l0aGluIiwgImJldHdlZW4iKSwgY29sID0gYygiYmx1ZSIsICJvcmFuZ2UiLCAiZGFya2dyYXkiKSwgCiAgICAgICBwY2ggPSAxNiwgbHR5ID0gMSkKYGBgCgpPYnNlcnZhbmRvIGVsIGNvbXBvcnRhbWllbnRvIGRlIGxhIGNvbXBvbmVudGUgKipiZXR3ZWVuKiosIHBvZGVtb3MgYWZpcm1hciBxdWUgbGEgZGVzaWd1YWxkYWQgZW50cmUgbGFzIGRpc3RpbnRhcyB1YmljYWNpb25lcyBzZSBtYW50dXZvIGNvbnN0YW50ZSBkdXJhbnRlIGVzdGUgcGVyaW9kby4gQXRyaWJ1aW1vcywgZW50b25jZXMsIGxhIG1heW9yIHBhcnRlIGRlbCBjb21wb3J0YW1pZW50byBkZWwgw61uZGljZSBkZSBUaGVpbCBhIGxhIGNvbXBvbmVudGUgKip3aXRoaW4qKi4KCkVuIHBhcnRpY3VsYXIsIGFsIG5vdGFyIHF1ZSBlbCDDrW5kaWNlIGRlIFRoZWlsIGF1bWVudGEgZW4gZWwgY3VhcnRvIHRyaW1lc3RyZSBkZSAyMDIzLCBpbmZlcmltb3MgcXVlIGh1Ym8gdW4gaW5jcmVtZW50byBlbiBsYSBkZXNpZ3VhbGRhZCBzYWxhcmlhbCwgZWwgY3VhbCBzZSBkZWJlIHByaW5jaXBhbG1lbnRlIGEgbGEgZGVzaWd1YWxkYWQgKipkZW50cm8qKiBkZSBsb3Mgc3ViZ3J1cG9zLCBxdWUgZW4gbnVlc3RybyBhbsOhbGlzaXMgY29ycmVzcG9uZGVuIGEgbGFzIHViaWNhY2lvbmVzLgoKCjIuYgoKQ29tZW56YW1vcyBjb24gbGEgcmVncmVzacOzbiBSSUY6CgpWYW1vcyBhIHRvbWFyIGNhZGEgcGVyaW9kbyBkZSB0aWVtcG8geSBoYWNlciBlbCBjw6FsY3VsbyBkZSBSSUYgZGUgbHdhZ2UsIHVzYW5kbyBjb21vIGVzdGFkw61zdGljbyBlbCDDrW5kaWNlIGRlIEdpbmksIHBhcmEgbHVlZ28gY2FsY3VsYXIgbGFzIGVzdGltYWNpb25lcyBkZSBsb3MgY29lZmljaWVudGVzIHJlc3VsdGFudGVzIGRlIGxhIHJlZ3Jlc2nDs24sIHRvbWFtb3MgKiphbmlvc19lZHUqKiB5ICoqZXhwX3BvdCoqIHBhcmEgbHVlZ28gZ3JhZmljYXJsb3MuCgpgYGB7cn0KCmNvZWZzX3JpZl9lZHUgPC0gYygpCmNvZWZzX3JpZl9leHAgPC0gYygpCiAKZm9yKGkgaW4gMTo1KXsKICAjIGNhbGN1bGFtb3MgUklGIGVuIGZ1bmNpb24gZGUgbHdhZ2UuCiAgcmlmX2dpbmkgPC0gcmlmKGxvZyhkW2ldW1sxXV0kd2FnZSksIG1ldGhvZCA9ICJnaW5pIikKICAKICBSSUZyZWdfZ2luaSA8LSBsbShyaWZfZ2luaSB+IGFuaW9zX2VkdSArIGV4cF9wb3QgKyBleHBfcG90XzIgKyBlZGFkICsgYXMuZmFjdG9yKGVzdF9jaXZpbCksIGRhdGEgPSBkW2ldW1sxXV0pCiAgCiAgZWR1IDwtIFJJRnJlZ19naW5pJGNvZWZmaWNpZW50c1syXQogIGV4cCA8LSBSSUZyZWdfZ2luaSRjb2VmZmljaWVudHNbM10KICAKICBjb2Vmc19yaWZfZWR1IDwtIGMoY29lZnNfcmlmX2VkdSwgZWR1KQogIGNvZWZzX3JpZl9leHAgPC0gYyhjb2Vmc19yaWZfZXhwLCBleHApCn0KYGBgCgoKIyMjIEdyw6FmaWNvIGRlIGxhcyBlc3RpbWFjaW9uZXMgZGUgYcOxb3MgZGUgZWR1Y2FjacOzbiAKCmBgYHtyfQpwbG90KGNvZWZzX3JpZl9lZHUsIHR5cGUgPSAibyIsIGNvbCA9ICJibGFjayIsIHBjaCA9IDE2LCB5bGFiID0gIiIsIHhsYWIgPSAiIiwgbWFpbiA9ICdBw7FvcyBkZSBlZHVjYWNpw7NuJywgeGF4dD0gIm4iLCB4bGltID0gYygxLCA1LjMpKQoKYXhpcygxLGF0PTE6NSxsYWJlbHMgPSBhbmlvcykKdmFsaWRfaW5kaWNlcyA8LSB3aGljaCghaXMubmEoY29lZnNfcmlmX2VkdSkpCnRleHQodmFsaWRfaW5kaWNlcywgY29lZnNfcmlmX2VkdSwgbGFiZWxzID0gcGFzdGUoIGZvcm1hdChjb2Vmc19yaWZfZWR1W3ZhbGlkX2luZGljZXNdLCBkaWdpdHMgPSAyKSksIHBvcyA9IDQsIGNleCA9IDAuOCwgY29sID0gImJsdWUiKQpgYGAKCk9ic2VydmFuZG8gZWwgdmFsb3IgZGUgbG9zIGNvZWZpY2llbnRlcyBlc3RpbWFkb3MsIHZlbW9zIHF1ZSBzb24gcG9zaXRpdm9zLCBlc3RvIHN1Z2llcmUgcXVlIGVsIGF1bWVudG8gZW4gbGEgZWR1Y2FjacOzbiBpbmNyZW1lbnRhIGxhIGRlc2lndWFsZGFkIHNhbGFyaWFsLCBjb21vIHNvbiBjZXJjYW5vcyBhIDAsIG5vIHNlIHB1ZWRlIGhhY2VyIHRhbCBhZmlybWFjacOzbi4gVW5vIGVzcGVyYXLDrWEgcXVlIGRpY2hhcyBlc3RpbWFjaW9uZXMgZnVlcmFuIG5lZ2F0aXZhcy4gCgoKYGBge3J9CnBsb3QoY29lZnNfcmlmX2V4cCwgdHlwZSA9ICJvIiwgY29sID0gImJsYWNrIiwgcGNoID0gMTYsIHlsYWIgPSAiIiwgeGxhYiA9ICIiLCBtYWluID0gJ2V4cGVyaWVuY2lhIHBvdGVuY2lhbCcsIHhheHQ9ICJuIix4bGltID0gYygxLCA1LjMpKQoKYXhpcygxLGF0PTE6NSxsYWJlbHMgPSBhbmlvcykKCnZhbGlkX2luZGljZXMgPC0gd2hpY2goIWlzLm5hKGNvZWZzX3JpZl9leHApKQp0ZXh0KHZhbGlkX2luZGljZXMsIGNvZWZzX3JpZl9leHAsIAogICAgIGxhYmVscyA9IHBhc3RlKCBmb3JtYXQoY29lZnNfcmlmX2V4cFt2YWxpZF9pbmRpY2VzXSwgZGlnaXRzID0gMikpLCAKICAgICBwb3MgPSA0LCBjZXggPSAwLjgsIGNvbCA9ICJibHVlIikKYGBgCgpTZSBvYnNlcnZhbiBjYXJhY3RlcsOtc3RpY2FzIHNpbWlsYXJlcyBhIGxhcyBhbnRlcmlvcmVzLCBlbiB0YW50byBjb25jbHVpbW9zIHF1ZSBhbWJhcyB2YXJpYWJsZXMgbm8gYWZlY3RhbiBkZXRlcm1pbmFudGVtZW50ZSBhIGNhbWJpb3MgZW4gZWwgbWVyY2FkbyBsYWJvcmFsLCBlbiBsb3MgcGVyaW9kb3MgZXN0dWRpYWRvcy4gCgojIyMgT2F4YWNhLUJsaW5kZXIgCgpgYGB7cn0KbW9kZWxfMjQgPC0gbG0obG9nKHdhZ2UpIH4gYW5pb3NfZWR1ICsgZXhwX3BvdCArIGV4cF9wb3RfMiArIGFzLmZhY3Rvcihlc3RfY2l2aWwpLGRhdGEgPSBiYXNlMjQpCm1vZGVsXzIzIDwtIGxtKGxvZyh3YWdlKSB+IGFuaW9zX2VkdSArIGV4cF9wb3QgKyBleHBfcG90XzIgKyBhcy5mYWN0b3IoZXN0X2NpdmlsKSxkYXRhID0gYmFzZTIzKQoKY29lZl8yNCA8LSBjb2VmKG1vZGVsXzI0KQpjb2VmXzIzIDwtIGNvZWYobW9kZWxfMjMpCgptZWRpYV92YXJzXzI0IDwtIGNvbE1lYW5zKG1vZGVsLm1hdHJpeChtb2RlbF8yNCkpCm1lZGlhX3ZhcnNfMjMgPC0gY29sTWVhbnMobW9kZWwubWF0cml4KG1vZGVsXzIzKSkKCmRpZmZfdG90YWwgPC0gbWVhbihsb2coYmFzZTIzJHdhZ2UpKSAtIG1lYW4obG9nKGJhc2UyNCR3YWdlKSkKCmV4cGxhaW5lZCA8LSBzdW0oKG1lZGlhX3ZhcnNfMjMgLSBtZWRpYV92YXJzXzI0KSAqIGNvZWZfMjMpCnVuZXhwbGFpbmVkIDwtIHN1bShtZWRpYV92YXJzXzI0ICogKGNvZWZfMjMgLSBjb2VmXzI0KSkKCmNhdCgiRGlmZXJlbmNpYSB0b3RhbDogIiwgZGlmZl90b3RhbCwgIlxuIikKY2F0KCJQYXJ0ZSBleHBsaWNhZGE6ICIsIGV4cGxhaW5lZCwiXG4iKQpjYXQoIlBhcnRlIG5vIGV4cGxpY2FkYTogIix1bmV4cGxhaW5lZCwiXG4iKQpgYGAKT2JzZXJ2YW1vcyBxdWUgZWwgY29lZmljaWVudGUgY29ycmVzcG9uZGllbnRlIGEgbGEgcGFydGUgbm8gZXhwbGljYWRhIHBvciBsYXMgY2FyYWN0ZXLDrXN0aWNhcyBvYnNlcnZhZGFzIGVzIGFsdG8gZW4gY29tcGFyYWNpw7NuIGNvbiBzdSAiY29udHJhcGFydGUiLCBwb3IgdGFudG8gbm8gcG9kZW1vcyBhZmlybWFyIHF1ZSBsYSBicmVjaGEgc2FsYXJpYWwgZGVsIGHDsW8gMjAyMyBhbCAyMDI0IHNlIGRlYmEgYSBsYXMgY2FyYWN0ZXLDrXN0aWNhcyBvYnNlcnZhZGEsIGVzIGRlY2lyIGEgbG9zIGHDsW9zIGVkdWNhdGl2b3MsIGV4cGVyaWVuY2lhIHBvdGVuY2lhbCwgeSBlc3RhZG8gY2l2aWwuIAoKCgoKWzFdClNob3Jyb2NrcyBBLiBGLiwgVGhlIENsYXNzIG9mIEFkZGl0aXZlbHkgRGVjb21wb3NhYmxlIEluZXF1YWxpdHkgTWVhc3VyZXMuIEVjb25vbWV0cmljYSA0OCwgNjEzLTYyNS4gMTk4MC4KCkNvd2VsbCBGLiwgT24gdGhlIFN0cnVjdHVyZSBvZiBBZGRpdGl2ZSBJbmVxdWFsaXR5IE1lYXN1cmVzLiBSZXZpZXcgb2YgRWNvbm9taWMgU3R1ZGllcyA0NywgNTIxLTUzMS4gMTk4MC4KCkJvdXJndWlnbm9uIEYuLCBEZWNvbXBvc2FibGUgSW5jb21lIEluZXF1YWxpdHkgTWVhc3VyZXMuIEVjb25vbWV0cmljYSA0NywgOTAxLTkyMC4KMTk3OQoK</div>
 
 
 

@@ -5,12 +5,11 @@ output: html_notebook
 
 ```{r}
 library(quantreg);
-#library(readxl); # para leer archivos xml, pero vamos a usar el paquete eph
 library(eph);
 library(dplyr);
 library(tidyr)
 library(ggplot2)
-source("funciones.R")
+source("utils.R")
 ```
 
 Realizamos las restricciones, y calculamos la variable anios_educacion en función de CH14 (último año de aprobación), luego lo mismo para experiencia potencial y su cuadrado.
@@ -21,9 +20,8 @@ Realizamos las restricciones, y calculamos la variable anios_educacion en funci�
 variables = c("P21","AGLOMERADO","CH07","CH06","CH03","CH04","CH13","CH12","CH14")
 
 base24   <- get_microdata(year = 2024, period = 1, type = "individual",destfile="EPH_2024_1_individual.zip",vars = variables) # para leer usando el paquete eph 
-#base2024 <- read_excel('EPH_usu_1er_Trim_2024_xlsx/usu_individual_T124.xlsx')
 
-base24 <- f_restricciones(base24)
+base24 <- f_restricciones(base24$microdata[[1]])
 ```
 Realizamos histogramas para 
 
@@ -77,7 +75,7 @@ $$  log(wage) = \text{anios_ed} + \text{exp_pot} + \text{exp_pot}^2 + ubicacion 
 $$  log(wage) = educacion (dummie) + \text{exp_pot} + \text{exp_pot}^2 + ubicacion (dummie) + \text{estado_civil} + edad $$
 ```{r}
 reg1 <- lm(log(wage)~ anios_edu + exp_pot + exp_pot_2 + edad + as.factor(ubicacion) + as.factor(est_civil), data=base24)
-reg2 <- lm(log(wage)~ as.factor(NIVEL_ED) + exp_pot + exp_pot_2 + edad + as.factor(ubicacion) + as.factor(est_civil), data=base24)
+reg2 <- lm(log(wage)~ as.factor(nivel_ed) + exp_pot + exp_pot_2 + edad + as.factor(ubicacion) + as.factor(est_civil), data=base24)
 
 summ_reg1 <- summary(reg1)
 summ_reg2 <- summary(reg2)
@@ -88,9 +86,8 @@ coef_reg2 <- coef(summ_reg2)
 
 # Filtrar las filas de los coeficientes que te interesan
 coef_interes_reg1 <- coef_reg1[c("anios_edu", "exp_pot"), ]
-coef_interes_reg2 <- coef_reg2[grep("NIVEL_ED", rownames(coef_reg2)), ] 
+coef_interes_reg2 <- coef_reg2[grep("nivel_ed", rownames(coef_reg2)), ] 
 ```
-
 
 ```{r}
 x <- c("Primario completo","Secundario incompleto","Secundario completo",

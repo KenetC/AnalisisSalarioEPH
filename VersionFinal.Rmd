@@ -25,18 +25,17 @@ source("utils.R")
 * Calculamos anios de educacion en funcion de las demas variables. (ver utis.R linea 14 - 28)
 * Estimamos experiencia potencial, siguiendo 
 
-$$ \text{EXP POTENCIAL} = \text{EDAD} - \text{ANIOS EDUCATIVOS} - 6 $$
+$$ \text{EXPERIENCIA POTENCIAL} = \text{EDAD} - \text{ANIOS EDUCATIVOS} - 6 $$
+
 
 ```{r}
 variables = c("P21","AGLOMERADO","CH07","CH06","CH03","CH04","CH13","CH12","CH14")
 
-base24   <- get_microdata(year = 2024,period=1,type= "individual",destfile="EPH_2024_1_individual.zip",vars = variables)  
+base24   <- get_microdata(year = 2024,period=1,type="individual",destfile="EPH_2024_1_individual.zip",vars = variables)
 base23_1 <- get_microdata(year = 2023,period=1,type="individual",destfile="EPH_2023_1_individual.zip",vars = variables) 
 base23_2 <- get_microdata(year = 2023,period=2,type="individual",destfile="EPH_2023_2_individual.zip",vars = variables) 
 base23_3 <- get_microdata(year = 2023,period=3,type="individual",destfile="EPH_2023_3_individual.zip",vars = variables) 
 base23_4 <- get_microdata(year = 2023,period=4,type="individual",destfile="EPH_2023_4_individual.zip",vars = variables) 
-
-#base2024 <- read_excel('EPH_usu_1er_Trim_2024_xlsx/usu_individual_T124.xlsx')
 
 base24   <- f_restricciones(base24$microdata[[1]])
 base23_1 <- f_restricciones(base23_1$microdata[[1]])
@@ -64,15 +63,25 @@ Usaremos el modelo lineal, para modelar el efecto de la educacion sobre la media
 
 # Modelo Lineal 
 
-$$ log(wage) = \text{Intercept} + \text{anios_edu} + \text{exp_pot} + \text{exp_pot}^2 + ubicacion (dummie) + \text{estado_civil} + edad  $$
+##### Modelo 1 
+$$ \text{log(wage)} = \text{anios_ed} + \text{exp_pot} + \text{exp_pot}^2 + \text{ubicacion (dummie)} + \text{estado_civil} + \text{edad} $$
+
+##### Modelo 2
+$$ \text{log(wage)} = \text{nivel educativo (dummie)} + \text{exp_pot} + \text{exp_pot}^2 + \text{ubicacion (dummie)} + \text{estado_civil} + \text{edad} $$
 ```{r}
 reg1 <- lm(log(wage)~ anios_edu + exp_pot + exp_pot_2 + edad + as.factor(ubicacion) + as.factor(est_civil), data=base24)
+reg2 <- lm(log(wage)~ as.factor(NIVEL_ED) + exp_pot + exp_pot_2 + edad + as.factor(ubicacion) + as.factor(est_civil), data=base24)
 
 summ_reg1 <- summary(reg1)
+summ_reg2 <- summary(reg2)
 
+# Extraer los coeficientes, errores estándar, valores t y p-valores del resumen del modelo
 coef_reg1 <- coef(summ_reg1)
+coef_reg2 <- coef(summ_reg2)
 
+# Filtrar las filas de los coeficientes que te interesan
 coef_interes_reg1 <- coef_reg1[c("anios_edu", "exp_pot"), ]
+coef_interes_reg2 <- coef_reg2[grep("NIVEL_ED", rownames(coef_reg2)), ] 
 ```
 
 Graficamos el p-valor correspondiente a cada estimacion sobre 
@@ -105,3 +114,100 @@ text(valid_indices, y[valid_indices],
      labels = paste("p-valor", format(pv[valid_indices], digits = 2)), 
      pos = 4, cex = 0.8, col = "darkgreen")
 ```
+
+La variación es considerable en los coeficientes de las variables dummie **NIVEL_ED**, sugiere que el efecto en **log(wage)** de cada nivel educativo no es constante. Es decir, parece haber un efecto no lineal de la educación sobre lwage.
+
+Esto indica que el retorno económico de completar un nivel educativo cambia significativamente dependiendo de qué nivel se está comparando. Por ejemplo, pasar de primario completo a secundario completo parece tener un retorno mayor que otros niveles, sugiriendo que las personas que completan el secundario pueden obtener un salario significativamente más alto que aquellos que sólo completan el primario.
+
+Los coeficientes para secundario incompleto, completo y universitario incompleto y completo, son todos significativos, en especial el 4 (secundario completo), lo que respalda la idea de que esos niveles educativos tienen un impacto positivo y relevante en los salarios.
+Por otro lado, si bien el coeficiente de la categoría **Sin instruccion** es alto en comparación, no es significativo, por tanto no es influyente para estimar lwage.
+
+La variación en los coeficientes y su significancia sugiere que el impacto de la educación sobre los salarios no es lineal. Esto es consistente con la idea de que ciertos niveles de educación (como completar la secundaria o la educación superior) pueden ofrecer ventajas salariales más significativas que simplemente tener un año más de educación.
+
+### ANOVA 
+
+```{r}
+anova(reg1,reg2)
+```
+Bajo las hipotesis de la prueba *ANOVA* de ambos modelos, vemos un p-valor menor a 0.05, en tanto controlando por las variables control (valga la redundancia) el nivel educativo máximo alcanzado como variable dummie de cada individuo resulta significativo, contra la variable continua. Esto sugiere un efecto no lineal de la educación sobre lwage.
+
+### Intervalo de confianza de $\beta_1$ (anios_ed)
+
+Variable continua correspondiente al 1er modelo.
+
+```{r}
+coef_df <- data.frame(estimate = coef(reg1)["anios_edu"], confint_lower = confint(reg1)["anios_edu", 1], confint_upper = confint(reg1)["anios_edu", 2])
+
+ggplot(coef_df, aes(x = "anios_edu", y = estimate)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = confint_lower, ymax = confint_upper), width = 0.2) +
+  labs(title = "Intervalo de confianza de Años de educación", y = "Coeficiente (Años de educación)")
+print(confint(reg1)[2,] )
+```
+
+### Grafico coeficientes (anios_ed)
+
+El primer cambio respecto al modelo previamente evaluado es que al tener la variable **edad** codificada con dummies, hace que la matriz de diseño no pueda invertirse para luego hacer la regresión por cuantiles, por lo tanto opte por quitar esta variable y obtuve estos resultados:
+```{r}
+sapply(summregq1,function(x) x$coefficients[2])
+anios_edus
+```
+
+```{r}
+taus = 1:9/10
+regq1 <- rq(log(wage)~ anios_edu + exp_pot + exp_pot_2 + as.factor(ubicacion) + as.factor(est_civil),data=base24,tau = taus,ci = FALSE)
+summregq1 <- summary(regq1,se="ker")
+
+anios_edus <- sapply(summregq1, function(x) x$coefficients[2])
+
+plot(summregq1,parm =2,
+     main = "Coeficientes: Años de Educación", xlab = "Tau (Cuantiles)", ylab = "Coeficientes (Años de Educación)") 
+```
+
+Para cuantiles bajos (τ cercanos a 0.1), el coeficiente de años_ed es más alto, lo que indica que el efecto marginal de la educación es mayor entre las personas con ingresos más bajos. En otras palabras, para este grupo, cada año adicional de educación tiene un impacto más fuerte en el aumento de los ingresos. Esto tiene sentido dado que estos individuos, al tener ingresos relativamente bajos, podrían beneficiarse más de la educación en términos de movilidad económica.
+
+A medida que τ se aproxima a 0.5 (mediana de la distribución), el coeficiente de años_ed disminuye, lo que sugiere que, en la mediana de los ingresos, el impacto de la educación es menos pronunciado. Es decir, el efecto marginal de la educación se atenúa en este grupo, lo cual podría indicar que otros factores además de la educación juegan un rol más importante en la determinación de los ingresos.
+
+Finalmente, para los cuantiles altos (τ cercanos a 0.9), el coeficiente de años_ed vuelve a aumentar, lo que sugiere que, para aquellos con ingresos más altos, la educación sigue siendo un factor determinante. Esto podría reflejar que en los niveles más altos de la distribución de ingresos, los años de educación siguen siendo cruciales para alcanzar los ingresos más elevados, probablemente debido a la acumulación de capital humano especializado o credenciales educativas superiores.
+
+---------------------------------------------------------
+
+
+Podemos ver el efecto de la educacion para ambos sexos 
+
+```{r}
+base24_fem  <- get_microdata(year = 2024,period=1,type="individual",destfile="EPH_2024_1_individual.zip",vars = variables)
+base24_fem  <- f_restricciones(base24_fem$microdata[[1]], gender = "fem") 
+```
+
+```{r}
+reg1 <- lm(log(wage)~ anios_edu + exp_pot + exp_pot_2 + edad + as.factor(ubicacion) + as.factor(est_civil), data = base24_fem)
+#reg2 <- lm(log(wage)~ as.factor(NIVEL_ED) + exp_pot + exp_pot_2 + edad + as.factor(ubicacion) + as.factor(est_civil), data=base24)
+
+summ_reg1 <- summary(reg1)
+#summ_reg2 <- summary(reg2)
+
+# Extraer los coeficientes, errores estándar, valores t y p-valores del resumen del modelo
+coef_reg1 <- coef(summ_reg1)
+#coef_reg2 <- coef(summ_reg2)
+
+# Filtrar las filas de los coeficientes que te interesan
+coef_interes_reg1 <- coef_reg1[c("anios_edu", "exp_pot"), ]
+#coef_interes_reg2 <- coef_reg2[grep("NIVEL_ED", rownames(coef_reg2)), ] 
+```
+
+
+```{r}
+taus = 1:9/10
+regq1_fem <- rq(log(wage)~ anios_edu + exp_pot + exp_pot_2 + as.factor(ubicacion) + as.factor(est_civil),data=base24_fem,tau = taus,ci = FALSE)
+summregq1_fem <- summary(regq1_fem,se="ker")
+
+plot(summregq1_fem, parm =2,
+     main = "Coeficientes: Años de Educación", xlab = "Tau (Cuantiles)", ylab = "Coeficientes (Años de Educación)") 
+```
+En cambio para valores de 
+
+
+
+
+

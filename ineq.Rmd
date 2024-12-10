@@ -4,12 +4,11 @@ output: html_notebook
 ---
 ```{r}
 library(quantreg);
-#library(readxl); # para leer archivos xml, pero vamos a usar el paquete eph
 library(eph);
 library(dplyr);
 library(tidyr)
 library(ggplot2)
-source("funciones.R") # funciones auxiliares para no ocupar tanto espacio
+source("utils.R") # funciones auxiliares para no ocupar tanto espacio
 library(ineq)
 library(dineq)
 ```
