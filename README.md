@@ -1,12 +1,12 @@
 # AnalisisSalarioEPH
 
-### Analisis extendibles: 
+### Analisis extendibles:
 
-* Indice Theil para ver convergencia a una desigualda o igualda en algomerados en Argentina. 
+* Indice Theil para ver convergencia a una desigualda o igualda en algomerados en Argentina.
 
 * Ver la distribucion de errores de modelos, RQ deberia capturar mejor las variaciones.
 
-* 1ero utilizacion metodo heckman para sesgo por seleccion. 
+* 1ero utilizacion metodo heckman para sesgo por seleccion.
 * 2do OAXACA BLINDER para analizar la descomposicion y a que componente se le puede atribuir mayor influencia.
 
 * Aniadir concluciones - Impacto social: 
