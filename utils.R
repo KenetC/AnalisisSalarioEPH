@@ -50,7 +50,8 @@ f_restricciones <- function(df, gender, asalariado){
     
     filter(
            edad >= 25,      # Edad mínima
-           edad <= 65       # Edad maxima
+           edad <= 65,      # Edad maxima
+           NIVEL_ED != 7
           ) %>%
                
     mutate(
@@ -82,7 +83,7 @@ f_restricciones <- function(df, gender, asalariado){
   
   df <- df[! is.na(df$exp_pot), ] # quitamos los NaN's de la variable "exp_pot"
   df <- df[! (df$anios_edu > 100),] # quitamos los valores de anios educativos mayores a 100, corresponden a personas con educacion especial o no sabe no responde.
-  df <- df[!(df$horas_semanales > 168), ] # no pueden trabajar mas de las horas que hay en una semana.
+  df <- df[!(df$horas_semanales > 168), ] # no pueden trabajar mas del total de horas en la semana.
   df <- df[! is.na(df$horas_semanales), ] 
   return(df)
 }
@@ -196,7 +197,7 @@ Descomp_Theil <- function(df1,df2,subgrupo){
 Heckman_method <- function(df){
   
   # Modelo probit para la selección
-  probit_model <- glm(empleado ~ edad + edad_2 + anios_edu + cant_integrantes + ingreso_jf + as.factor(estrato) + as.factor(est_civil),
+  probit_model <- glm(empleado ~ edad + edad_2 + as.factor(NIVEL_ED) + cant_integrantes + ingreso_jf + as.factor(estrato) + as.factor(est_civil),
                       family = binomial(link = "probit"), data = df)
   
   # Resumen del modelo
@@ -215,6 +216,8 @@ Heckman_method <- function(df){
   return(df)
 }
 
+# transformacion que permite una interpretabilidad a la diferencia de medias log(ingreso) 
+# porcentaje de la diferencia entre d1 y d2.
 porce <- function(d1, d2 = NULL) {
   # D1 y D2 deben estar en orden correcto, para mi analisis seria: hombres -> d1, mujeres -> d2.
   if (missing(d2)) {
@@ -226,7 +229,7 @@ porce <- function(d1, d2 = NULL) {
 
 # Graficos --------------------------------------------------------------------------------------------------------------------------------------------
 
-x <- c("Primario completo","Secundario incompleto","Secundario completo","Universitario incompleto","Universitario completo","Sin instruccion")
+x <- c("Primario completo","Secundario incompleto","Secundario completo","Universitario incompleto","Universitario completo")
 
 # Efecto de NIVEL_ED en lwage --- no linearidad ---- 
 graph_nivel_ed <- function(y,pv){
@@ -256,7 +259,7 @@ graph_nivel_ed <- function(y,pv){
       pos = 4, cex = 0.8, col = "darkgreen")
 }
 
-graph_nivel_ed_comparacion <- function(y,pv, y2, pv2){
+graph_nivel_ed_comparacion <- function(y, pv, y2, pv2){
    # Crear el gráfico base con la primera serie (línea azul)
    plot(1:length(x), y, type = "b", pch = 19, col = "blue", xaxt = "n", 
         xlab = "", ylab = "Coeficiente estimado", 
@@ -340,7 +343,6 @@ graph_theil <- function(x, w, b) {
          pch = 16, lty = 1, cex = 0.7)
 }
 
-
 # Gini
 graph_gini <- function(ambos, mas, fem) {
   y_min <- min(c(ambos, mas, fem)) - 0.01
@@ -391,4 +393,141 @@ graph_RIF <- function(mas,fem){
   # Agregar una leyenda para los grupos
   legend("topleft", legend = c("Masculino", "Femenino"), 
         col = c( "blue", "red"), pch = c(16, 17, 18), lty = 1, cex = 0.7)
+}
+
+# barplots 
+
+## nivel edu y tam 
+NT_aux <- function(df){
+  porcent <- c()
+  t <- c(1,6,7,9,10,11)
+  
+  for(i in c(1,3,5)){
+    d <- df %>% filter(t[i] <= PP04C,PP04C <= t[i+1])
+    porcent <- c(porcent, 
+                  c(d %>% filter(1 <= NIVEL_ED, NIVEL_ED <= 3) %>% nrow(),
+                    d %>% filter(4 == NIVEL_ED) %>% nrow(),
+                    d %>% filter(5 == NIVEL_ED) %>% nrow(), 
+                    d %>% filter(6 == NIVEL_ED) %>% nrow() ) / d %>% nrow()
+                )
+  }
+  
+  d <- df %>% filter(PP04C == 12) #7-9  10-11  12
+  porcent <- c(porcent, 
+                c(d %>% filter(1 <= NIVEL_ED, NIVEL_ED <= 3) %>% nrow(),
+                  d %>% filter(4 == NIVEL_ED) %>% nrow(),
+                  d %>% filter(5 == NIVEL_ED) %>% nrow(), 
+                  d %>% filter(6 == NIVEL_ED) %>% nrow() ) / d %>% nrow()
+              )
+  
+  porcent <- porcent * 100
+  return(porcent)
+}
+
+niveled_tam <- function(df){
+  # Datos de ejemplo
+  datos <- data.frame(
+    nivel_ed = rep(c("Hasta Secundario incompleto", "Secundario completo", "Universitario incompleto", "Universitario completo"), each = 4),
+    Sector = rep(c("HASTA 10 PERSONAS", "DE 11 A 100 PERSONAS", "DE 101 A 500 PERSONAS", "MAS DE 500 PERSONAS"), times = 4),
+    Porcentajes = NT_aux(df)  
+  )
+
+  # Modificar los nombres de las categorías con saltos de línea
+  datos$nivel_ed <- gsub(" ", "\n", datos$nivel_ed)
+
+  # Definir el orden deseado de los sectores y categorías
+  orden_cant <- c("HASTA 10 PERSONAS", "DE 11 A 100 PERSONAS", "DE 101 A 500 PERSONAS", "MAS DE 500 PERSONAS")
+  orden_ed <- c("Hasta\nSecundario\nincompleto", "Secundario\ncompleto", "Universitario\nincompleto", "Universitario\ncompleto")
+
+  # Convertir las columnas Sector y Categoria en factores con el orden especificado
+  datos$Sector <- factor(datos$Sector, levels = orden_cant)
+  datos$nivel_ed <- factor(datos$nivel_ed, levels = orden_ed)
+
+  # Gráfico de barras agrupadas con colores personalizados
+  ggplot(datos, aes(x = nivel_ed, y = Porcentajes, fill = Sector)) +
+    geom_bar(stat = "identity", position = "dodge", width = 0.7) +  # Ancho de las barras
+    scale_fill_manual(values = c("HASTA 10 PERSONAS" = "#a6bddb",  # Colores personalizados
+                                "DE 11 A 100 PERSONAS" = "#74a9cf",
+                                "DE 101 A 500 PERSONAS" = "#2b8cbe",
+                                "MAS DE 500 PERSONAS" = "#045a8d")) + 
+    labs(title = "Nivel educativo por tamaño de la organización",
+        x = "",
+        y = "",
+        fill = "") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12))  # Rotar etiquetas del eje X
+}
+
+## ingreso y nivel edu 
+
+IN_aux <- function(df){
+  df <- df %>% filter(ingreso > 0)
+  x <- mean(df$ingreso)
+
+  porcent <- c(mean(( df %>% filter(1 <= NIVEL_ED, NIVEL_ED <= 2) )$ingreso),
+              mean(( df %>% filter(3 == NIVEL_ED) )$ingreso),
+              mean(( df %>% filter(4 == NIVEL_ED) )$ingreso),
+              mean(( df %>% filter(5 == NIVEL_ED) )$ingreso),
+              mean(( df %>% filter(6 == NIVEL_ED) )$ingreso)) / x 
+
+  porcent <- (porcent - 1) * 100
+
+  return(porcent)
+}
+
+IN_graph <- function(df){
+  # Crear datos
+  datos <- data.frame(
+    Categoria = c("Primario completo","Secundario incompleto","Secundario completo","Universitario incompleto","Universitario completo"),
+    Valor = IN_aux(df)
+  )
+
+  datos$Categoria <- factor(datos$Categoria, levels = c("Primario completo","Secundario incompleto","Secundario completo","Universitario incompleto","Universitario completo"))
+
+  # Crear el barplot con color único sin fill
+  ggplot(datos, aes(x = Categoria, y = Valor)) +
+    geom_bar(stat = "identity", width = 0.7, fill = "#023858", color = "black") +  # Color único y bordes
+    labs(title = "% Ingreso vs promedio",
+        x = "",
+        y = "%") +
+    theme_minimal() +  # Estilo minimalista
+    theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12))  # Rotar etiquetas del eje X
+}
+
+## ingreso y cant 
+
+IC_aux <- function(df){
+  porcent <- c()
+  df <- df %>% filter(ingreso > 0)
+  x <- mean(df$ingreso)
+
+  for(i in 1:12){
+    porcent <- c(porcent,
+      mean( (df %>% filter(PP04C == i))$ingreso ) / x
+    )
+  }
+
+  porcent <- (porcent - 1) * 100
+
+  return(porcent)
+}
+
+IC_graph <- function(df){
+  cant <- c("1 PERSONA","2 PERSONAS","3 PERSONAS","4 PERSONAS","5 PERSONAS","6 A 10 PERSONAS","11 A 25 PERSONAS","26 A 40 PERSONAS","41 A 100 PERSONAS","101 A 200 PERSONAS","201 A 500 PERSONAS","MAS DE 500 PERSONAS")
+
+    datos <- data.frame(
+    Categoria = cant,
+    Valor = IC_aux(df)
+  )
+
+  datos$Categoria <- factor(datos$Categoria, levels = cant)
+
+  # Crear el barplot con color único sin fill
+  ggplot(datos, aes(x = Categoria, y = Valor)) +
+    geom_bar(stat = "identity", width = 0.7, fill = "#023858", color = "black") +  # Color único y bordes
+    labs(title = "% Ingreso vs promedio",
+        x = "",
+        y = "%") +
+    theme_minimal() +  # Estilo minimalista
+    theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10))  # Rotar etiquetas del eje X
 }
