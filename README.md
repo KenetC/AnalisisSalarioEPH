@@ -18,6 +18,7 @@ A lo largo del trabajo se realizó:
 
 En caso de querer visualizar el informe completo, puedes descargar al archivo analisisEPH.nb.html.
 
+```
 /brecha-salarial-genero
 ├── /data                    # Datos utilizados
 ├── /scripts                 # Código en R
@@ -25,3 +26,4 @@ En caso de querer visualizar el informe completo, puedes descargar al archivo an
 ├── README.md                # Este archivo
 ├── analisisEPH.nb.html      # Informe completo del análisis
 └── EPH_registro_1T2024.pdf  # Documentacion oficial del dataset usado
+```
