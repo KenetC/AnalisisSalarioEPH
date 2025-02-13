@@ -6,10 +6,10 @@ datos <- function(anio,f_i){
    hogares    <- list()
    for(i in 1:f_i){
      b <- get_microdata(year = anio, period = i, type = "individual", 
-                        destfile = paste0('EPH_', anio, '_', i, '_individual.zip')) 
+                        destfile = paste0('Data/EPH_', anio, '_', i, '_individual.zip')) 
      b_f <- f_restricciones(b$microdata[[1]],gender = "ambos",asalariado = FALSE)
      h <- get_microdata(year = anio, period = i, type = "hogar",
-                        destfile = paste0('EPH_', anio, '_', i, '_hogar.zip'))
+                        destfile = paste0('Data/EPH_', anio, '_', i, '_hogar.zip'))
      
      hogares[[i]]    <- h$microdata[[1]]
      bases[[i]]      <- b$microdata[[1]]

@@ -11,7 +11,7 @@ library(eph);
 library(dplyr);
 library(tidyr);
 library(ggplot2); 
-source("utils.R");
+source("scripts/utils.R");
 library(dineq);
 library(ineq);
 library(knitr);
@@ -139,6 +139,7 @@ $$\text{log(ingreso)} = \text{anios_edu} + \text{exp_pot} + \text{exp_pot}^2 +  
 ##### **Modelo 2**
 
 $$\text{log(ingreso)} = \text{nivel_ed (dummie)} + \text{exp_pot} + \text{exp_pot}^2 + \text{tamaño organizacion (dummie)} + \text{log_horas}$$
+
 ### **Regresión**
 
 #### **Género Femenino**
@@ -273,11 +274,11 @@ Observamos que el comportamiento del efecto marginal de la educacion a lo largo 
 
 Al comparar los coeficientes estimados con y sin la corrección de Heckman, observamos que la tendencia general del efecto marginal de la educación a lo largo de la distribución de ingresos no cambia sustancialmente. Sin embargo, se presentan algunas diferencias clave:
 
-+ **En los cuantiles bajos (τ ≈ 0.1)**, el efecto marginal máximo de la educación se reduce, pasando de un incremento del 7% a un 6.3% en el ingreso por cada año adicional de educación.
++ **En los cuantiles bajos (τ ≈ 0.1)**, el efecto marginal máximo de la educación se reduce, pasando de un incremento del **7% a un 6.3% en el ingreso por cada año adicional de educación**.
 
-+ **En los cuantiles altos (τ ≈ 0.9)**, el efecto marginal mínimo de la educación aumenta, pasando de 6.3% a 6.5% por año adicional de educación.
++ **En los cuantiles altos (τ ≈ 0.9)**, el efecto marginal mínimo de la educación aumenta, pasando de **6.3% a 6.5% por año adicional de educación**.
 
-+ **En la mediana de la distribución (τ = 0.5)**, el coeficiente disminuye, reflejando un efecto marginal del 4.5% por año de educación, en comparación con el 5% estimado sin la corrección de Heckman.
++ **En la mediana de la distribución (τ = 0.5)**, el coeficiente disminuye, reflejando un efecto marginal del **4.5% por año de educación**, en comparación con el 5% estimado sin la corrección de Heckman.
 
 Tras aplicar la corrección por sesgo de selección, se observa una leve reducción en la varianza del efecto marginal de la educación a lo largo de la distribución de ingresos. Esto sugiere que el sesgo de selección afectaba principalmente a los cuantiles extremos, lo que podría haber sobrestimado la heterogeneidad en los retornos educativos.
 
@@ -322,8 +323,8 @@ tabla <- data.frame(matrix(diferencia_coef, nrow = 1, dimnames = list("Diferenci
 print(tabla)
 ```
 
-Para los "extremos", es decir *primario completo* y *universitario completo* se observa una ligera ventaja a favor del género femenino, la influencia del máximo nivel educativo alcanzado es menor para los hombres, hay una diferencia cerca del .05.
-Para los demás niveles educativos se observa una ventaja en el género masculino, para *secundario incompleto* y *universitario incompleto* hay una diferencia del .06 y.09 respectivamente, esto es que los hombres reciben un .06 más de retorno que las mujeres.
+Para los "extremos", es decir **primario completo** y **universitario completo** se observa una ligera ventaja a favor del género femenino, la influencia del máximo nivel educativo alcanzado es menor para los hombres, hay una diferencia cerca del .05.
+Para los demás niveles educativos se observa una ventaja en el género masculino, para **secundario incompleto** y **universitario incompleto** hay una diferencia del .06 y.09 respectivamente, esto es que los hombres reciben un .06 más de retorno que las mujeres.
 
 ### ANOVA
 
@@ -445,15 +446,8 @@ for(i in 1:2){
 
 graph_gini(ambos, mas, fem)
 ```
-```{r}
-ambos 
-fem 
-mas
-```
 
 La comparación de los valores del índice de Gini entre 2023 y 2024 muestra un aumento de 0.388 a 0.419 para ambos géneros, implica un cambio negativo en términos de equidad, ya que indica una mayor desigualdad en la distribución de los ingresos en la población. Se observa una pendiente más pronunciada en el género masculino aunque sigue siendo el género opuesto más desigual. Es interesante ver que los valores están muy cerca del .5, si bien no están cerca del 1 (desigualdad perfecta) es alarmante ver que no parecen descender en el 2024.
-
-
 
 Se observa un aumento generalizado de la desigualdad entre 2023 y 2024.
 
@@ -525,8 +519,8 @@ rm(des)
 graph_theil(x_ed,w_ed,b_ed)
 ```
 ```{r}
-w_ed / x_ed * 100 
-b_ed / x_ed * 100
+w_ed / x_ed * 100 # componente within
+b_ed / x_ed * 100 # componente between
 ```
 
 Observamos una situacion similar a la del Gini, en terminos de un aumento en la desiguldad aun que no parece tan pronunciado, la interpretabilidad de la magnitud de la desigualdad en el Theil es diferente por un tema de escalas, la perfecta desigualdad es del $[ln(n)]$ con n el tamanio de la muestra. Sin embargo, la pendiente de la funcion logaritmo natural cae rapidamente. Esto provoca que esa caracteristica no demasiado deseable resulte de poca importancia practica para muestras como las que utilizamos, lo suficientemente grandes y aproximadamente del mismo tamanio. (entre 14500 y 15000)
@@ -817,6 +811,10 @@ twoFold23[["coef(unexplained)"]] / (twoFold23[['coef(explained)']] + twoFold23[[
 twoFold24[["coef(unexplained)"]] / (twoFold24[['coef(explained)']] + twoFold24[['coef(unexplained)']]) # porcentaje parte no explicada 2024, del total de la diferencia salarial
 ```
 
+### **Conclusión final**
 
+Los resultados de este análisis confirman que la educación y la experiencia laboral explican una parte significativa de la variabilidad en los ingresos, pero no logran justificar completamente la brecha salarial de género. Se identificó que las mujeres reciben menores retornos a la educación en comparación con los hombres, lo que sugiere la presencia de barreras estructurales en el mercado laboral.
 
+El análisis de la **regresión cuantílica** mostró que la educación tiene un mayor impacto en los sectores de menores ingresos, aunque este efecto se atenúa a medida que los ingresos aumentan. La **descomposición de Oaxaca-Blinder** evidenció que una parte importante de la brecha salarial no puede explicarse por características observables, lo que indica la posible existencia de discriminación salarial o segregación ocupacional. Además, es importante considerar que esta brecha podría estar influenciada por variables no observadas, como diferencias en la negociación salarial, sesgos inconscientes o la distribución desigual de las responsabilidades de cuidado.
 
+Los **índices** de desigualdad, como el **Gini** y el **Theil**, reflejan un incremento en la desigualdad salarial en 2024 en comparación con 2023, con un aumento en la contribución de la desigualdad dentro de cada grupo de *nivel educativo* y *género*, más que entre ellos. 

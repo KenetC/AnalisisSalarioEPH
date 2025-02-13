@@ -1,15 +1,27 @@
-# AnalisisSalarioEPH
+# Análisis de la Brecha Salarial de Género: Modelado y Descomposición de Factores Explicativos
 
-### Analisis extendibles:
+Este repositorio contiene el código en R y los resultados de un análisis estadístico sobre la brecha salarial de género, utilizando datos de la **Encuesta Permanente de Hogares (EPH)**. El estudio se enfoca en la influencia de factores como la educación, la experiencia laboral y otras variables en el ingreso de los asalariados y la desigualdad salarial de genero.
 
-* Indice Theil para ver convergencia a una desigualda o igualda en algomerados en Argentina.
+A lo largo del trabajo se realizó:
 
-* Ver la distribucion de errores de modelos, RQ deberia capturar mejor las variaciones.
++ **Exploración de Datos**: Análisis exploratorio para obtener las variables de control utilizadas en la **Función de Ingresos de Mincer**.
 
-* 1ero utilizacion metodo heckman para sesgo por seleccion.
-* 2do OAXACA BLINDER para analizar la descomposicion y a que componente se le puede atribuir mayor influencia.
++ **Regresión Cuantílica**: Modelado de la influencia de la educación en diferentes percentiles de ingresos.
 
-* Aniadir concluciones - Impacto social: 
-Politicas educativas u de empleo para disminuir la desigualdad. 
++ **Método de Heckman**: Corrección del sesgo de selección presente en el género femenino.
 
-* Ver RQ educacion (dummie) con tau = .1 ... .9, y conclusiones.
++ **Índices de Gini y Theil**: Cuantificación de la brecha salarial y descomposición de Theil utilizando subgrupos como nivel educativo y género.
+
++ **Descomposición de Oaxaca-Blinder**: Identificación de la proporción de la brecha salarial que puede explicarse por factores observables y la parte que no.
+
++ **Visualización**: Gráficos claros para comunicar los resultados y un breve análisis previo.
+
+En caso de querer visualizar el informe completo, puedes descargar al archivo analisisEPH.nb.html.
+
+/brecha-salarial-genero
+├── /data                    # Datos utilizados
+├── /scripts                 # Código en R
+├── /output                  # gráficos
+├── README.md                # Este archivo
+├── analisisEPH.nb.html      # Informe completo del análisis
+└── EPH_registro_1T2024.pdf  # Documentacion oficial del dataset usado
