@@ -14,16 +14,16 @@ A lo largo del trabajo se realizó:
 
 + **Descomposición de Oaxaca-Blinder**: Identificación de la proporción de la brecha salarial que puede explicarse por factores observables y la parte que no.
 
-+ **Visualización**: Gráficos claros para comunicar los resultados y un breve análisis previo.
++ **Visualización**: Gráficos claros para comunicar los resultados y un breve análisis de cada uno de ellos.
 
-En caso de querer visualizar el informe completo, puedes descargar al archivo analisisEPH.nb.html.
+En caso de querer visualizar el informe completo descargar `analisisEPH.html`
 
 ```
 /brecha-salarial-genero
 ├── /data                    # Datos utilizados
 ├── /scripts                 # Código en R
-├── /output                  # gráficos
+├── /graphs                  # gráficos
 ├── README.md                # Este archivo
-├── analisisEPH.nb.html      # Informe completo del análisis
+├── analisisEPH.html      # Informe completo
 └── EPH_registro_1T2024.pdf  # Documentacion oficial del dataset usado
 ```

@@ -1,6 +1,9 @@
 ---
 title: "Analisis EPH"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
 ---
 
 #### Librerías necesarias
@@ -14,10 +17,28 @@ library(ggplot2);
 source("scripts/utils.R");
 library(dineq);
 library(ineq);
-library(knitr);
+library(gt);
 library(oaxaca);
 ```
-Toda función auxiliar que uso a lo largo del trabajo está en `utils.R`. Para detalles de implementación y decisiones, ir al archivo.
+Descargamos los Datos:
+
+```{r}
+for(anio in c(2023,2024)){
+  if(anio == 2024){
+    f_i = 2 
+  }else{
+    f_i = 4
+  }
+  for(i in 1:f_i){
+   get_microdata(year = anio, period = i, type = "individual", 
+                      destfile = paste0('Data/EPH_', anio, '_', i, '_individual.zip')) 
+   get_microdata(year = anio, period = i, type = "hogar",
+                          destfile = paste0('Data/EPH_', anio, '_', i, '_hogar.zip'))
+  }  
+}
+```
+
+Toda función auxiliar que uso a lo largo del trabajo está en `utils.R`. Para detalles de implementación y decisiones, ir a `scripts/utils.R`
 
 ####  **Lectura de datos**
 
@@ -36,11 +57,11 @@ hogares24 <- resultados$hogares
 
 rm(resultados) # eliminamos la variable resultados
 ```
-+ bases**N**: lista que contiene las bases de microdatos `individuales` correspondientes al año 20**N** (los 4 trimestres).
-+ bases**N**_rest: lista análoga a la anterior, pero habiendo hecho una limpieza de los datos. 
++ bases**N**: lista que contiene las bases de microdatos `individuales` correspondientes al año 20**N**.
++ bases**N**_rest: lista análoga, pero habiendo hecho una limpieza.
 + hogares**N**: lista que contiene las bases de microdatos de `hogares` correspondientes al año 20**N**.
 
-Notar que, al día de la fecha, aún no están disponibles los datos del 3er y 4to trimestre del 2024. Por ello no se tuvo en cuenta, pero haciendo un ligero cambio en `utils.R` se pueden agregar al análisis.
+Notar que, al día de la fecha, aún no están disponibles los datos del 3er y 4to trimestre del 2024. Por ello no se tuvo en cuenta, pero haciendo un ligero cambio en `datos(2024,-)` se pueden agregar al análisis.
 
 #### **Datos, Preprocesamiento y decisiones tomadas**
 
@@ -66,7 +87,7 @@ Fuente: bases de datos de la Encuesta Permanente de Hogares (EPH).
       En estudios econométricos similares, es común eliminar observaciones con valores faltantes cuando no se pueden realizar imputaciones con un nivel razonable de certeza. Esta práctica está alineada con estándares aceptados en el campo.
 
 + **Cálculo de años de educación (\( \text{anios_edu} \)):**  
-   Estimamos los años de educación en función de las variables relacionadas con el nivel educativo, el año aprobado y si el nivel fue completado (ver `utis.R`, líneas 14-28).
+   Estimamos los años de educación en función de las variables relacionadas con el nivel educativo, el año aprobado y si el nivel fue completado (ver `utis.R`, líneas 26-90).
 
 + **Estimación de experiencia potencial (\( \text{exp_pot} \)):**  
    Calculamos la experiencia potencial siguiendo la fórmula:  
@@ -92,19 +113,23 @@ Fuente: bases de datos de la Encuesta Permanente de Hogares (EPH).
 #### **Nivel educativo por tamaño de la organización**
 
 ```{r}
-niveled_tam(bases23_rest[[4]])
+g<-niveled_tam(bases23_rest[[4]])
+ggsave("graphs/nivel_ed_vs_org.png", plot = g, width = 10, height = 5, units = "in", dpi = 300)
 ```
+
 El nivel de educación alcanzado por la población impacta en el puesto de trabajo que es posible obtener. A mayor tamaño de la organización estas van cambiando la composición de su plantilla, siendo necesario que participen cada vez trabajadores calificados, ya sean con título universitario u con este nivel educativo incompleto.
 Parece que tener más años educativos permite aumentar las probabilidades de acceder a grandes organizaciones. Lo cual parece consistente desde el punto de vista empresarial pues si se quiere ampliar el tamaño de la plantilla es probable que se deba contratar personal cualificado. 
 
 ```{r}
-IN_graph(bases23_rest[[4]])
+g<-IN_graph(bases23_rest[[4]])
+ggsave("graphs/ingreso_nivel_ed.png", plot = g, width = 10, height = 5, units = "in", dpi = 300)
 ```
 
 Observamos que el nivel educativo es crucial para medir los ingresos de los asalariados. Mientras que quienes solamente terminaron el nivel primario o no terminaron el nivel secundario sus ingresos promedio son 20% inferiores o más, los que completaron sus estudios universitarios tienen ingresos promedio 40% mayores que la media. Se debe tener en cuenta que debido al problema de sub-declaración de ingresos de esta encuesta las brechas posiblemente sean aún mayores.
 
 ```{r}
-IC_graph(bases23_rest[[4]])
+g<-IC_graph(bases23_rest[[4]])
+ggsave("graphs/ingreso_tamanio_org.png", plot = g, width = 10, height = 5, units = "in", dpi = 300)
 ```
 
 Las organizaciones con mayor cantidad de personas son en las que sus participantes tienen mayor nivel ingresos comparado con el promedio de la economía. Es a partir de organizaciones de 11 a 25 personas que el nivel de ingresos supera al promedio. Comparando los últimos dos gráficos notamos que, midiendo impactos, el tamaño de la organización parece tener igual importancia que el nivel educativo.
@@ -188,7 +213,7 @@ anova(reg1_f,reg2_f)
 
 Bajo las hipótesis de la prueba *ANOVA* de ambos modelos, vemos un p-valor menor a 0.01, en tanto controlando por las variables control (valga la redundancia) el nivel educativo máximo alcanzado como variable dummie de cada individuo resulta significativo, contra la variable continua. Esto refuerza la idea de que hay un efecto no lineal de la educación en los ingresos.
 
-### **Heterogeneidad en el retorno de la educación | Regresión cuantilica**
+### **Heterogeneidad en el retorno de la educación | Regresión cuantílica**
 
 El uso de regresiones por cuantiles permite capturar cómo el efecto marginal de los años de educación (**anios_edu**) sobre el logaritmo del ingreso varía a lo largo de la distribución de ingresos. Esto es especialmente relevante para entender cómo la educación afecta de manera diferenciada a mujeres asalariadas en distintos niveles de ingreso, desde las que se encuentran en sectores más vulnerables (cuantiles bajos) hasta las que ocupan posiciones más privilegiadas en términos de ingresos (cuantiles altos).
 
@@ -209,15 +234,14 @@ Es decir, en este segmento de la distribución, cada año adicional de educació
 **Cuantiles medios (0.3 ≤ τ < 0.8): Disminución del efecto marginal**
 Para los cuantiles intermedios, el coeficiente de `anios_edu` comienza a decrecer progresivamente, lo que sugiere que la educación sigue siendo un factor relevante en la determinación de los ingresos, pero su impacto marginal se reduce.
 
-Este fenómeno podria indicar que, para mujeres con ingresos en la mediana de la distribución, otros factores comienzan a jugar un papel más importante en la determinación salarial. Algunos de estos factores pueden incluir la experiencia laboral acumulada, el tipo de ocupación, el tamaño de la organización en la que trabajan, las redes de contacto o la presencia en sectores con mayores barreras de acceso.
+Este fenómeno podría indicar que, para mujeres con ingresos en la mediana de la distribución, otros factores comienzan a jugar un papel más importante en la determinación salarial. Algunos de estos factores pueden incluir la experiencia laboral acumulada, el tipo de ocupación, el tamaño de la organización en la que trabajan, las redes de contacto o la presencia en sectores con mayores barreras de acceso.
 
 En este grupo, cada año adicional de educación está asociado con un **aumento promedio** del salario del **5%**.
 
 **Cuantiles altos (τ ≥ 0.8): Estabilización del coeficiente**
 En los cuantiles más altos de la distribución (τ ≥ 0.8), el coeficiente de `anios_edu` se estabiliza en sus valores más bajos. Esto indica que, en los niveles superiores de ingresos, la educación ya no es el principal factor que explica las diferencias salariales entre individuos.
 
-Para este segmento, el **retorno marginal** de la educación se mantiene alrededor del **6.3%** por cada anio, lo que sugiere que, si bien la educación sigue influyendo en los ingresos, otras variables como la ocupación, el sector laboral y la posición jerárquica dentro de una organización pueden ser más determinantes en este nivel de la distribución.
-
+Para este segmento, el **retorno marginal** de la educación se mantiene alrededor del **6.3%** por cada año, lo que sugiere que, si bien la educación sigue influyendo en los ingresos, otras variables como la ocupación, el sector laboral y la posición jerárquica dentro de una organización pueden ser más determinantes en este nivel de la distribución.
 
 ### **Sesgo de seleccion | Metodo Heckman**
 
@@ -266,13 +290,18 @@ Dadas las condiciones teóricas del método de Heckman, vamos a emplearlo en reh
 heckman_stage2_fem <- rq(log(ingreso)~ anios_edu + exp_pot + exp_pot_2 + as.factor(PP04C) + log_horas + lambda, data=base24_1_fem_hm%>%filter(ingreso>0),tau = taus,ci = FALSE)
 summ_heckman_stage2_fem <- summary(heckman_stage2_fem,se="ker")
 
-plot(summ_heckman_stage2_fem, parm =2,
-     main = "Coeficientes: Años de Educación", xlab = "Tau (Cuantiles)", ylab = "Coeficientes (Años de Educación)") 
+#png("graphs/reg_quant_fem.png", width = 10 * 72, height = 5 * 72)
+plot(summ_heckman_stage2_fem, parm = 2,
+     main = "Coeficientes: Años de Educación")
+
+mtext("Cuantiles", side = 1, line = 3) # Añade etiqueta al eje X (margen inferior)
+
+#dev.off()
 ```
 
-Observamos que el comportamiento del efecto marginal de la educacion a lo largo de la distribucion no cambio sustancialmente, sin embargo se observa una reduccion tanto en el extremo maximo ahora representa un aumento promedio en el salario del 6.3% (aprox) por cada anio de educacion (cerca $\tau$ = 0.1) y un aumento en el minimo del 6.5% por anio adicional (apartir de $\tau$ = 0.9). Ademas de una reduccion en la mediana de la distribucion, ahora un aumento del 4.5% por cada anio.**En conclucion hubo una leve reduccion en la varianza del efecto marginal a lo largo de la distribucion.**
+Observamos que el comportamiento del efecto marginal de la educación a lo largo de la distribución no cambió sustancialmente, sin embargo se observa una reducción tanto en el extremo máximo ahora representa un aumento promedio en el salario del 6.3% (aprox) por cada año de educación (cerca $\tau$ = 0.1) y un aumento en el mínimo del 6.5% por año adicional (a partir de $\tau$ = 0.9). Además de una reducción en la mediana de la distribución, ahora hay un aumento del 4.5% por cada año.**En conclusión hubo una leve reducción en la varianza del efecto marginal a lo largo de la distribución.**
 
-Al comparar los coeficientes estimados con y sin la corrección de Heckman, observamos que la tendencia general del efecto marginal de la educación a lo largo de la distribución de ingresos no cambia sustancialmente. Sin embargo, se presentan algunas diferencias clave:
+Al comparar los coeficientes estimados con y sin la corrección de Heckman, observamos que la tendencia general del efecto marginal de la educación a lo largo de la distribución de ingresos no cambia sustancialmente. Sin embargo, se presentan algunas diferencias:
 
 + **En los cuantiles bajos (τ ≈ 0.1)**, el efecto marginal máximo de la educación se reduce, pasando de un incremento del **7% a un 6.3% en el ingreso por cada año adicional de educación**.
 
@@ -328,7 +357,7 @@ Para los demás niveles educativos se observa una ventaja en el género masculin
 
 ### ANOVA
 
-Realizamos nuevamente la prueba ANOVA como una prueba rigurosa de la no linearildad de la educacion.
+Realizamos nuevamente la prueba ANOVA, como evidencia estadística de la no linearildad de la educacion.
 
 ```{r}
 anova(reg1,reg2)
@@ -336,7 +365,7 @@ anova(reg1,reg2)
 
 Bajo las hipotesis de la prueba *ANOVA* de ambos modelos, vemos un p-valor al rededor de .028, por lo tanto para este caso no hay pruebas suficientes para descartar el primer modelo. 
 
-### Heterogeneidad en el retorno de la educación | Regresion cuantilica
+### Heterogeneidad en el retorno de la educación | Regresion cuantílica
 
 ```{r}
 regq1 <- rq(log(ingreso) ~ anios_edu + exp_pot + exp_pot_2 + as.factor(PP04C) + log_horas, data=base24_1_mas, tau = taus, ci = FALSE)
@@ -344,7 +373,8 @@ regq1 <- rq(log(ingreso) ~ anios_edu + exp_pot + exp_pot_2 + as.factor(PP04C) + 
 summregq1 <- summary(regq1,se="ker")
 
 plot(summregq1,parm =2,
-     main = "Coeficientes: Años de Educación", xlab = "Tau (Cuantiles)", ylab = "Coeficientes (Años de Educación)") 
+     main = "Coeficientes: Años de Educación")
+mtext("Cuantiles", side = 1, line = 3) # Añade etiqueta al eje X (margen inferior)
 ```
 
 **Cuantiles bajos (τ < 0.1)**
@@ -395,8 +425,11 @@ summary(heckman_stage2)
 heckman_stage2_mas <- rq(log(ingreso)~ anios_edu + exp_pot + exp_pot_2 + as.factor(PP04C) + log_horas + lambda, data=base24_1_mas_hm%>%filter(ingreso>0),tau = taus,ci = FALSE)
 summ_heckman_stage2_mas <- summary(heckman_stage2_mas,se="ker")
 
+#png("graphs/reg_quant_mas.png", width = 10 * 72, height = 5 * 72)
 plot(summ_heckman_stage2_mas, parm =2,
-     main = "Coeficientes: Años de Educación", xlab = "Tau (Cuantiles)", ylab = "Coeficientes (Años de Educación)") 
+     main = "Coeficientes: Años de Educación")
+mtext("Cuantiles", side = 1, line = 3) # Añade etiqueta al eje X (margen inferior)
+#dev.off()
 ```
 
 Luego de aplicar el método Heckman, los valores disminuyeron, ahora la mediana de la distribución sólo tiene un 2% de retorno por año educativo adicional, 4% para la población con menor salario y alrededor del 7% para los asalariados pertenecientes a los cuantiles más altos.
@@ -443,24 +476,19 @@ for(i in 1:2){
   mas   <- c(mas, Gini(bases24_mas[[i]]$ingreso)) 
   fem   <- c(fem, Gini(bases24_fem[[i]]$ingreso))
 }
-
+```
+```{r}
 graph_gini(ambos, mas, fem)
 ```
 
-La comparación de los valores del índice de Gini entre 2023 y 2024 muestra un aumento de 0.388 a 0.419 para ambos géneros, implica un cambio negativo en términos de equidad, ya que indica una mayor desigualdad en la distribución de los ingresos en la población. Se observa una pendiente más pronunciada en el género masculino aunque sigue siendo el género opuesto más desigual. Es interesante ver que los valores están muy cerca del .5, si bien no están cerca del 1 (desigualdad perfecta) es alarmante ver que no parecen descender en el 2024.
+La comparación de los valores del índice de Gini entre 2023 y 2024 muestra un aumento de 0.388 a 0.419 para ambos géneros, implica un cambio negativo en términos de equidad, ya que indica una mayor desigualdad en la distribución de los ingresos en la población. Se observa una pendiente más pronunciada en el género masculino aunque sigue siendo el género opuesto más desigual. Es interesante ver que los valores están muy cerca del 0.5, si bien no están cerca del 1 (desigualdad perfecta) es alarmante ver que no parecen descender en el 2024.
 
-Se observa un aumento generalizado de la desigualdad entre 2023 y 2024.
+El genero femenino presenta los mayores niveles de desigualdad en ambos años. En 2023, el índice de Gini ya era superior al de los hombres (0.410 vs. 0.363) y en 2024 la brecha persiste (0.422 vs. 0.381).
 
-Para la población total, el índice de Gini aumenta de 0.388 a 0.419, lo que sugiere un deterioro en la equidad de la distribución del ingreso.
-Este incremento indica que los ingresos en el sector asalariado se han vuelto más desiguales en 2024.
-
-Mujeres: Presentan los mayores niveles de desigualdad en ambos años. En 2023, el índice de Gini ya era superior al de los hombres (0.410 vs. 0.362) y en 2024 la brecha persiste (0.425 vs. 0.401).
-
-Hombres: A pesar de partir de un nivel más bajo de desigualdad, muestran un aumento más pronunciado en la pendiente, lo que sugiere que la distribución del ingreso dentro de este grupo ha empeorado más rápidamente en comparación con las mujeres.
-Interpretación de los valores:
+Sin embargo los hombres a pesar de partir de un nivel más bajo de desigualdad, muestran un aumento más pronunciado, lo que sugiere que la distribución del ingreso dentro de este grupo ha empeorado más rápidamente en comparación con las mujeres.
 
 Aunque los valores no están cerca de 1 (desigualdad total), el hecho de que se mantengan elevados y en ascenso en 2024, indica a una desigualdad mayor.
-El índice se acerca progresivamente al umbral de 0.5, lo que sugiere una alta concentración de ingresos en ciertos sectores de la población asalariada.
+El índice se acerca progresivamente al 0.5, lo que sugiere una alta concentración de ingresos en ciertos sectores de la población asalariada.
 
 ```{r}
 # Definir los valores a mostrar
@@ -470,6 +498,7 @@ anio24 <- mean(diferencia_coef[5:6])
 
 # Crear una tabla con una sola fila
 tabla <- data.frame(matrix(diferencia_coef, nrow = 1, dimnames = list("Diferencia", anios)))
+colnames(tabla) <- anios
 tabla
 ```
 
@@ -516,11 +545,11 @@ rm(des)
 #### **Por nivel educativo**
 
 ```{r}
-graph_theil(x_ed,w_ed,b_ed)
+graph_theil(x_ed,w_ed,b_ed,"Nivel Educativo")
 ```
 ```{r}
-w_ed / x_ed * 100 # componente within
-b_ed / x_ed * 100 # componente between
+w_ed / x_ed * 100 # proporción componente within
+b_ed / x_ed * 100 # proporción componente between
 ```
 
 Observamos una situacion similar a la del Gini, en terminos de un aumento en la desiguldad aun que no parece tan pronunciado, la interpretabilidad de la magnitud de la desigualdad en el Theil es diferente por un tema de escalas, la perfecta desigualdad es del $[ln(n)]$ con n el tamanio de la muestra. Sin embargo, la pendiente de la funcion logaritmo natural cae rapidamente. Esto provoca que esa caracteristica no demasiado deseable resulte de poca importancia practica para muestras como las que utilizamos, lo suficientemente grandes y aproximadamente del mismo tamanio. (entre 14500 y 15000)
@@ -531,15 +560,14 @@ cual no se normaliza, ademas ya tenemos idea de que hay una evidente desigualdad
 **Componente Within vs. Between**
 
 La componente **between** es casi constante a lo largo del tiempo, y vemos que la mayor parte del comportamiento de la desigualdad salarial se le atribuye a la componente **within**.
-La desigualdad salarial dentro de los niveles educativos ("Within") representa en promedio el 80% de la desigualdad total.
+La desigualdad salarial dentro de los niveles educativos representa en promedio el 80% de la desigualdad total.
 
 Esto indica que, incluso dentro de cada nivel educativo, existen diferencias salariales significativas.
+
 + La heterogeneidad dentro de cada grupo educativo es el principal determinante de la desigualdad.
-+ La desigualdad entre niveles educativos ("Between") contribuye con el 20% restante.
++ La desigualdad entre niveles educativos contribuye con el 20% restante.
 
 Esto sugiere que la diferencia en ingresos entre personas con distintos niveles educativos explica solo una fracción menor de la desigualdad total.
-
-Tendencia temporal:
 
 En el cuarto trimestre de 2023, se observa un aumento en la desigualdad salarial.
 Este incremento es impulsado principalmente por la desigualdad dentro de los niveles educativos, lo que implica que las diferencias salariales entre personas con la misma educación se ampliaron.
@@ -548,7 +576,7 @@ Este incremento es impulsado principalmente por la desigualdad dentro de los niv
 
 La mayor parte de la desigualdad salarial proviene de diferencias dentro de cada nivel educativo, no entre ellos.
 Aunque el nivel educativo es un factor importante para explicar las diferencias salariales, existen otros factores que generan desigualdad dentro de cada grupo educativo (por ejemplo, experiencia, tipo de empleo, sector económico y género).
-Si bien la desigualdad entre niveles educativos es relevante, las diferencias salariales dentro de cada nivel educativo son las que realmente impulsan la desigualdad total en el mercado laboral asalariado.
+Si bien la desigualdad entre niveles educativos es relevante, las diferencias salariales dentro de cada nivel educativo son las que realmente impulsan la desigualdad total en el mercado laboral.
 
 #### **Por genero**
 
@@ -556,8 +584,8 @@ Si bien la desigualdad entre niveles educativos es relevante, las diferencias sa
 graph_theil(x_gen,w_gen,b_gen)
 ```
 ```{r}
-w_gen / x_gen * 100 
-b_gen / x_gen * 100
+w_gen / x_gen * 100 # proporción componente within
+b_gen / x_gen * 100 # proporción componente between
 ```
 
 El comportamiento observado es similar al análisis por nivel educativo, con la diferencia de que ahora la componente within representa el 96% de la desigualdad total, lo que indica que la mayor parte de la desigualdad salarial se debe a diferencias dentro de cada género, más que a la brecha salarial entre hombres y mujeres.
@@ -570,13 +598,14 @@ La desigualdad *dentro* de cada grupo de género ("Within") *explica casi la tot
 
 Esto indica que, más allá de la brecha salarial entre hombres y mujeres, *existen diferencias salariales* significativas *dentro* de cada grupo.
 Es probable que factores como el sector de empleo, la ocupación, la antigüedad y la negociación salarial tengan un rol clave en esta heterogeneidad.
-La desigualdad entre géneros ("Between") ha aumentado ligeramente, alcanzando el *4.11%* en el primer semestre de 2024.
+La desigualdad entre géneros ha aumentado ligeramente, alcanzando el *4.11%* en el primer semestre de 2024.
 
 Esto refleja un incremento en las disparidades salariales de género, lo que indica que las diferencias en la remuneración entre hombres y mujeres se han acentuado en el último período.
-Evolución temporal:
 
 La desigualdad de género se mantiene baja en términos relativos, pero su tendencia al alza en los últimos trimestres sugiere un deterioro en la equidad salarial entre hombres y mujeres.
-Conclusión
+
+**Conclusión**
+
 La desigualdad salarial en Argentina no se explica principalmente por la brecha de género, sino por las diferencias dentro de cada grupo de género.
 Las diferencias salariales entre hombres y mujeres han aumentado en el último año, lo que sugiere que las barreras de género en el mercado laboral siguen siendo un factor relevante.
 Para reducir la desigualdad salarial total, se deben abordar tanto las diferencias dentro de cada grupo (por ejemplo, mejorando las condiciones laborales y la movilidad laboral) como las diferencias entre géneros (reduciendo la brecha salarial y promoviendo igualdad de oportunidades en el acceso a mejores empleos).
@@ -586,67 +615,13 @@ Para reducir la desigualdad salarial total, se deben abordar tanto las diferenci
 Para ello vamos a realizar la regresión RIF (recenter influence function). Hacemos el cálculo de RIF de `log(ingreso)`, usando como estadístico el índice de Gini, para luego estimar los coeficientes resultantes de la regresión, tomando **anios_edu**.
 
 ```{r}
-d1 <- bases23_mas
-d2 <- bases23_fem
-d3 <- bases23_rest
-
-coefs_rif_edu_mas <- c()
-coefs_rif_edu_fem <- c()
-coefs_rif_edu <- c()
-#coefs_rif_exp <- c()
-
-for(i in 1:4){
-  # calculamos RIF en funcion de lwage.
-  rif_gini_mas <- rif(log(d1[[i]]$ingreso[d1[[i]]$ingreso >0]), method = "gini")
-  rif_gini_fem <- rif(log(d2[[i]]$ingreso[d2[[i]]$ingreso >0]), method = "gini")
-  rif_gini <- rif(log(d3[[i]]$ingreso[d3[[i]]$ingreso >0]), method = "gini")
-  
-  RIFreg_gini_mas <- lm(rif_gini_mas ~ anios_edu + exp_pot + exp_pot_2 + as.factor(PP04C) + log_horas, data = d1[[i]] %>% filter(ingreso >0))
-  RIFreg_gini_fem <- lm(rif_gini_fem ~ anios_edu + exp_pot + exp_pot_2 + as.factor(PP04C) + log_horas, data = d2[[i]] %>% filter(ingreso >0))
-  RIFreg_gini     <- lm(rif_gini     ~ anios_edu + exp_pot + exp_pot_2 + as.factor(PP04C) + log_horas, data = d3[[i]] %>% filter(ingreso >0))
-  
-  edu1 <- RIFreg_gini_mas$coefficients[2]
-  edu2 <- RIFreg_gini_fem$coefficients[2]
-  edu3 <- RIFreg_gini$coefficients[2]
-  #exp <- RIFreg_gini$coefficients[3]
-  
-  coefs_rif_edu_mas <- c(coefs_rif_edu_mas, edu1)
-  coefs_rif_edu_fem <- c(coefs_rif_edu_fem, edu2)
-  coefs_rif_edu <- c(coefs_rif_edu, edu3)
-  #coefs_rif_exp <- c(coefs_rif_exp, exp)
-}
-
-d1 <- bases24_mas
-d2 <- bases24_fem
-d3 <- bases24_rest
-
-for(i in 1:2){
-  # calculamos RIF en funcion de lwage.
-  rif_gini_mas <- rif(log(d1[[i]]$ingreso[d1[[i]]$ingreso >0]), method = "gini")
-  rif_gini_fem <- rif(log(d2[[i]]$ingreso[d2[[i]]$ingreso >0]), method = "gini")
-  rif_gini <- rif(log(d3[[i]]$ingreso[d3[[i]]$ingreso >0]), method = "gini")
-  
-  RIFreg_gini_mas <- lm(rif_gini_mas ~ anios_edu + exp_pot + exp_pot_2 + as.factor(PP04C) + log_horas, data = d1[[i]] %>% filter(ingreso >0))
-  RIFreg_gini_fem <- lm(rif_gini_fem ~ anios_edu + exp_pot + exp_pot_2 + as.factor(PP04C) + log_horas, data = d2[[i]] %>% filter(ingreso >0))
-  RIFreg_gini     <- lm(rif_gini     ~ anios_edu + exp_pot + exp_pot_2 + as.factor(PP04C) + log_horas, data = d3[[i]] %>% filter(ingreso >0))
-  
-  edu1 <- RIFreg_gini_mas$coefficients[2]
-  edu2 <- RIFreg_gini_fem$coefficients[2]
-  edu3 <- RIFreg_gini$coefficients[2]
-  #exp <- RIFreg_gini$coefficients[3]
-  
-  coefs_rif_edu_mas <- c(coefs_rif_edu_mas, edu1)
-  coefs_rif_edu_fem <- c(coefs_rif_edu_fem, edu2)
-  coefs_rif_edu <- c(coefs_rif_edu, edu3)
-  #coefs_rif_exp <- c(coefs_rif_exp, exp)
-}
+vals_rif <- calculate_rif(bases23_mas,bases23_fem,bases23_rest, bases24_mas,bases24_fem,bases24_rest)
 ```
-
 
 ### Gráfico de las estimaciones de años de educación 
 
 ```{r}
-graph_RIF(coefs_rif_edu_mas,coefs_rif_edu_fem)
+graph_RIF(vals_rif$coefs_rif_edu_mas,vals_rif$coefs_rif_edu_fem)
 ```
 
 Observando los valores de las estimaciones, vemos que las estimaciones no parecen seguir un comportamiento negativo y positivo, tienen órdenes de magnitud poco significativos, lo que indica que el efecto es moderado en términos absolutos, sin importar el signo no se ve una influencia en la reducción de la brecha salarial.
@@ -662,159 +637,159 @@ Para cuantificar la influencia de la educación, experiencia laboral (potencial)
 Para ello aplicamos el método de heckman a ambos géneros, pues encontramos que la variable $\lambda$ es significativa en ambos modelos, para tener resultados totalmente comparables así tener una consistencia metodológica simétrica. No mencionó la contribución a la brecha salarial de la variable debido a que su interpretabilidad no resulta directa, ya que no es una característica del individuo "promedio", sino del proceso de selección en el mercado laboral.
 
 ```{r}
-# Primero definimos la lista donde iteraremos cada data.frame 
-bases23_fem_hm <- list()
-bases23_mas_hm <- list()
-for(i in 1:4){
-  aux <- f_restricciones(bases23[[i]], gender = "fem", asalariado = FALSE)
-  aux <- mergear(aux, hogares23[[i]], bases23[[i]])
-  bases23_fem_hm[[i]] <- Heckman_method(aux) 
-  
-  aux <- f_restricciones(bases23[[i]], gender = "mas", asalariado = FALSE)
-  aux <- mergear(aux, hogares23[[i]], bases23[[i]])
-  bases23_mas_hm[[i]] <- Heckman_method(aux) 
-}
-bases24_fem_hm <- list()
-bases24_mas_hm <- list()
-for(i in 1:2){
-  aux <- f_restricciones(bases24[[i]], gender = "fem", asalariado = FALSE)
-  aux <- mergear(aux, hogares24[[i]], bases24[[i]])
-  bases24_fem_hm[[i]] <- Heckman_method(aux) 
-  
-  aux <- f_restricciones(bases24[[i]], gender = "mas", asalariado = FALSE)
-  aux <- mergear(aux, hogares24[[i]], bases24[[i]])
-  bases24_mas_hm[[i]] <- Heckman_method(aux) 
-}
-```
+oaxaca_res <- Descomp_OaxacaBlinder(bases23[[1]], hogares23[[1]], bases24[[2]], hogares24[[2]])
 
-```{r}
-fem_23 <- bases23_fem_hm[[1]] %>% filter(ingreso >0) 
-mas_23 <- bases23_mas_hm[[1]] %>% filter(ingreso >0) 
-
-fem_24 <- bases24_fem_hm[[2]] %>% filter(ingreso >0) 
-mas_24 <- bases24_mas_hm[[2]] %>% filter(ingreso >0) 
-
-fem_23$fem = 1; fem_24$fem = 1 
-mas_23$fem = 0; mas_24$fem = 0 
-data_combined23 <- rbind(fem_23, mas_23) ; data_combined24 <- rbind(fem_24, mas_24) 
-data_combined23$fem <- as.numeric(as.character(data_combined23$fem));  data_combined24$fem <- as.numeric(as.character(data_combined24$fem))
-```
-
-```{r}
-oaxaca_result23 <- oaxaca(
-  formula = log(ingreso) ~ anios_edu + exp_pot + exp_pot_2 + as.factor(PP04C) + log_horas + lambda | fem,
-  data = data_combined23,
-)
-
-oaxaca_result24 <- oaxaca(
-  formula = log(ingreso) ~ anios_edu + exp_pot + exp_pot_2 + as.factor(PP04C) + log_horas + lambda | fem,
-  data = data_combined24,
-)
+oaxaca_result23 <- oaxaca_res$oaxaca_result23
+oaxaca_result24 <- oaxaca_res$oaxaca_result24
 ```
 
 Vamos a usar la siguiente transformación para cuantificar en términos de porcentaje la diferencia salarial, dada $x = Media(log(ingresoA)) - Media(log(ingresoB))$
 
 $$ e^{x} - 1 $$
-Como tenemos una cantidad de datos similar correspondientes a los diferentes grupos (géneros), aprovechando propiedades del log junto con la media geométrica, encuentro esta transformación adecuada para obtener una cuantificación interpretativa.
+Como tenemos una cantidad de datos similar correspondientes a los diferentes grupos (géneros), aprovechando propiedades del logaritmo junto con la media geométrica, encuentro esta transformación adecuada para obtener una cuantificación interpretable.
 
-### Brecha Salarial y Diferencias en Ingresos
+### Brecha Salarial y Diferencias de Ingresos
+
+```{r}
+# "(Intercept)","lambda","exp_pot_2"
+var_observables <- c("(Intercept)","anios_edu","exp_pot","log_horas")
+twoFold23 <- oaxaca_result23$twofold$overall[6,]
+twoFold24 <- oaxaca_result24$twofold$overall[6,]
+
+porcDS_23 <- porce(twoFold23[['coef(explained)']] + twoFold23[['coef(unexplained)']]) # porcentaje de la diferencia salarial 2023
+porcDS_24 <- porce(twoFold24[['coef(explained)']] + twoFold24[['coef(unexplained)']]) # porcentaje de la diferencia salarial 2024
+
+porcDS_23_pExp <- porce(twoFold23[['coef(explained)']]) # porcentaje de la diferencia salarial 2023 atribuida a la parte explicada
+porcDS_24_pExp <- porce(twoFold24[['coef(explained)']]) # porcentaje de la diferencia salarial 2024 atribuida a la parte explicada
+
+pExp_23 <- twoFold23[["coef(explained)"]] / (twoFold23[['coef(explained)']] + twoFold23[['coef(unexplained)']]) * 100 # porcentaje parte explicada 2023, del total de la diferencia salarial
+pExp_24 <- twoFold24[["coef(explained)"]] / (twoFold24[['coef(explained)']] + twoFold24[['coef(unexplained)']]) * 100 # porcentaje parte explicada 2024, del total de la diferencia salarial
+
+pnoExp_23 <- twoFold23[["coef(unexplained)"]] / (twoFold23[['coef(explained)']] + twoFold23[['coef(unexplained)']]) * 100 # porcentaje parte no explicada 2023, del total de la diferencia salarial
+pnoExp_24 <- twoFold24[["coef(unexplained)"]] / (twoFold24[['coef(explained)']] + twoFold24[['coef(unexplained)']]) * 100 # porcentaje parte no explicada 2024, del total de la diferencia salarial
+```
 
 #### 2023
 
 ```{r}
-# "(Intercept)","lambda","exp_pot_2"
-aver <- c("(Intercept)","anios_edu","exp_pot","log_horas")
-twoFold23 <- oaxaca_result23$twofold$overall[6,]
-
-plot(oaxaca_result23, decomposition = "twofold", group.weight = -2, variables = aver)
-
-plot(oaxaca_result23, decomposition = 'twofold', group.weight = -2, unexplained.split = TRUE, components = c("unexplained A","unexplained B"), 
-     component.labels = c("unexplained A" = "a favor de hombres", 'unexplained B' = "en contra de las mujeres"),
-     variables = aver)
+plot(oaxaca_result23, decomposition = "twofold", group.weight = -2, variables = var_observables)
 ```
 #### 2024
 
 ```{r}
-twoFold24 <- oaxaca_result24$twofold$overall[6,]
-
-plot(oaxaca_result24, decomposition = "twofold", group.weight = -2,variables = aver)
-
-plot(oaxaca_result24, decomposition = 'twofold', group.weight = -2, unexplained.split = TRUE, components = c("unexplained A","unexplained B"), 
-     component.labels = c("unexplained A" = "a favor de hombres", 'unexplained B' = "en contra de las mujeres"),
-      variables = aver)
+#png("graphs/desc_exp_unexp.png", width = 10 * 72, height = 5 * 72)
+plot(oaxaca_result24, decomposition = "twofold", group.weight = -2,variables = var_observables)
+#dev.off()
 ```
 
-En 2023, la brecha salarial de género muestra que los hombres perciben, en promedio, un **48% más** de ingresos que las mujeres. Para 2024, esta diferencia aumenta en **1.3 puntos porcentuales**, lo que indica una **tendencia al ensanchamiento de la brecha salarial**.
+```{r}
+PorcentajeDS_PE <- data.frame(matrix(round(c(porcDS_23,porcDS_24,porcDS_23_pExp,porcDS_24_pExp),digits = 1), nrow = 2, ncol = 2, byrow = TRUE))
 
-La diferencia en los **interceptos** entre ambos años se mantiene cercana a **1**, con una varianza de aproximadamente **0.25**. Esto sugiere que **existe una diferencia estructural salarial significativa** entre hombres y mujeres, la cual **afecta más a la brecha que las propias características observables**. Sin embargo, dentro de la **parte no explicada de la descomposición Oaxaca-Blinder**, variables como **años educativos, experiencia potencial (exp_pot) y logaritmo de horas trabajadas (log_horas)** también juegan un rol importante.
+colnames(PorcentajeDS_PE) <- c("2023", "2024")
+rownames(PorcentajeDS_PE) <- c("Porcentaje de la diferencia salarial","Porcentaje atribuido a la parte explicada")
+
+print(PorcentajeDS_PE)
+# Convertir los nombres de las filas en una nueva columna llamada "Variable"
+#PorcentajeDS_PE <- cbind(Variable = rownames(PorcentajeDS_PE), PorcentajeDS_PE)
+
+# Ahora, al crear el objeto gt, puedes especificar que la columna "Variable" sea la columna de encabezados de fila
+#gtsave(gt(PorcentajeDS_PE, rowname_col = "Variable"), "graphs/tabla_porcDS_pE.png")
+```
+
+Para el 1er trimestre de 2023, se observa que los hombres perciben, en promedio, un **48% más** de ingresos que las mujeres. Para 2024, esta diferencia aumenta en **1.2 puntos porcentuales**, lo que indica una **tendencia al ensanchamiento de la brecha salarial**.
+
+La diferencia en los **interceptos** para ambos años se mantiene cercana a **1**, con una varianza de aproximadamente **0.25**. Esto sugiere que **existe una diferencia estructural salarial significativa**, la cual **afecta más a la brecha que las propias características observables**. Sin embargo, dentro de la **parte no explicada de la descomposición**, variables como **años educativos, experiencia potencial (exp_pot) y logaritmo de horas trabajadas (log_horas)** también juegan un rol importante.
+
+```{r}
+PorcentajeExpVNExp = data.frame(matrix(round(c(pExp_23, pExp_24,pnoExp_23, pnoExp_24),digits = 1), nrow = 2, ncol = 2, byrow = TRUE))
+
+colnames(PorcentajeExpVNExp) <- c("2023", "2024")
+rownames(PorcentajeExpVNExp) <- c("Parte Explicada","Parte No Explicada")
+print(PorcentajeExpVNExp)
+# Convertir los nombres de las filas en una nueva columna llamada "Variable" en gt
+#PorcentajeExpVNExp <- cbind(Variable = rownames(PorcentajeExpVNExp), PorcentajeExpVNExp)
+
+# especificar que la columna "Variable" sea la columna de encabezados de fila
+#gtsave(gt(PorcentajeExpVNExp, rowname_col = "Variable"), "graphs/tabla_pExp_pnoExp.png")
+```
 
 #### Parte Explicada vs. No Explicada
 
-En ambos años, la **parte explicativa** contribuye en menor medida a la brecha en comparación con la **parte no explicada**, lo que resalta la importancia de diferencias en la valoración del mercado más que en las características individuales de los trabajadores.
+En ambos años, la **parte explicativa** contribuye en menor medida a la brecha en comparación con la **parte no explicada**, sugiriendo importancia de diferencias en la valoración del mercado más que en las características individuales de los trabajadores.
 
-- **2023:** La parte explicada representa un **26.8%** de la brecha total.
-- **2024:** La parte explicada aumenta a un **39.3%**, lo que indica que una mayor proporción de la brecha puede atribuirse a diferencias en características observables.
+Se observa un aumento de la proporción de la brecha atribuida a características incluidas en nuestro modelo. Representado un 26,8% a un 39,3% de la brecha, del 1er trimestre de 2023 al 2do de 2024, respectivamente.
 
 En ambos años, el coeficiente de la parte explicada tiene signo positivo, lo que implica que **las características observables favorecen al género masculino** en términos salariales. En 2023, esto representaba aproximadamente un **11% de ventaja** en el ingreso masculino frente al femenino, mientras que en 2024 este valor aumenta al **17%**, reflejando un **ensanchamiento de la brecha explicada**.
 
-#### Análisis de Variables Clave en la Parte Explicada
+```{r}
+var_descomp_23 <- oaxaca_result23$twofold$variables[[6]] 
+var_descomp_24 <- oaxaca_result24$twofold$variables[[6]]
+a <- c(var_descomp_23[2,2], var_descomp_24[2,2], var_descomp_23[3,2], var_descomp_24[3,2] , var_descomp_23[18,2],var_descomp_24[18,2])
+Coef_Exp <- data.frame(matrix(round(a,digits = 3), nrow = 3, ncol = 2, byrow = TRUE))
+colnames(Coef_Exp) <- c("2023", "2024")
+rownames(Coef_Exp) <- c("Años educativos","Experiencia Laboral","Logaritmo de horas mensuales")
+print(Coef_Exp)
+# Convertir los nombres de las filas en una nueva columna llamada "Variable" en gt
+#Coef_Exp <- cbind(Variable = rownames(Coef_Exp), Coef_Exp)
 
-#### Años Educativos (`anios_edu`) → -0.06
+# especificar que la columna "Variable" sea la columna de encabezados de fila
+#gtsave(gt(Coef_Exp, rowname_col = "Variable"), "graphs/tabla_VarOber_pE.png")
+```
+
+#### Análisis de Variables Observables en la Parte Explicada
+
+#### Años Educativos (`anios_edu`)
 El coeficiente negativo indica que **las mujeres, en promedio, tienen más años educativos que los hombres**. Dado que existe una **relación positiva entre educación e ingresos**, esto debería reducir la brecha salarial. Sin embargo, esta diferencia no es suficiente para compensar otros factores que amplían la desigualdad.
 
-#### Experiencia Potencial (`exp_pot`) → 0.04 (2023) | 0.02 (2024)
+#### Experiencia Potencial (`exp_pot`) 
 En promedio, **los hombres tienen más años de experiencia potencial que las mujeres**. Esto puede explicarse por **interrupciones laborales más frecuentes en la carrera profesional de las mujeres**, debido a factores como licencias por maternidad o mayores responsabilidades en el hogar. Se observa un comportamiento similar para `exp_pot_2`, con el signo cambiado, lo que sugiere que **a medida que aumenta la experiencia, el crecimiento salarial se desacelera**, explicando parte de la brecha.
 
-#### Logaritmo de Horas Trabajadas (`log_horas`) → 0.03 (2023) | 0.07 (2024)
+#### Logaritmo de Horas Trabajadas (`log_horas`)
 En promedio, **los hombres reportan más horas laborales en su ocupación principal**. Esto contribuye a la parte explicativa de la brecha, ya que un **mayor número de horas trabajadas tiende a estar asociado con mayores ingresos**. En 2024, el coeficiente aumenta, lo que sugiere que la diferencia en horas trabajadas **explica una mayor proporción de la brecha salarial respecto a 2023**.
 
 #### Parte No Explicada y Factores Subyacentes
 
 En **2023 y 2024**, la **parte no explicada** representó el **73% y el 61%** de la brecha salarial, respectivamente. Esto significa que la mayor parte de la diferencia salarial **no puede atribuirse a diferencias en características observables** como educación, experiencia o ubicación, sino a **cómo el mercado valora y remunera a cada género**.
 
-#### Posibles Causas de la Parte No Explicada
-
-- **Diferencias en los retornos a las características observables**: El mercado puede otorgar un **mayor o menor retorno** a la educación, la experiencia o la ubicación según el género.
-- **Factores estructurales y culturales**: Normas sociales o condiciones laborales que afectan de manera diferente a hombres y mujeres.
-- **Discriminación salarial o segregación ocupacional**: Diferencias en oportunidades de ascenso, sectores de trabajo predominantemente masculinos o femeninos, o barreras implícitas en el acceso a mejores empleos.
-- **Omisión de variables relevantes**: Factores no incluidos en el análisis, como habilidades específicas, redes de contacto o diferencias en la negociación salarial.
-
-La disminución de la contribución de la parte no explicada entre 2023 y 2024 sugiere una posible reducción en la desigualdad estructural, aunque sigue siendo la principal fuente de la brecha salarial de género.
-
-La reducción del coeficiente del intercepto en la parte no explicada entre 2023 y 2024 indica que la ventaja estructural que el mercado laboral otorgaba a los hombres ha disminuido. Es decir, la parte de la brecha salarial que no puede explicarse por diferencias en educación, experiencia u otras características observables ha cambiado en detrimento del grupo masculino.
-Sin embargo, dado que el intervalo de confianza incluye valores negativos, la estimación no es estadísticamente significativa. Esto sugiere que, aunque hay indicios de una reducción en la ventaja estructural de los hombres, no podemos afirmar con certeza que este cambio sea distinto de cero con un alto nivel de confianza.
-
-Observamos una disminución en la penalización hacia los hombres en los años educativos. En 2023, la desventaja no explicada atribuida a los hombres fue de **-0.16**, reduciéndose a **-0.1** en 2024. Esto sugiere que, aunque persiste una diferencia en los retornos a la educación en contra de los hombres, su magnitud se ha reducido.
-En contraste, en el caso de las mujeres, la ventaja no explicada también se ha reducido. En 2023, el componente no explicado a favor de las mujeres era de **-0.14**, mientras que en 2024 disminuyó a **-0.06**. Esto indica que las mujeres estaban obteniendo un mayor retorno relativo por la educación en comparación con los hombres, pero esta ventaja se ha reducido en el último período.
-
-El coeficiente de experiencia potencial mantiene un comportamiento estable en ambos años para los hombres, situándose alrededor de **-0.03**. Esto sugiere que los retornos a la experiencia laboral para este grupo son bajos o incluso negativos, lo que podría indicar que la acumulación de años de experiencia no se traduce necesariamente en mayores ingresos para los hombres en este período.
-En el caso de las mujeres, los retornos a la experiencia muestran un cambio más marcado en 2024. Mientras que en 2023 el intervalo de confianza del 95% incluía valores tanto positivos como negativos, con una media cercana a **0**, lo que indicaba falta de evidencia estadística para afirmar un impacto claro de la experiencia en los ingresos, en 2024 el coeficiente estimado para exp_pot disminuye hasta aproximadamente **-0.1**.
-Este resultado sugiere que, en 2024, la experiencia laboral está asociada a una penalización en los ingresos femeninos, lo que podría reflejar limitaciones en la progresión salarial, discriminación por antigüedad o segregación ocupacional. Sin embargo, dado que en 2023 la estimación no era concluyente (por el amplio intervalo de confianza), no se puede afirmar con certeza que esta tendencia refleja un patrón estructural, ya que podría deberse a variaciones muestrales.
-
-En 2023, el coeficiente del logaritmo de horas trabajadas (`log_horas`) presenta valores negativos tanto en la componente a favor del género masculino como en la componente en contra del femenino. Sin embargo, debido a que estos valores son cercanos a cero, su magnitud e intervalos de confianza no permiten extraer conclusiones significativas.
-En 2024, se observa un cambio más marcado en los retornos de log_horas. Para los hombres, el coeficiente disminuye aproximadamente a **-0.22**, lo que indica una penalización mayor en los ingresos asociados a las horas trabajadas en comparación con el año anterior. En contraste, para las mujeres, el coeficiente se incrementa hasta **-0.18**, lo que sugiere que su retorno a las horas trabajadas mejora en términos relativos respecto a los hombres.
-
 ```{r}
-porce(twoFold23[['coef(explained)']] + twoFold23[['coef(unexplained)']]) # transformacion para el procentaje de la diferencia salarial 2023
-porce(twoFold24[['coef(explained)']] + twoFold24[['coef(unexplained)']]) # transformacion para el procentaje de la diferencia salarial 2024
+plot(oaxaca_result23, decomposition = 'twofold', group.weight = -2, unexplained.split = TRUE, components = c("unexplained A","unexplained B"), 
+     component.labels = c("unexplained A" = "a favor de hombres", 'unexplained B' = "en contra de las mujeres"),
+     variables = var_observables) # Correspondiente a 2023 
 
-porce(twoFold23[['coef(explained)']]) # transformacion para el procentaje de la diferencia salarial 2023 parte explicada
-porce(twoFold24[['coef(explained)']]) # transformacion para el procentaje de la diferencia salarial 2024 parte explicada
-
-oaxaca_result23$twofold$variables[[6]]
-oaxaca_result24$twofold$variables[[6]]
-
-twoFold23[["coef(explained)"]] / (twoFold23[['coef(explained)']] + twoFold23[['coef(unexplained)']]) # porcentaje parte explicada 2023, del total de la diferencia salarial
-twoFold24[["coef(explained)"]] / (twoFold24[['coef(explained)']] + twoFold24[['coef(unexplained)']]) # porcentaje parte explicada 2024, del total de la diferencia salarial
-
-twoFold23[["coef(unexplained)"]] / (twoFold23[['coef(explained)']] + twoFold23[['coef(unexplained)']]) # porcentaje parte no explicada 2023, del total de la diferencia salarial
-twoFold24[["coef(unexplained)"]] / (twoFold24[['coef(explained)']] + twoFold24[['coef(unexplained)']]) # porcentaje parte no explicada 2024, del total de la diferencia salarial
+plot(oaxaca_result24, decomposition = 'twofold', group.weight = -2, unexplained.split = TRUE, components = c("unexplained A","unexplained B"), 
+     component.labels = c("unexplained A" = "a favor de hombres", 'unexplained B' = "en contra de las mujeres"),
+      variables = var_observables) # Correspondiente a 2024 
 ```
 
-### **Conclusión final**
+#### Posibles Causas de la Parte No Explicada
 
-Los resultados de este análisis confirman que la educación y la experiencia laboral explican una parte significativa de la variabilidad en los ingresos, pero no logran justificar completamente la brecha salarial de género. Se identificó que las mujeres reciben menores retornos a la educación en comparación con los hombres, lo que sugiere la presencia de barreras estructurales en el mercado laboral.
+- **Factores estructurales y culturales**: *Normas sociales* o *condiciones laborales* que afectan de manera diferente a hombres y mujeres.
+- **Discriminación salarial o segregación ocupacional**: *Diferencias en oportunidades de ascenso*, *sectores de trabajo predominantemente masculinos o femeninos*, o *barreras implícitas en el acceso a mejores empleos*.
+- **Omisión de variables relevantes**: *Factores no incluidos en el análisis*, como *habilidades específicas*, *redes de contacto* o *diferencias en la negociación salarial*.
 
-El análisis de la **regresión cuantílica** mostró que la educación tiene un mayor impacto en los sectores de menores ingresos, aunque este efecto se atenúa a medida que los ingresos aumentan. La **descomposición de Oaxaca-Blinder** evidenció que una parte importante de la brecha salarial no puede explicarse por características observables, lo que indica la posible existencia de discriminación salarial o segregación ocupacional. Además, es importante considerar que esta brecha podría estar influenciada por variables no observadas, como diferencias en la negociación salarial, sesgos inconscientes o la distribución desigual de las responsabilidades de cuidado.
+La **disminución** de la contribución de la **parte no explicada** de *2023 a 2024* sugiere una posible **reducción en la desigualdad estructural**, aunque **sigue siendo la principal fuente** de la brecha salarial de género.
 
-Los **índices** de desigualdad, como el **Gini** y el **Theil**, reflejan un incremento en la desigualdad salarial en 2024 en comparación con 2023, con un aumento en la contribución de la desigualdad dentro de cada grupo de *nivel educativo* y *género*, más que entre ellos. 
+La **reducción del intercepto** en la parte no explicada indica que la *ventaja estructural* que el mercado laboral otorgaba a los hombres ha disminuido. Como el **intervalo de confianza incluye al cero**, la estimación *no es estadísticamente significativa*.
+
+Observamos una **disminución** en la penalización hacia los **hombres** en los **años educativos**. En *2023*, la desventaja no explicada fue de **-0.16**, reduciéndose a **-0.10** en *2024*. Aunque persiste una diferencia en los *retornos a la educación en contra de los hombres*, su magnitud se ha reducido.
+
+En el **género opuesto**, la ventaja no explicada también se ha **reducido**. En *2023*, la componente no explicada a favor de las mujeres era de **-0.14**, mientras que en *2024* disminuyó a **-0.06**. Esto indica que *las mujeres estaban obteniendo un mayor retorno relativo por la educación* en comparación con los hombres, aunque se haya reducido en el último período.
+
+El **coeficiente de experiencia potencial** mantiene un comportamiento *estable* en ambos años para los hombres, situándose alrededor de **-0.3**. Esto sugiere que *la acumulación de experiencia no necesariamente se traduce en mayores ingresos*.
+
+Para las **mujeres**, el retorno en *2023* no muestra evidencia clara de impacto, mientras que en *2024* el coeficiente estimado **disminuye hasta aproximadamente -0.1**. Esto implica que *la experiencia laboral puede estar asociada a una penalización*, reflejando *limitaciones en la progresión salarial*, *discriminación por antigüedad* o *segregación ocupacional*.
+
+En *2023*, el **intervalo de confianza** de `log_horas` incluye al **cero** para los hombres, por lo tanto, *no hay evidencia concluyente*.
+
+En *2024*, se observa un **cambio más marcado** en los retornos. Para el género **masculino**, el coeficiente es aproximadamente **-0.22**, indicando una penalización mayor en los ingresos por horas trabajadas. En contraste, para las **mujeres**, el coeficiente se incrementa de **-0.05** a **-0.18**, lo que sugiere que *su retorno a las horas trabajadas mejora en términos relativos*.
+
+### **Conclusiónes finales**
+
+Para los sectores bajos e intermedios de los asalariados, las mujeres tienen un retorno mayor de los años educativos respecto al género opuesto, una diferencia cercana al 3%, sin embargo, para cuantiles altos el género femenino tiene un retorno menor frente al masculino con una diferencia cercana a 9%. Sin mencionar que para el primero, a partir de τ ≈ 0.95 se observan cambios, mientras que para el masculino, a partir de τ ≈ 0.8.
+Estos resultados refuerzan la idea de que la educación sigue desempeñando un papel clave en la determinación del ingreso, aunque su impacto puede estar condicionado por factores no observados en la selección de la muestra.
+
+El género femenino posee en promedio más años educativos que su contraparte, esto debe reducir la brecha, sin embargo no es así para las horas trabajadas y experiencia laboral, lo cual puede atribuirse con el hecho de las interrupciones laborales son más frecuentes en la carrera profesional de las mujeres.
+
+Se encontró evidencia de que una parte considerable de la brecha salarial no puede explicarse por las características observadas en el modelo propuesto, lo que indica la posible existencia de discriminación salarial o segregación ocupacional. Además, es importante considerar que esta brecha podría estar influenciada por variables no observadas, como diferencias en la negociación salarial, sesgos inconscientes, entre otros.
+
+Se observaron niveles de desigualdad peligrosamente altos, pues Gini ronda valores cercanos a 0.42. Además según Theil, la mayor parte de la desigualdad proviene dentro de los subgrupos nivel educativo con 80% y género con 96%, habiendo un incremento sin aparente estabilización cuando se agrupa por género.

@@ -220,22 +220,24 @@ Heckman_method <- function(df){
 # porcentaje de la diferencia entre d1 y d2.
 porce <- function(d1, d2 = NULL) {
   # D1 y D2 deben estar en orden correcto, para mi analisis seria: hombres -> d1, mujeres -> d2.
+  res <- 0 
   if (missing(d2)) {
-    return(exp(d1) - 1)
+    res <- exp(d1) - 1
   } else {
-    return(exp(mean(log(d1)) - mean(log(d2))) - 1)
+    res <- exp(mean(log(d1)) - mean(log(d2))) - 1
   }
+  return(res * 100)
 }
 
 # Graficos --------------------------------------------------------------------------------------------------------------------------------------------
 
-x <- c("Primario completo","Secundario incompleto","Secundario completo","Universitario incompleto","Universitario completo")
+x <- c("Primario\ncompleto", "Secundario\nincompleto", "Secundario\ncompleto", "Universitario\nincompleto", "Universitario\ncompleto")
 
 # Efecto de NIVEL_ED en lwage --- no linearidad ---- 
 graph_nivel_ed <- function(y,pv){
   #y <- coef_interes_reg2[,1]
   #pv <- coef_interes_reg2[,4]
-
+  # png("Graphs/nivel_ed_nl.png", width = 10 * 72, height = 5 * 72)#  Para guardar grafico 
   # Crear el gráfico base
   plot(1:length(x), y, type = "b", pch = 19, col = "blue", xaxt = "n", 
       xlab = "", ylab = "Coeficiente estimado", 
@@ -257,10 +259,13 @@ graph_nivel_ed <- function(y,pv){
   text(valid_indices, y[valid_indices], 
       labels = paste("p-valor", format(pv[valid_indices], digits = 2)), 
       pos = 4, cex = 0.8, col = "darkgreen")
+  
+  # dev.off() # para guardar grafico
 }
 
 graph_nivel_ed_comparacion <- function(y, pv, y2, pv2){
-   # Crear el gráfico base con la primera serie (línea azul)
+  # png("Graphs/nivel_ed_comp.png", width = 10 * 72, height = 5 * 72)#  Para guardar grafico 
+  # Crear el gráfico base con la primera serie (línea azul)
    plot(1:length(x), y, type = "b", pch = 19, col = "blue", xaxt = "n", 
         xlab = "", ylab = "Coeficiente estimado", 
         xlim = c(0, length(x) + 1), ylim = c(min(y,y2) - .01, max(y,y2) + .01),
@@ -293,6 +298,7 @@ graph_nivel_ed_comparacion <- function(y, pv, y2, pv2){
    # Añadir una leyenda para diferenciar ambas series
    legend("topright", legend = c("Hombres", "Mujeres"), 
           col = c("blue", "red"), pch = c(19, 17), lty = 1, cex = 0.8)
+   # dev.off() 
 }
 
 # Comparacion boxplot y histogram 
@@ -316,12 +322,13 @@ comparacion <- function(df){
 }
 
 # Definir los años y períodos
-anios <- c("2023-1 per","2023-2 per","2023-3 per","2023-4 per","2024-1 per","2024-2 per")
+anios <- c("2023-1er","2023-2do","2023-3er","2023-4to","2024-1er","2024-2do")
 
 # Theil 
-graph_theil <- function(x, w, b) {
-  plot(x, type = "o", col = "blue", pch = 16, ylab = "", xlab = "",
-       main = "Theil y su descomposición", ylim = c(0, 0.35), xaxt= "n")
+graph_theil <- function(x, w, b, group = "Género") {
+  #png(paste("Graphs/ind_theil_",group,".png"), width = 10 * 72, height = 5 * 72)
+  plot(x, type = "o", col = "blue", pch = 16, ylab = "Índice Theil", xlab = "Año - Trimestre",
+       main = paste("Theil en el tiempo, agrupando por",group), ylim = c(0, 0.35), xaxt= "n")
   
   # Agregar etiquetas personalizadas en el eje X
   axis(1, at = 1:length(anios), labels = anios)
@@ -341,16 +348,17 @@ graph_theil <- function(x, w, b) {
   legend("topleft", legend = c("Theil", "Within", "Between"), 
          col = c("blue", "orange", "darkgray"), 
          pch = 16, lty = 1, cex = 0.7)
+  #dev.off()
 }
 
 # Gini
 graph_gini <- function(ambos, mas, fem) {
   y_min <- min(c(ambos, mas, fem)) - 0.01
   y_max <- max(c(ambos, mas, fem)) + 0.01
-  
+  #png("Graphs/ind_gini.png", width = 10 * 72, height = 5 * 72)
   # Graficar el primer grupo (ambos)
-  plot(ambos, type = "o", col = "black", pch = 16, ylab = "Índice gini", 
-       xlab = "Año - Periodo", main = "Gini por genero", xaxt= "n", ylim = c(y_min, y_max))
+  plot(ambos, type = "o", col = "black", pch = 16, ylab = "Índice Gini", 
+       xlab = "Año - Trimestre", main = "Gini en el tiempo", xaxt= "n", ylim = c(y_min, y_max))
   
   # Agregar las líneas de los otros dos grupos
   lines(mas, type = "o", col = "blue", pch = 17)
@@ -367,6 +375,7 @@ graph_gini <- function(ambos, mas, fem) {
   # Agregar una leyenda para los grupos
   legend("topleft", legend = c("Ambos", "Masculino", "Femenino"), 
          col = c("black", "blue", "red"), pch = c(16, 17, 18), lty = 1, cex = 0.7)
+  #dev.off()
 }
 
 
@@ -444,8 +453,8 @@ niveled_tam <- function(df){
   datos$nivel_ed <- factor(datos$nivel_ed, levels = orden_ed)
 
   # Gráfico de barras agrupadas con colores personalizados
-  ggplot(datos, aes(x = nivel_ed, y = Porcentajes, fill = Sector)) +
-    geom_bar(stat = "identity", position = "dodge", width = 0.7) +  # Ancho de las barras
+  g<-ggplot(datos, aes(x = nivel_ed, y = Porcentajes, fill = Sector)) +
+    geom_bar(stat = "identity", position = position_dodge(width = 0.8), width = 0.7) +  # Ancho de las barras
     scale_fill_manual(values = c("HASTA 10 PERSONAS" = "#a6bddb",  # Colores personalizados
                                 "DE 11 A 100 PERSONAS" = "#74a9cf",
                                 "DE 101 A 500 PERSONAS" = "#2b8cbe",
@@ -455,7 +464,14 @@ niveled_tam <- function(df){
         y = "",
         fill = "") +
     theme_minimal() +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12))  # Rotar etiquetas del eje X
+    theme(
+          panel.grid.major = element_blank(), # Elimina las líneas de cuadrícula mayores
+          panel.grid.minor = element_blank(), # Elimina las líneas de cuadrícula menores
+          axis.text.x = element_text(angle = 45, hjust = 1, size = 12),  # Rotar etiquetas del eje X
+          plot.title = element_text(hjust = 0.5) # Centra el título
+          )
+  print(g)
+  return(g)
 }
 
 ## ingreso y nivel edu 
@@ -485,13 +501,19 @@ IN_graph <- function(df){
   datos$Categoria <- factor(datos$Categoria, levels = c("Primario completo","Secundario incompleto","Secundario completo","Universitario incompleto","Universitario completo"))
 
   # Crear el barplot con color único sin fill
-  ggplot(datos, aes(x = Categoria, y = Valor)) +
+  g<-ggplot(datos, aes(x = Categoria, y = Valor)) +
     geom_bar(stat = "identity", width = 0.7, fill = "#023858", color = "black") +  # Color único y bordes
-    labs(title = "% Ingreso vs promedio",
+    labs(title = "Media de Ingresos sobre el Ingreso Promedio segun Nivel Educativo",
         x = "",
-        y = "%") +
+        y = "") +
     theme_minimal() +  # Estilo minimalista
-    theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12))  # Rotar etiquetas del eje X
+    theme(
+          panel.grid.major = element_blank(), # Elimina las líneas de cuadrícula mayores
+          panel.grid.minor = element_blank(), # Elimina las líneas de cuadrícula menores
+          axis.text.x = element_text(angle = 45, hjust = 1, size = 12), # Rotar etiquetas del eje X
+          plot.title = element_text(hjust = 0.5)) # Centra el título  
+  print(g)
+  return(g)
 }
 
 ## ingreso y cant 
@@ -512,10 +534,10 @@ IC_aux <- function(df){
   return(porcent)
 }
 
+cant <- c("1 PERSONA","2 PERSONAS","3 PERSONAS","4 PERSONAS","5 PERSONAS","6 A 10 PERSONAS","11 A 25 PERSONAS","26 A 40 PERSONAS","41 A 100 PERSONAS","101 A 200 PERSONAS","201 A 500 PERSONAS","MAS DE 500 PERSONAS")
 IC_graph <- function(df){
-  cant <- c("1 PERSONA","2 PERSONAS","3 PERSONAS","4 PERSONAS","5 PERSONAS","6 A 10 PERSONAS","11 A 25 PERSONAS","26 A 40 PERSONAS","41 A 100 PERSONAS","101 A 200 PERSONAS","201 A 500 PERSONAS","MAS DE 500 PERSONAS")
 
-    datos <- data.frame(
+  datos <- data.frame(
     Categoria = cant,
     Valor = IC_aux(df)
   )
@@ -523,11 +545,115 @@ IC_graph <- function(df){
   datos$Categoria <- factor(datos$Categoria, levels = cant)
 
   # Crear el barplot con color único sin fill
-  ggplot(datos, aes(x = Categoria, y = Valor)) +
-    geom_bar(stat = "identity", width = 0.7, fill = "#023858", color = "black") +  # Color único y bordes
-    labs(title = "% Ingreso vs promedio",
-        x = "",
-        y = "%") +
-    theme_minimal() +  # Estilo minimalista
-    theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10))  # Rotar etiquetas del eje X
+  g <- ggplot(datos, aes(x = Categoria, y = Valor)) +
+    geom_bar(stat = "identity", width = 0.7, fill = "#023858", color = "black") +
+    labs(title = "Media de Ingresos sobre el Ingreso Promedio segun tamaño de la Organización",
+         x = "",
+         y = "") +
+    theme_minimal() +
+    theme(
+      panel.grid.major = element_blank(), # Elimina las líneas de cuadrícula mayores
+      panel.grid.minor = element_blank(), # Elimina las líneas de cuadrícula menores
+      axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+      plot.title = element_text(hjust = 0.5) # Centra el título
+    )
+  print(g)
+  return(g)
 }
+# RIF  --------------------------------------------------------------------------------------------------------------------------------------------
+
+calculate_rif <- function(dmas_23,dfem_23,d_23, dmas_24,dfem_24,d_24){
+  coefs_rif_edu_mas <- c()
+  coefs_rif_edu_fem <- c()
+  coefs_rif_edu <- c()
+  #coefs_rif_exp <- c()
+  
+  for(i in 1:4){
+    # calculamos RIF en funcion de lwage.
+    rif_gini_mas <- rif(log(dmas_23[[i]]$ingreso[dmas_23[[i]]$ingreso >0]), method = "gini")
+    rif_gini_fem <- rif(log(dfem_23[[i]]$ingreso[dfem_23[[i]]$ingreso >0]), method = "gini")
+    rif_gini <- rif(log(d_23[[i]]$ingreso[d_23[[i]]$ingreso >0]), method = "gini")
+    
+    RIFreg_gini_mas <- lm(rif_gini_mas ~ anios_edu + exp_pot + exp_pot_2 + as.factor(PP04C) + log_horas, data = dmas_23[[i]] %>% filter(ingreso >0))
+    RIFreg_gini_fem <- lm(rif_gini_fem ~ anios_edu + exp_pot + exp_pot_2 + as.factor(PP04C) + log_horas, data = dfem_23[[i]] %>% filter(ingreso >0))
+    RIFreg_gini     <- lm(rif_gini     ~ anios_edu + exp_pot + exp_pot_2 + as.factor(PP04C) + log_horas, data = d_23[[i]] %>% filter(ingreso >0))
+    
+    edu1 <- RIFreg_gini_mas$coefficients[2]
+    edu2 <- RIFreg_gini_fem$coefficients[2]
+    edu3 <- RIFreg_gini$coefficients[2]
+    #exp <- RIFreg_gini$coefficients[3]
+    
+    coefs_rif_edu_mas <- c(coefs_rif_edu_mas, edu1)
+    coefs_rif_edu_fem <- c(coefs_rif_edu_fem, edu2)
+    coefs_rif_edu <- c(coefs_rif_edu, edu3)
+    #coefs_rif_exp <- c(coefs_rif_exp, exp)
+  }
+  
+  for(i in 1:2){
+    # calculamos RIF en funcion de lwage.
+    rif_gini_mas <- rif(log(dmas_24[[i]]$ingreso[dmas_24[[i]]$ingreso >0]), method = "gini")
+    rif_gini_fem <- rif(log(dfem_24[[i]]$ingreso[dfem_24[[i]]$ingreso >0]), method = "gini")
+    rif_gini <- rif(log(d_24[[i]]$ingreso[d_24[[i]]$ingreso >0]), method = "gini")
+    
+    RIFreg_gini_mas <- lm(rif_gini_mas ~ anios_edu + exp_pot + exp_pot_2 + as.factor(PP04C) + log_horas, data = dmas_24[[i]] %>% filter(ingreso >0))
+    RIFreg_gini_fem <- lm(rif_gini_fem ~ anios_edu + exp_pot + exp_pot_2 + as.factor(PP04C) + log_horas, data = dfem_24[[i]] %>% filter(ingreso >0))
+    RIFreg_gini     <- lm(rif_gini     ~ anios_edu + exp_pot + exp_pot_2 + as.factor(PP04C) + log_horas, data = d_24[[i]] %>% filter(ingreso >0))
+    
+    edu1 <- RIFreg_gini_mas$coefficients[2]
+    edu2 <- RIFreg_gini_fem$coefficients[2]
+    edu3 <- RIFreg_gini$coefficients[2]
+    
+    coefs_rif_edu_mas <- c(coefs_rif_edu_mas, edu1)
+    coefs_rif_edu_fem <- c(coefs_rif_edu_fem, edu2)
+    coefs_rif_edu <- c(coefs_rif_edu, edu3)
+  }
+  return(list(coefs_rif_edu_mas=coefs_rif_edu_mas,coefs_rif_edu_fem=coefs_rif_edu_fem,coefs_rif_edu=coefs_rif_edu))
+}
+
+
+
+# Oaxaca-Blinder --------------------------------------------------------------------------------------------------------------------------------------------
+Descomp_OaxacaBlinder <- function(base23,hogar23,base24,hogar24){
+
+  aux <- f_restricciones(base23, gender = "fem", asalariado = FALSE)
+  aux <- mergear(aux, hogar23, base23)
+  fem_23 <- Heckman_method(aux) 
+  
+  aux <- f_restricciones(base23, gender = "mas", asalariado = FALSE)
+  aux <- mergear(aux, hogar23, base23)
+  mas_23 <- Heckman_method(aux) 
+  
+  aux <- f_restricciones(base24, gender = "fem", asalariado = FALSE)
+  aux <- mergear(aux, hogar24, base24)
+  fem_24 <- Heckman_method(aux) 
+  
+  aux <- f_restricciones(base24, gender = "mas", asalariado = FALSE)
+  aux <- mergear(aux, hogar24, base24)
+  mas_24 <- Heckman_method(aux) 
+  
+  fem_23 <- fem_23 %>% filter(ingreso >0) 
+  mas_23 <- mas_23 %>% filter(ingreso >0) 
+  
+  fem_24 <- fem_24 %>% filter(ingreso >0) 
+  mas_24 <- mas_24 %>% filter(ingreso >0) 
+  
+  fem_23$fem = 1; fem_24$fem = 1 
+  mas_23$fem = 0; mas_24$fem = 0 
+  data_combined23 <- rbind(fem_23, mas_23) ; data_combined24 <- rbind(fem_24, mas_24) 
+  data_combined23$fem <- as.numeric(as.character(data_combined23$fem));  data_combined24$fem <- as.numeric(as.character(data_combined24$fem))
+  
+  oaxaca_result23 <- oaxaca(
+    formula = log(ingreso) ~ anios_edu + exp_pot + exp_pot_2 + as.factor(PP04C) + log_horas + lambda | fem,
+    data = data_combined23,
+  )
+  
+  oaxaca_result24 <- oaxaca(
+    formula = log(ingreso) ~ anios_edu + exp_pot + exp_pot_2 + as.factor(PP04C) + log_horas + lambda | fem,
+    data = data_combined24,
+  )
+  return(list(oaxaca_result23=oaxaca_result23, oaxaca_result24=oaxaca_result24))
+}
+
+
+
+
