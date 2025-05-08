@@ -24,6 +24,6 @@ En caso de querer visualizar el informe completo descargar `analisisEPH.html`
 ├── /scripts                 # Código en R
 ├── /graphs                  # gráficos
 ├── README.md                # Este archivo
-├── analisisEPH.html      # Informe completo
+├── analisisEPH.html         # Informe completo
 └── EPH_registro_1T2024.pdf  # Documentacion oficial del dataset usado
 ```
