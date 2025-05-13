@@ -237,12 +237,12 @@ x <- c("Primario\ncompleto", "Secundario\nincompleto", "Secundario\ncompleto", "
 graph_nivel_ed <- function(y,pv){
   #y <- coef_interes_reg2[,1]
   #pv <- coef_interes_reg2[,4]
-  # png("Graphs/nivel_ed_nl.png", width = 10 * 72, height = 5 * 72)#  Para guardar grafico 
+  png("graphs/nivel_ed_nl.png", width = 10 * 72, height = 5 * 72)#  Para guardar grafico 
   # Crear el gráfico base
   plot(1:length(x), y, type = "b", pch = 19, col = "blue", xaxt = "n", 
       xlab = "", ylab = "Coeficiente estimado", 
       xlim = c(0, length(x) + 1),
-      main = "Efecto del Nivel Educativo en el ingreso")
+      main = "Efecto del Nivel Educativo en el Salario")
 
   # Añadir una línea horizontal en y = 0 para referencia
   abline(h = 0, col = "red", lty = 2)
@@ -260,45 +260,46 @@ graph_nivel_ed <- function(y,pv){
       labels = paste("p-valor", format(pv[valid_indices], digits = 2)), 
       pos = 4, cex = 0.8, col = "darkgreen")
   
-  # dev.off() # para guardar grafico
+  dev.off() # para guardar grafico
 }
 
 graph_nivel_ed_comparacion <- function(y, pv, y2, pv2){
-  # png("Graphs/nivel_ed_comp.png", width = 10 * 72, height = 5 * 72)#  Para guardar grafico 
+  #png("graphs/nivel_ed_comp.png", width = 10 * 72, height = 5 * 72)#  Para guardar grafico 
   # Crear el gráfico base con la primera serie (línea azul)
-   plot(1:length(x), y, type = "b", pch = 19, col = "blue", xaxt = "n", 
-        xlab = "", ylab = "Coeficiente estimado", 
-        xlim = c(0, length(x) + 1), ylim = c(min(y,y2) - .01, max(y,y2) + .01),
-        main = "Efecto del Nivel Educativo en el ingreso")
+  plot(1:length(x), y, type = "b", pch = 19, col = "blue", xaxt = "n", 
+      xlab = "", ylab = "Coeficiente estimado", 
+      xlim = c(0, length(x) + 1), ylim = c(min(y,y2) - .01, max(y,y2) + .01),
+      main = "Efecto del Nivel Educativo en el Salario")
    
-   # Añadir la segunda serie (línea roja)
-   lines(1:length(x), y2, type = "b", pch = 17, col = "red")
+  # Añadir la segunda serie (línea roja)
+  lines(1:length(x), y2, type = "b", pch = 17, col = "red")
+  
+  # Añadir una línea horizontal en y = 0 para referencia
+  abline(h = 0, col = "red", lty = 2)
+  
+  # Añadir las etiquetas del eje X inclinadas
+  axis(1, at = 1:length(x), labels = FALSE)  # Ocultar etiquetas predeterminadas
+  text(1:length(x), par("usr")[3] - 0.05,  # Ajuste para desplazar las etiquetas
+      labels = x, srt = 45, adj = 1, xpd = TRUE, cex = 0.8)
+  
+  # Filtrar los valores válidos para evitar NA en los p-valores
+  valid_indices1 <- which(!is.na(y))
+  valid_indices2 <- which(!is.na(y2))
+  
+  # Añadir los p-valores junto a sus respectivos puntos en el gráfico
+  text(valid_indices1, y[valid_indices1], 
+      labels = paste("p=", format(pv[valid_indices1], digits = 2)), 
+      pos = 4, cex = 0.8, col = "darkgreen")
+  
+  text(valid_indices2, y2[valid_indices2], 
+      labels = paste("p=", format(pv2[valid_indices2], digits = 2)), 
+      pos = 4, cex = 0.8, col = "darkred")
+  
+  # Añadir una leyenda para diferenciar ambas series
+  legend("topright", legend = c("Hombres", "Mujeres"), 
+      col = c("blue", "red"), pch = c(19, 17), lty = 1, cex = 0.8)
 
-   # Añadir una línea horizontal en y = 0 para referencia
-   abline(h = 0, col = "red", lty = 2)
-   
-   # Añadir las etiquetas del eje X inclinadas
-   axis(1, at = 1:length(x), labels = FALSE)  # Ocultar etiquetas predeterminadas
-   text(1:length(x), par("usr")[3] - 0.05,  # Ajuste para desplazar las etiquetas
-        labels = x, srt = 45, adj = 1, xpd = TRUE, cex = 0.8)
-   
-   # Filtrar los valores válidos para evitar NA en los p-valores
-   valid_indices1 <- which(!is.na(y))
-   valid_indices2 <- which(!is.na(y2))
-   
-   # Añadir los p-valores junto a sus respectivos puntos en el gráfico
-   text(valid_indices1, y[valid_indices1], 
-        labels = paste("p=", format(pv[valid_indices1], digits = 2)), 
-        pos = 4, cex = 0.8, col = "darkgreen")
-
-   text(valid_indices2, y2[valid_indices2], 
-        labels = paste("p=", format(pv2[valid_indices2], digits = 2)), 
-        pos = 4, cex = 0.8, col = "darkred")
-   
-   # Añadir una leyenda para diferenciar ambas series
-   legend("topright", legend = c("Hombres", "Mujeres"), 
-          col = c("blue", "red"), pch = c(19, 17), lty = 1, cex = 0.8)
-   # dev.off() 
+  #dev.off() 
 }
 
 # Comparacion boxplot y histogram 
@@ -503,7 +504,7 @@ IN_graph <- function(df){
   # Crear el barplot con color único sin fill
   g<-ggplot(datos, aes(x = Categoria, y = Valor)) +
     geom_bar(stat = "identity", width = 0.7, fill = "#023858", color = "black") +  # Color único y bordes
-    labs(title = "Media de Ingresos sobre el Ingreso Promedio segun Nivel Educativo",
+    labs(title = "Ingreso según Nivel educativo vs salario medio",
         x = "",
         y = "") +
     theme_minimal() +  # Estilo minimalista
@@ -547,7 +548,7 @@ IC_graph <- function(df){
   # Crear el barplot con color único sin fill
   g <- ggplot(datos, aes(x = Categoria, y = Valor)) +
     geom_bar(stat = "identity", width = 0.7, fill = "#023858", color = "black") +
-    labs(title = "Media de Ingresos sobre el Ingreso Promedio segun tamaño de la Organización",
+    labs(title = "Ingreso según tamaño de la organización vs salario medio",
          x = "",
          y = "") +
     theme_minimal() +

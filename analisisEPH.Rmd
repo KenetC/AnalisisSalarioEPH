@@ -524,9 +524,9 @@ donde:
 
 * $T_g$, es el índice Theil calculado para el subgrupo $g$.
 
-El primer sumando representa el componente de la desigualdad atribuido a las diferencias de ingresos **dentro** de un mismo grupo. (**within**)
+El primer sumando representa la componente de la desigualdad atribuido a las diferencias de ingresos **dentro** de cada subgrupo. (**within**)
 
-El segundo sumando representa la desigualdad en los ingresos **entre** los subgrupos de la población. (**between**)
+El segundo sumando representa la desigualdad **entre** los subgrupos de la población. (**between**)
 
 A continuación calculamos esta descomposición utilizando como subgrupos los géneros y niveles educativos.
 
@@ -672,12 +672,14 @@ pnoExp_24 <- twoFold24[["coef(unexplained)"]] / (twoFold24[['coef(explained)']] 
 #### 2023
 
 ```{r}
+#png("graphs/desc_exp_unexp_23.png", width = 10 * 72, height = 5 * 72)
 plot(oaxaca_result23, decomposition = "twofold", group.weight = -2, variables = var_observables)
+#dev.off()
 ```
 #### 2024
 
 ```{r}
-#png("graphs/desc_exp_unexp.png", width = 10 * 72, height = 5 * 72)
+#png("graphs/desc_exp_unexp_24.png", width = 10 * 72, height = 5 * 72)
 plot(oaxaca_result24, decomposition = "twofold", group.weight = -2,variables = var_observables)
 #dev.off()
 ```
